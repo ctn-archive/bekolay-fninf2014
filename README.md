@@ -1,2 +1,0 @@
-nengo-frontiers-paper
-=====================
