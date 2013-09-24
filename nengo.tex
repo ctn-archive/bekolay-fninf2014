@@ -646,26 +646,36 @@ even though the underlying implementation
 still connects populations of neurons
 together with connection weights.
 
+However, the ability to connect neurons together
+with synaptic connection weights is still possible
+with the \texttt{NonlinearityConnection}.
+Both of these connection types
+can be temporally filtered,
+and the weights involved in the connection
+(decoding weights for \texttt{DecodedConnection},
+synaptic connection weights for \texttt{NonlinearityConnection})
+can be modified over time with learning rules.
+
 \subsection{Probes}
+
+A probe is used to denotes a signal that
+whose state will be recorded
+throughout the simulation.
+Nengo objects and connections
+each have several signals that can be probed.
+For an ensemble's decoded value,
+or the underlying neurons' membrane voltages
+can be probed, among others.
 
 Ideally, the entire state of a simulation
 would be recorded on each timestep,
 and stored with no overhead to the simulator.
-In practice, recording data
+However, in practice, recording data
 is a costly part of most simulations,
 and often what is simulated must also change
 if the signals being probed must be filtered.
 For this reason, probes are also
 a core component of a Nengo model.
-
-In general, Nengo objects and connections
-each have several signals that can be probed.
-For example, an ensemble's decoded value,
-or the underlying neurons' membrane voltages
-can be probed, among other signals.
-The underlying logic for the probe
-leverages connection logic,
-making it easy to probe any part of an object.
 
 Since probes are also described
 at a symbolic level,
@@ -711,7 +721,7 @@ that work directly with the
 objects described in section \ref{sec:objects}.
 However, in the simulators that we have implemented
 as reference, the model goes through a
-two-stage build process in order to
+two-stage process in order to
 simulate models as fast as possible.
 In the first stage,
 the model is ``built;''
