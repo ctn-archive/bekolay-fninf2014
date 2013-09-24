@@ -118,6 +118,29 @@ several ways that previous Nengo tools could not.
 
 \subsection{Why reimplement Nengo?}
 
+\begin{table}[!t]
+\processtable{Nengo tools\label{tab:nengo-vers}}
+{\begin{tabular}{p{2.6cm} p{2.7cm} l p{7cm}} \toprule
+\textbf{Name} & \textbf{Implementation language}
+  & \textbf{Code repository} & \textbf{Purpose} \\\midrule
+JavaNengo simulator & Java & \texttt{nengo\_java}
+  & Simulates many types of spiking neuron models.
+  Includes methods to construct and simulate models using the NEF. \\
+JavaNengo GUI & Java & \texttt{nengo\_java\_gui}
+  & Graphical interface to JavaNengo simulator.
+  Allows modellers to drag-and-drop components built with the NEF. \\
+JavaNengo scripting interface & Jython & \texttt{nengo\_jython}
+  & Scripting interface to JavaNengo simulator.
+  Provides shortcuts to classes and functions in the simulator.
+  Also accessible through and interacts with the JavaNengo GUI. \\
+PyNengo & Python & \texttt{nengo}
+  & Constructs and simulates models using the NEF. \\
+PyNengo OpenCL simulator & Python+PyOpenCL
+  & \texttt{nengo\_ocl}
+  & Simulates models constructed with PyNengo. \\\botrule
+\end{tabular}}{Footnote?}
+\end{table}
+
 The original Java simulator was created
 with the intention of being a general
 neural simulator that included
