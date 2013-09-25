@@ -34,7 +34,8 @@
 \onecolumn
 \firstpage{1}
 
-\title[Nengo in Python]{Reimplementing Nengo in Python for speed and simplicity}
+\title[Nengo in Python]{Nengo: A Python tool for
+  building large-scale functional brain models}
 \author[\firstAuthorLast ]{\Authors}
 \address{}
 \correspondance{}
@@ -84,39 +85,83 @@
 
 \section{Introduction}
 
-Nengo is a set of software tools built around
-a theoretical framework for building neural models
-proposed by Eliasmith \& Anderson \cite{TODO},
-and more recently, an architecture
-for performing high-level cognitive tasks
-in that framework proposed by Eliasmith \cite{TODO}.
-Nengo consists of a Java-based simulator,
-a Jython-based scripting interface
-for common use cases of the simulator,
-and a Java-based GUI that
-uses both the underlying simulator
-and the scripting interface.
-This set of tools has been used
-to create models of visual attention \cite{TODO},
-inductive reasoning \cite{TODO},
-and reinforcement learning \cite{TODO},
-as well as Spaun, a cognitive agent able
-to do these and several other tasks
-(\cite{TODO}).
-Nengo has been used by dozens of researchers
-in labs at the University of Waterloo,
-Johns Hopkins University, Yale, Stanford,
-and others (TODO: confirm).
+It is often said that neuroscience
+is data-rich but theory-poor.
+Although computational neuroscience
+has grown significantly,
+this phrase continues to be repeated
+due to a lack of satisfying
+theories of the brain.
+Much work has been put into simulators
+that attempt to recreate neural
+data in precise detail,
+but behavior has not emerged
+from data-driven large scale models.
+Similarly, theoretical frameworks
+that involve a generic algorithm
+replicated many times
+(e.g., the memory-prediction framework \cite{TODO}
+and the pattern recognition theory of mind \cite{TODO})
+have not been shown to solve problems
+outside of those that
+the generic algorithm alone can solve.
 
-Here, we describe a new tool
-for creating and simulating NEF-based models
-implemented in Python,
-which effectively merges two existing tools
-into one unified package
-that can be extended in
-several ways that previous Nengo tools could not.
+Nengo is a neural simulator
+based on a theoretical framework proposed
+by Eliasmith \& Anderson \citeyearpar{TODO}
+called the Neural Engineering Framework
+(NEF).
+Nengo was recently used to implement Spaun,
+currently the world's largest functional brain model
+\cite{TODO}.
+Spaun is a network of 2.5 million spiking neurons
+that can perform eight high-level cognitive tasks
+including list memory and inductive reasoning.
+It can perform any of these eight tasks
+at any time by being presented
+the appropriate series of images
+representing the task to be performed
+and the details of that task
+(e.g., $A3[1234]$ instructs Spaun
+to remember the list $1234$).
+It then provides its answer by
+sending motor commands to a simulated arm model,
+tracing out digits
+(e.g., $1234$ if asked to recall the remembered list).
 
-\subsection{Why reimplement Nengo?}
+While the tasks Spaun performs are diverse,
+all tasks use a common set of
+functional modules that we map
+onto the brain areas hypothesized
+to perform those functions.
+As a result, Spaun is able to match
+experimental data across the spectrum
+of neuroscientific data,
+from the single cell level
+to the behavioral level,
+despite experimental data
+being a very small part of the model description.
+Similarly, while this is made possible
+by a theoretical framework,
+the NEF enables Spaun to employ
+many different algorithms with spiking neurons,
+rather than defining a single algorithm
+that is replicated many times.
+
+In implementing Spaun,
+we have provided strong support
+that the NEF is beginning to fill the theory void in neuroscience.
+However, we have also pushed Nengo
+to the limits of its ability to construct and simulate
+large-scale neural models.
+In order to continue to evaluate the NEF
+as a theory of the brain
+by building larger and more complicated models,
+we have begun the next generation
+of Nengo tools with a focus on simplicity,
+extensibility, and speed.
+
+\subsection{JavaNengo limitations}
 
 \begin{table}[!t]
 \processtable{Nengo tools\label{tab:nengo-vers}}
@@ -138,82 +183,168 @@ PyNengo & Python & \texttt{nengo}
 PyNengo OpenCL simulator & Python+PyOpenCL
   & \texttt{nengo\_ocl}
   & Simulates models constructed with PyNengo. \\\botrule
-\end{tabular}}{Footnote?}
+\end{tabular}}{}
 \end{table}
 
-The original Java simulator was created
+JavaNengo is a suite of tools providing
+a neural simulator and graphical user interface (GUI)
+implemented in Java,
+and a scripting interface implemented in Jython
+(see Table~\ref{tab:nengo-vers} for more detail).
+JavaNengo's simulator was created
 with the intention of being a general
 neural simulator that included
-the methods of the Neural Engineering Framework
-(NEF; \cite{TODO}) as one of many different
+the methods of the NEF
+as one of many different
 methods of creating neural models.
-However, since creating the simulator in 2007,
-it has only been extended minimally,
-but has been used extensively for its ability
-to create NEF-based models.
+As a result, its implementation
+of important NEF components
+are nested in deep class hierarchies,
+adding unnecessary layers of complexity
+for developers wishing
+to extend those NEF components.
+The addition of synaptic plasticity rules,
+for example, involved adding or significantly modifying
+25 Java classes \cite{TODO}.\footnote{Changelog at
+  \url{https://github.com/ctn-waterloo/nengo_1.4/commit/93eee51147545f7ce30ae9919809e3072dc15728}.}
 
-The Jython scripting interface,
+The JavaNengo GUI provided
+a drag-and-drop interface in which to create NEF models.
+However, as it was developed
+before the scripting interface,
+the GUI manipulates simulator objects directly.
+Typically, modellers start by following
+tutorials that use the GUI interface,
+and transition to the scripting interface
+in order to implement more complicated models.
+Since the GUI modifies simulator objects directly,
+modelling concepts learned in the GUI
+have to be relearned in the scripting interface.
+
+The JavaNengo scripting interface,
 described in \cite{TODO},
 provided a simpler interface
 to the NEF-specific portions of the simulator.
-However, the Java GUI was developed at the same time
-as the Jython scripting interface,
-and for that reason primarily
-interacts with the simulator directly.
-Since large-scale models often require
-a scripting language for looping
-and parameterization,
-this has resulted in a difficult transition
-for modellers moving from the
-drag-and-drop graphical interface
-to the scripting interface.
-Additionally, advanced scripts often
-contain Jython code that either defines
-or manipulates Java objects directly,
-meaning that modellers have to know
-a certain amount of Python and Java to be productive.
+This greatly enhanced productivity,
+and made it possible
+to create many models with very little code.
+Modellers quickly started using
+the scripting interface
+as their primary tool,
+but still needed to access the GUI
+for interactive model inspection,
+and still needed to modify the simulator
+to add new functionality
+(e.g., new neuron models).
+This is because Jython makes it easy
+to inspect and create Java objects,
+but does not make it easy to
+write Java code to
+inspect and create Jython objects.
+Modellers, therefore, had to be
+proficient in Java whether
+they used the scripting interface or not.
+As the set of neural modellers
+that are proficient with both Java and Python
+syntax is small,
+the scripting interface still lacks
+convenient ways to record the results of simulations,
+and to define complex experimental setups.
 
-Since Nengo makes it possible to define
-very large models,
-performance is an important issue.
+Finally, perhaps the most significant limitation
+of the JavaNengo tools is its performance.
 While Java has good support for threads,
-it is difficult to interface with
+it does not have well-supported libraries
+for doing mathematical operations on large matrices quickly.
+Additionally, it is difficult to interface with
 platform-specific tools such as
 graphical processing units (GPUs),
-which can quickly perform the types of parallel
-computations that these neural models require.
-This is due to the
-architecture of the Java simulator
-and the Java Native Interface,
-which results in code that
-is difficult to maintain and debug.
+which can perform the types of computations
+that these neural models require quickly and in parallel.
 
-The new implementation of Nengo described in this paper
-was undertaken with three goals in mind:
-\begin{enumerate}
-  \item Provide a scripting interface
-    similar to the existing Jython interface.
-  \item Leverage existing scientific computing tools
-    rather than write our own.
-  \item Provide the ability to run models with
-    different software and hardware simulators.
-\end{enumerate}
+Addressing all of these issues
+in the Java codebase would involve
+significant enough changes
+that we decided to start from scratch instead.
+Since the scripting interface
+already used Python syntax,
+and we were using Python
+and its scientific libraries
+for analyzing simulation results,
+we targeted the CPython interpreter
+as the platform for the new generation of Nengo tools.
 
-In order to achieve these goals,
-this new version of Nengo uses the Python language
-and targets the CPython interpreter,
-allowing Nengo to use existing scientific Python
-tools for vectorized computations, plotting, and graph manipulation.
-As evidence that we have met these goals,
-we have implemented two different software simulators,
-and have done so with an order of magnitude
-less lines of code than the Java simulator
-and Jython scripting interface combined.
-For the remainder of the paper,
-we will use ``Nengo'' to refer to
-this new Python rewrite.
+\subsection{PyNengo}
 
-\subsection{Neural Engineering Framework (NEF)}
+PyNengo, which we describe in more detail
+in the remainder of this paper,
+is a Python package for
+defining and simulating
+neural models using the NEF.
+It targets the CPython interpreter,
+meaning that it integrates seamlessly
+with other scientific Python tools.
+Nengo models can used
+in arbitrary CPython programs,
+opening up possibilities
+for using neurally inspired algorithms
+in applications and games.
+
+PyNengo's object model has been radically simplified,
+making it easy to
+document, test, and modify those objects.
+It also includes a scripting interface to those objects
+based on JavaNengo's scripting interface \cite{TODO},
+but with several modifications
+to allow for easier incorporation
+of new neuron models and learning rules.
+Additionally, PyNengo's scripting interface
+contains methods to record simulated data
+and access that data after simulation.
+
+Model creation and simulation
+have been completely decoupled,
+allowing for models to be exported
+to other simulators,
+such as those accessible with PyNN.
+Simulators can also be written
+to leverage specific platforms.
+Currently, we have implemented
+a platform-independent simulator
+that uses NumPy for vectorized computations,
+and a PyOpenCL-based
+simulator that takes full advantage of GPUs
+and multicore CPUs.
+
+PyNengo does not currently
+replace all of the JavaNengo tools.
+Most notably, there is no graphical interface
+to PyNengo, and therefore little ability to interact
+with simulations as they are running.
+However, we are confident that these tools
+can be created, and will be much easier
+to implement compared to JavaNengo's GUI.
+
+We believe that PyNengo overcomes
+all of the significant issues
+with JavaNengo.
+It can simulate the majority of models
+currently simulated by JavaNengo,
+using 11\% as many lines code,
+and depending on
+only three external libraries instead of ten.
+The OpenCL simulator can simulate
+a large scale network TODO times
+faster than JavaNengo's simulator.
+This, along with a codebase
+that is easier to understand and extend,
+provides a platform
+that can simulate larger and more complex
+models than Spaun,
+and can therefore further
+test the NEF as a theory of the brain.
+
+\section{Neural Engineering Framework (NEF)}
 
 TODO; make sure it meshes with 3.1's operators
 
