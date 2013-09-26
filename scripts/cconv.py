@@ -36,38 +36,37 @@ model.probe("Result", filter=0.02)
 sim = model.simulator()
 sim.run(0.5)
 
-colors = ['r', 'g', 'b', 'm']
-
 actual_out = circconv(a_in, b_in)
-t = sim.data(model.t)
 
-def plot(actual, sim):
+def plot(actual, ens):
+    color_cycle = plt.gca()._get_lines.color_cycle
+    colors = [next(color_cycle) for _ in xrange(4)]
     plt.gca().set_color_cycle(colors)
     plt.gca().spines['top'].set_visible(False)
     plt.gca().spines['left'].set_visible(False)
     plt.gca().xaxis.set_ticks_position('bottom')
     plt.gca().yaxis.tick_right()
     plt.gca().yaxis.set_label_position("right")
-    plt.plot(t, sim)
+    plt.plot(sim.data(model.t), sim.data(ens))
     for color, l in zip(colors, actual):
         plt.axhline(l, color=color)
     plt.xlim(0, 0.5)
 
 plt.figure(figsize=(5,5))
 plt.subplot(3, 1, 1)
-plot(a_in, sim.data("A"))
+plot(a_in, "A")
 plt.gca().spines['bottom'].set_visible(False)
 plt.xticks(())
 plt.ylabel("A")
 
 plt.subplot(3, 1, 2)
-plot(b_in, sim.data("B"))
+plot(b_in, "B")
 plt.gca().spines['bottom'].set_visible(False)
 plt.xticks(())
 plt.ylabel("B")
 
 plt.subplot(3, 1, 3)
-plot(actual_out, sim.data("Result"))
+plot(actual_out, "Result")
 plt.xlabel("Time (s)")
 plt.ylabel("Result")
 

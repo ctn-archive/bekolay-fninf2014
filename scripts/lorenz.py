@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 import nengo
-from nengo.helpers import sorted_neurons
+
+from base import sorted_spikes
 
 tau = 0.1
 sigma = 10
@@ -30,17 +31,7 @@ model.probe('State.spikes')  # Very expensive!!
 sim = model.simulator()
 sim.run(6)
 
-t = sim.data(model.t)
-def sorted_spikes(pop):
-    # 2000 neurons... let's just get 10% (200)
-    indices = sorted_neurons(sim.model.get(pop), iterations=250)[::80]
-    spikes = [t[sim.data(pop + ".spikes")[:,i] > 0].flatten() for i in indices]
-    for ix in xrange(len(spikes)):
-        if spikes[ix].shape == (0,):
-            spikes[ix] = np.array([-1])
-    return spikes
-
-state_spikes = sorted_spikes("State")
+state_spikes = sorted_spikes(sim, "State", iterations=250, every=80)
 #state_spikes = [np.linspace(0, 6, 6 * 100)]
 
 plt.figure(figsize=(7,4.55))
@@ -53,7 +44,7 @@ ax.plot(sim.data('State')[:,0], sim.data('State')[:,1], sim.data('State')[:,2],
 ax.dist = 8.5
 
 ax = plt.subplot2grid((2,3), (0,2))
-ax.plot(t, sim.data('State'))
+ax.plot(sim.data(model.t), sim.data('State'))
 ax.set_ylabel("Amplitude")
 ax.spines['top'].set_visible(False)
 ax.spines['left'].set_visible(False)

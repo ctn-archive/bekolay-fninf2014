@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
 import nengo
-from nengo.helpers import sorted_neurons, white_noise
+from nengo.helpers import white_noise
+
+from base import sorted_spikes
 
 model = nengo.Model("Communication Channel")
 
@@ -22,17 +25,8 @@ model.probe("B.spikes")
 sim = model.simulator()
 sim.run(1)
 
-t = sim.data(model.t)
-def sorted_spikes(pop):
-    indices = sorted_neurons(sim.model.get(pop))
-    spikes = [t[sim.data(pop + ".spikes")[:,i] > 0].flatten() for i in indices]
-    for ix in xrange(len(spikes)):
-        if spikes[ix].shape == (0,):
-            spikes[ix] = np.array([-1])
-    return spikes
-
-a_spikes = sorted_spikes("A")
-b_spikes = sorted_spikes("B")
+a_spikes = sorted_spikes(sim, "A")
+b_spikes = sorted_spikes(sim, "B")
 
 def adjust(ax):
     ax.spines['top'].set_visible(False)
@@ -44,7 +38,7 @@ def adjust(ax):
 
 plt.figure(figsize=(4,5))
 ax = plt.subplot(3,1,1)
-ax.plot(t, sim.data("Input"), color='k')
+ax.plot(sim.data(model.t), sim.data("Input"), color='k')
 ax.text(0.5, 1.0, "Input", ha='center', va='center', fontsize=20)
 adjust(ax)
 ax.spines['bottom'].set_visible(False)
@@ -56,10 +50,10 @@ ax.spines['bottom'].set_visible(False)
 ax.spines['top'].set_visible(False)
 ax.spines['left'].set_visible(False)
 ax.set_yticks(())
-ax.axis([0, 1, 0, len(a_spikes)])
+ax.axis([0, 1, -0.5, len(a_spikes)-0.5])
 
 ax = ax.twinx()
-ax.plot(t, sim.data("A"), color='k')
+ax.plot(sim.data(model.t), sim.data("A"), color='k')
 ax.text(0.5, 1.0, "A", ha='center', va='center', fontsize=20,
         bbox=dict(ec='none', fc='w', alpha=0.8))
 ax.spines['bottom'].set_visible(False)
@@ -72,11 +66,11 @@ ax.spines['top'].set_visible(False)
 ax.spines['left'].set_visible(False)
 ax.xaxis.set_ticks_position('bottom')
 ax.set_yticks(())
-ax.axis([0, 1, 0, len(b_spikes)])
+ax.axis([0, 1, -0.5, len(b_spikes)-0.5])
 ax.set_xlabel("Time (s)")
 
 ax = ax.twinx()
-ax.plot(t, sim.data("B"), color='k')
+ax.plot(sim.data(model.t), sim.data("B"), color='k')
 ax.text(0.5, 1.0, "B", ha='center', va='center', fontsize=20,
         bbox=dict(ec='none', fc='w', alpha=0.8))
 adjust(ax)
