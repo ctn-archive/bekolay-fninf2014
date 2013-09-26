@@ -1,9 +1,37 @@
 \documentclass{frontiersSCNS}
 
-\usepackage{url,lineno}
-% \linenumbers  % TODO uncomment!
+%%%%% Some customizations
+
+\usepackage{listings}
+\usepackage{inconsolata}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  deletendkeywords={filter},
+}
 
 \graphicspath{{figures/}}
+
+%%%%% Frontiers boilerplate
+
+\usepackage{url,lineno}
+% \linenumbers  % TODO uncomment!
 
 \copyrightyear{2013}
 \pubyear{2013}
@@ -29,6 +57,7 @@
   Waterloo, ON, N2L 3G1, Canada}
 \def\corrEmail{tbekolay@uwaterloo.ca}
 
+%%%%% Document begins
 
 \begin{document}
 \onecolumn
@@ -134,19 +163,24 @@ all tasks use a common set of
 functional modules that we map
 onto the brain areas hypothesized
 to perform those functions.
-As a result, Spaun is able to match
-experimental data across the spectrum
-of neuroscientific data,
-from the single cell level
-to the behavioral level,
-despite experimental data
-being a very small part of the model description.
-Similarly, while this is made possible
-by a theoretical framework,
+Like data-driven large scale models,
+Spaun is able to match experimental data
+across the neuroscientific spectrum,
+from the single cell to the behavioral level.
+However, instead of constructing the model
+based on data and hoping behavior emerges,
+we construct the model
+based on behavior
+and see that the data emerges.
+This is made possible by a theoretical framework
+like the memory-prediction framework \cite{TODO},
+but unlike it and other frameworks,
 the NEF enables Spaun to employ
-many different algorithms with spiking neurons,
+many different algorithms
+based on the behavior being performed,
 rather than defining a single algorithm
-that is replicated many times.
+and hoping that replicating it
+many times will enable these behaviors.
 
 In implementing Spaun,
 we have provided strong support
@@ -458,15 +492,6 @@ If these attributes are not set,
 then they will be randomly selected
 from distributions that describe
 what is known about pyramidal cells in neocortex.
-
-%% However, not all simulators can support all neuron types,
-%% and all of the attributes that can be
-%% set on an ensemble.
-%% This is particularly the case
-%% when interacting with special-purpose hardware.
-%% In these cases, simulators should
-%% raise appropriate exceptions
-%% when unsupported ensembles are encountered.
 
 \paragraph{Nodes}
 A \texttt{Node} tracks any information
@@ -945,7 +970,110 @@ This flexibility is possible
 due to the decoupling of
 the model definition and simulation steps.
 
-\section{Examples and benchmarks}
+\section{Examples}
+
+\subsection{Communication channel}
+
+Faithfully transmit a signal.
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=.9\textwidth]{comm_channel}
+  \begin{minipage}{0.58\textwidth}
+    \begin{lstlisting}
+      import nengo
+      from nengo.helpers import white_noise
+      model = nengo.Model("Communication Channel")
+      model.make_node("Input", white_noise(1, 5))
+      model.make_ensemble("A", nengo.LIF(30), 1)
+      model.make_ensemble("B", nengo.LIF(30), 1)
+      model.connect("Input", "A")
+      model.connect("A", "B")
+      model.probe("Input")
+      model.probe("A", filter=0.01)
+      model.probe("A.spikes")
+      model.probe("B", filter=0.01)
+      model.probe("B.spikes")
+      sim = model.simulator()
+      sim.run(1)
+      A_data = sim.data("A")
+      A_spikes = sim.data("A.spikes")
+      ...
+    \end{lstlisting}
+  \end{minipage}
+  \begin{minipage}{0.37\textwidth}
+    \includegraphics[width=\textwidth]{comm_channel_res}
+  \end{minipage}
+\end{center}
+ \textbf{\refstepcounter{figure}\label{fig:cchannel} Figure \arabic{figure}.}{
+   Communcation channel model. (Top) Cartoon depiction of the model.
+   (Bottom left) Python code to create and run the model.
+   (Bottom right) Results of the model simulation. Lines depict
+   the node's output (Input panel) and the decoded value being represented
+   by ensembles (A and B panels). Light gray lines in A and B panels denote
+   spikes emitted by neurons in the ensembles. Each row depicts spikes
+   for one neuron.}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+  \begin{minipage}{.495\textwidth}
+    \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
+      # We use Nengo to generate
+      #     bias: Bias currents
+      #     decoders: Decoding weights
+      #     encoders: Encoding weights
+      # for populations A and B.
+      import pynn.nest as pyNN
+
+      lif_params = {'tau_refrac': 2.0, 'tau_syn_E':100,
+                     'tau_syn_I':100}
+      dt = 0.5
+      pyNN.setup(timestep=dt, min_delay=dt)
+      A = pyNN.Population(30, pyNN.IF_cond_exp, lif_params)
+      B = pyNN.Population(30, pyNN.IF_cond_exp, lif_params)
+      input_signal = 0.5
+      inputA = [pyNN.DCSource(amplitude=val) for val
+                 in A_bias + input_signal * A_encoders]
+      for i, pulse in enumerate(inputA):
+          pulse.inject_into(A[i:i+1])
+      inputB = [pyNN.DCSource(amplitude=val) for val
+                 in B_bias]
+      for i, pulse in enumerate(inputB):
+          pulse.inject_into(B[i:i+1])
+    \end{lstlisting}
+  \end{minipage}
+  \begin{minipage}{.495\textwidth}
+    \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
+      weights = []
+      for i in xrange(30):
+          for j in xrange(30):
+              weights.append((i, j,
+                  np.dot(A_decoder[i], B_encoder[j]), 1.0))
+      connection = pyNN.Projection(
+          A, B, pyNN.FromListConnector(weights))
+      A.record('spikes')
+      B.record('spikes')
+      pyNN.run(1000)
+
+      # Decoded value of B
+      B_output = numpy.zeros(1000)
+      for i in xrange(1000):
+          spikes = B[i:i+1].getSpikes()[:,1]
+          spikes = (spikes / dt).astype('int')
+          B_output[spikes] += B_decoder[i]
+      # Filter with tau = 200 ms
+      decay = np.exp(-dt / 200)
+      B_output[0, :] *= (1 - decay)
+      for i in xrange(1, 1000):
+          B_output[i,:] = decay * B_output[i-1,:]
+                           + (1-decay) * B_output[i,:]
+    \end{lstlisting}
+  \end{minipage}
+\end{center}
+ \textbf{\refstepcounter{figure}\label{fig:pynn} Figure \arabic{figure}.}{
+   An implementation of the communication channel in PyNN.}
+\end{figure}
 
 \subsection{Lorenz attractor network}
 
@@ -961,10 +1089,44 @@ composed of 2000 leaky integrate-and-fire neurons.
 
 \begin{figure}
 \begin{center}
-  Nengo Lorenz code listing
+  \begin{minipage}{0.43\textwidth}
+    \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
+      import nengo
+      tau = 0.1; sigma = 10; beta = 8.0/3; rho = 28
+      model = nengo.Model('Lorenz attractor')
+      model.make_ensemble('State', nengo.LIF(2000),
+                            dimensions=3, radius=60)
+
+      def feedback(x):
+          dx0 = -sigma * x[0] + sigma * x[1]
+          dx1 = -x[0] * x[2] - x[1]
+          dx2 = x[0] * x[1] - beta * (x[2] + rho) - rho
+
+          return [dx0 * tau + x[0],
+                  dx1 * tau + x[1],
+                  dx2 * tau + x[2]]
+
+      model.connect('State', 'State',
+                      function=feedback, filter=tau)
+      model.probe('State', filter=tau)
+      model.probe('State.spikes')
+      sim = model.simulator()
+      sim.run(6)
+    \end{lstlisting}
+  \end{minipage}
+  \begin{minipage}{0.55\textwidth}
+    \includegraphics[width=0.95\textwidth]{lorenz}
+    \includegraphics[width=\textwidth]{lorenz_res}
+  \end{minipage}
 \end{center}
- \textbf{\refstepcounter{figure}\label{fig:01} Figure \arabic{figure}.}{
-   Nengo Lorenz code listing}
+ \textbf{\refstepcounter{figure}\label{fig:lorenz} Figure \arabic{figure}.}{
+   Lorenz attractor model. (Left) Python code to create and run the model.
+   (Top right) Cartoon depiction of the model.
+   (Bottom right) Results of the model simulation. Lines depict
+   the node's output (Input panel) and the decoded value being represented
+   by ensembles (A and B panels). Light gray lines in A and B panels denote
+   spikes emitted by neurons in the ensembles. Each row depicts spikes
+   for one neuron.}
 \end{figure}
 
 In order to compare this Nengo model
@@ -972,22 +1134,6 @@ with other pieces of neural modelling software,
 we have implemented the Lorenz attractor
 in PyNN \cite{TODO} in order to simulate it
 with the simulators that PyNN supports.
-
-\begin{figure}
-\begin{center}
-  PyNN Lorenz code listing
-\end{center}
- \textbf{\refstepcounter{figure}\label{fig:01} Figure \arabic{figure}.}{
-   PyNN Lorenz code listing}
-\end{figure}
-
-\begin{figure}
-\begin{center}
-  Lorenz attractor benchmarks
-\end{center}
- \textbf{\refstepcounter{figure}\label{fig:01} Figure \arabic{figure}.}{
-   Lorenz benchmarks}
-\end{figure}
 
 \subsection{Circular convolution}
 
@@ -1008,21 +1154,51 @@ by the existence of the \texttt{CircularConvolution} network.
 
 \begin{figure}
 \begin{center}
-  Nengo CConv code listing
+  \includegraphics[width=0.8\textwidth]{cconv}
+  \begin{minipage}{0.53\textwidth}
+    \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
+      import nengo
+      from nengo.networks import CircularConvolution
+      model = nengo.Model("Circular convolution")
+      model.make_node("Input A", [-0.21, 0.5, 0.12, 0.06])
+      model.make_ensemble("A", nengo.LIF(512), 4)
+      model.connect("Input A", "A")
+      model.make_node("Input B", [-0.18, 0.28, 0.18, -0.52])
+      model.make_ensemble("B", nengo.LIF(512), 4)
+      model.connect("Input B", "B")
+      cconv = model.add(CircularConvolution("Circular Convolution",
+          neurons=nengo.LIF(1032), dimensions=4))
+      model.connect("A", cconv.A)
+      model.connect("B", cconv.B)
+      model.make_ensemble("Result", nengo.LIF(512), 4)
+      model.connect(cconv, "Result")
+      model.probe("A", filter=0.02)
+      model.probe("B", filter=0.02)
+      model.probe("Result", filter=0.02)
+      sim = model.simulator()
+      sim.run(0.5)
+    \end{lstlisting}
+  \end{minipage}
+  \begin{minipage}{0.43\textwidth}
+    \includegraphics[width=\textwidth]{cconv_res}
+  \end{minipage}
 \end{center}
- \textbf{\refstepcounter{figure}\label{fig:01} Figure \arabic{figure}.}{
-   Nengo CConv code listing}
+ \textbf{\refstepcounter{figure}\label{fig:lorenz} Figure \arabic{figure}.}{
+   Circular convolution model. (Top) Cartoon depiction of the model.
+   Note that much of the complexity is contained within the
+   circular convolution network; the transform matrices shown
+   are automatically generated by the network depending on
+   input dimensionality.
+   (Bottom left) Python code to create and run the model.
+
+   (Bottom right) Results of the model simulation. Lines depict
+   the node's output (Input panel) and the decoded value being represented
+   by ensembles (A and B panels). Light gray lines in A and B panels denote
+   spikes emitted by neurons in the ensembles. Each row depicts spikes
+   for one neuron.}
 \end{figure}
 
 TODO: can we do circconv in PyNN?
-
-\begin{figure}
-\begin{center}
-  PyNN CConv code listing
-\end{center}
- \textbf{\refstepcounter{figure}\label{fig:01} Figure \arabic{figure}.}{
-   PyNN CConv code listing}
-\end{figure}
 
 \begin{figure}
 \begin{center}

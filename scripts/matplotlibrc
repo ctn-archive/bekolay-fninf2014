@@ -1,0 +1,8 @@
+font.family : serif
+font.serif : Times New Roman, serif
+legend.fontsize : medium
+legend.frameon : False
+savefig.dpi : 1200
+svg.fonttype : none
+text.usetex : true
+text.latex.preamble : \usepackage{pslatex}
