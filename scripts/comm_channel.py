@@ -75,5 +75,5 @@ ax.text(0.5, 1.0, "B", ha='center', va='center', fontsize=20,
         bbox=dict(ec='none', fc='w', alpha=0.8))
 adjust(ax)
 
-plt.tight_layout()
+plt.tight_layout(h_pad=0.15)
 plt.savefig("../figures/comm_channel_res.pdf")

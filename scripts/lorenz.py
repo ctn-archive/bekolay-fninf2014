@@ -65,6 +65,6 @@ ax.xaxis.set_ticks_position('bottom')
 ax.yaxis.tick_right()
 ax.yaxis.set_label_position("right")
 
-plt.tight_layout()
-plt.subplots_adjust(left=0, hspace=0.12)
+plt.tight_layout(h_pad=0.12)
+plt.subplots_adjust(left=0)
 plt.savefig("../figures/lorenz_res.pdf")

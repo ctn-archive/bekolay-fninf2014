@@ -70,6 +70,5 @@ plot(actual_out, "Result")
 plt.xlabel("Time (s)")
 plt.ylabel("Result")
 
-plt.tight_layout()
-plt.subplots_adjust(hspace=0.12)
+plt.tight_layout(h_pad=0.12)
 plt.savefig("../figures/cconv_res.pdf")
