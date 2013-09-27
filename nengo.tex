@@ -340,7 +340,7 @@ to implement compared to JavaNengo's GUI.
 PyNengo overcomes all of JavaNengo's limitations.
 It can simulate most models
 currently simulated by JavaNengo
-using 11\% as many lines code,
+using 11\% as many lines of code,
 and depending on
 only three external libraries instead of ten.
 The OpenCL simulator can simulate
@@ -534,8 +534,7 @@ in order to collect data during simulation.
 
 The \texttt{Model} object is primarily a container
 for Nengo objects,
-but also doubles as
-a scripting interface
+but also doubles as a scripting interface
 that simplifies creating, connecting,
 and probing objects.
 Basic models
@@ -568,24 +567,29 @@ so that each simulator can compute
 this population's nonlinear function
 however it sees fit.
 The neuron model used by the population
-is easily changed, as long as the simulat
+is easily changed, as long as the simulator
+is aware of the neuron model description object.
 
 Other attributes of the \texttt{Ensemble},
-such as its encoding weights, $\mathbf{e_i}$,
-the maximum firing rate of the neurons,
-and so on, can also be specified.
-This is usually done according
-to what is known about
-the neurobiology of the area being modelled;
-some areas of the brain regularly spike
-at rates above 200Hz,
-while others rarely spike above 10Hz.
+such as its encoding weights,
+the maximum firing rate of its neurons,
+and so on, can also be specified
+either as keyword arguments
+to the \texttt{Ensemble} constructor,
+or by setting an attribute on the instantiated object.
+While an ensemble makes a hypothesis
+about the information being represented by neurons,
+these additional attributes
+also allow modellers to ensure that
+the ensemble stays
+within neurobiological constraints.
 If these attributes are not set,
 then they will be randomly selected
 from distributions that describe
-what is known about pyramidal cells in neocortex.
+neocortical pyramidal cells.
 
 \subsection{Node}
+
 A \texttt{Node} tracks any information
 that is not represented by an ensemble.
 In the most common case,
@@ -594,10 +598,6 @@ that drive ensembles of sensory neurons.
 In a more general sense,
 nodes represent the experimental environment
 in which a neural model exists.
-More practically,
-nodes can be used to directly compute
-parts of a neural model
-for debugging purposes.
 
 A node computes an arbitrary function
 of its inputs directly.
@@ -616,25 +616,26 @@ interface with other programs
 using shared memory or sockets,
 and so on.
 
-Nodes allows many of the special-purpose
-routines that are necessary in many real-world
+Nodes allow many of the special-purpose
+routines that are necessary in real-world
 models to be integrated
 as core components of a Nengo model.
+This makes Nengo models more explicit,
+and enables simulators
+to control and optimize node execution.
 
-\subsection{Connections}
+\subsection{Connection}
 
 Ensembles and nodes can be connected together
 in several ways.
 Like other high-level objects,
 a connection contains symbolic information
-about how two objects are to be connected
-together.
+about how two objects are to be connected together.
 
 The most important type of connection
 in Nengo is the \texttt{DecodedConnection}.
 This connection implements
-the transformation principle equations,
-\eqref{TODO}.
+the NEF's transformation principle.
 In other words, the \texttt{DecodedConnection}
 allows ensembles to project
 the information they're representing---or
@@ -643,10 +644,10 @@ another ensemble or node.
 This functionality is what enables Nengo models
 to appear conceptual,
 even though the underlying implementation
-still connects populations of neurons
-together with connection weights.
+can translate that connection
+to connection weights.
 
-However, the ability to connect neurons together
+The ability to connect neurons together
 with synaptic connection weights is still possible
 with the \texttt{NonlinearityConnection}.
 Both of these connection types
@@ -656,28 +657,75 @@ and the weights involved in the connection
 synaptic connection weights for \texttt{NonlinearityConnection})
 can be modified over time with learning rules.
 
-\subsection{Probes}
+In many cases, the type of the connection
+is not explicitly specified by the modeller.
+Instead, it is inferred by the arguments
+to \texttt{Model}'s \texttt{connect} function.
+However, that function is just a simple wrapper
+of each connection object's constructor,
+so complex models can use
+the appropriate connection,
+or even implement their own.
 
-A probe is used to denotes a signal that
-whose state will be recorded
+\subsection{Network}
+
+A network is a collection of ensembles and nodes
+connected together in a particular way.
+It is primarily a way of grouping together
+a common set of connected objects,
+and makes explicit the purpose
+of the network and how it interacts
+with the rest of the model
+(see section \ref{sec:ccon} for a usage example).
+
+Networks are designed to be
+subclasses by users,
+in order to group together
+parts of a model.
+In most cases,
+the code that creates and connects
+several objects in the model can be
+moved into a \texttt{Network}
+subclass' \texttt{make}
+function with only minor changes.
+
+Networks can vary dramatically in size,
+and can be composed of other networks.
+The \texttt{Integrator} network, for example,
+is composed of only one recurrently connected ensemble.
+By encapsulating that logic in a network,
+the purpose of that ensemble is made explicit.
+On the other end of the spectrum,
+the \texttt{BasalGanglia} network,
+is composed of five groups of ensembles
+connected with several specific functions
+that together implement a ``winner take all'' circuit.
+Encapsulating that logic
+makes a complicated section of code
+easy to include in many different models.
+
+\subsection{Probe}
+
+A probe is used to denotes a signal
+that will be recorded
 throughout the simulation.
 Nengo objects and connections
 each have several signals that can be probed.
-For an ensemble's decoded value,
-or the underlying neurons' membrane voltages
+An ensemble's decoded value
+and its neurons' spikes
 can be probed, among others.
 
-Ideally, the entire state of a simulation
-would be recorded on each timestep,
-and stored with no overhead to the simulator.
-However, in practice, recording data
-is a costly part of most simulations,
-and often what is simulated must also change
-if the signals being probed must be filtered.
-For this reason, probes are also
-a core component of a Nengo model.
-
-Since probes are also described
+Like nodes, a probe could be implemented
+outside of the model.
+However, doing so requires detailed knowledge
+of the simulator,
+and can incur significant overhead
+if not implemented carefully.
+For these reasons, we have made probes
+a core component of a Nengo model,
+and are therefore explicit
+and optimizable.
+Further, since probes are described
 at a symbolic level,
 the underlying implementation
 can output probed data in many different formats.
@@ -687,79 +735,76 @@ but adding the ability to store data
 in files or to stream probed data
 directly to sockets will be added.
 
-\subsection{Networks}
-A network is a collection of ensembles and nodes
-connected together in a particular way.
-It is primarily a way of grouping together
-a common set of objects connected in a particular way,
-and provides some implicit expressiveness
-in the name of the network.
-
-Networks can vary dramatically in size,
-and can be composed of other networks.
-The \texttt{Integrator} network, for example,
-is composed of only one recurrently connected ensemble.
-By encapsulating that logic in a network,
-the purpose of that ensemble is made explicit.
-On the other end of the size spectrum,
-the \texttt{BasalGanglia} network,
-is composed of five groups of ensembles
-connected with several specific functions
-that together implement a ``winner take all'' circuit.
-Encapsulating that logic
-makes this complicated section of code
-easy to include in many different models
-(see Figure~\ref{TODO}).
-
 \section{PyNengo simulators} \label{sec:simulators}
-
-Once a model has been fully defined,
-a simulator can be created to
-run that model.
-Simulators can be created
-that work directly with the
-objects described in section \ref{sec:objects}.
-However, in the simulators that we have implemented
-as reference, the model goes through a
-two-stage process in order to
-simulate models as fast as possible.
-In the first stage,
-the model is ``built;''
-i.e., the objects in the model are mapped to a simpler
-set of objects that represent the computations
-that the simulator must perform.
-Those computations are analyzed in order to
-schedule them efficiently.
-In the second stage,
-the simulator performs the computations
-that have been scheduled on each timestep.
-
-This two-stage process has enabled us
-to implement a more efficient simulator
-that is only aware of
-the objects that are created
-during the build process.
-In the future,
-new simulators can target either
-the high level Nengo objects,
-or the low level simulator objects
-depending on the constraints of the platform.
-
-\subsection{Reference build process}
 
 \begin{figure}
 \begin{center}
   \includegraphics[width=0.6\textwidth]{sim}
 \end{center}
  \textbf{\refstepcounter{figure}\label{fig:sim} Figure \arabic{figure}.}{
-   Sim}
+   The first two timesteps of a simple simulation.}
 \end{figure}
 
-The first stage of the reference implementation
-maps all of the Nengo objects
-down to a set of signals and operators.
+
+Decoupling model creation and simulation
+enables PyNengo simulators
+to allocate memory and schedule computations
+in the most efficient ways possible.
+Simulators are given a \texttt{Model}
+as an argument;
+this \texttt{Model} is a symbolic description,
+which a simulator can assume will not change
+over the course of a simulation.
+The simulator, however,
+can modify the model as it sees fit;
+in most cases, this means that the simulator
+will fill in many of the details
+that the symbolic description
+has allowed to be generated randomly.
+
+We have implemented
+a reference simulator using NumPy
+for vectorized computations,
+and an OpenCL simulator
+using PyOpenCL to parallelize
+computations on GPUs and multicore CPUs.
+In the remainder of this section,
+we will describe
+the reference simulator implementation;
+the OpenCL simulator shares many
+of the reference simulator's architectural choices,
+but is heavily optimized in ways
+that cannot be adequately described
+with the space available.
+Additionally, it should be noted that
+any simulator that takes a \texttt{Model}
+as input and exposes a \texttt{step}
+function can be used in PyNengo;
+the reference simulator
+is provided as an example
+for simulator designers,
+not as a specification.
+
+\subsection{Reference simulator}
+
+Before the first timestep, the reference simulator
+\begin{enumerate}
+  \item translates high-level objects to
+    a set of signals and operators,
+  \item allocates NumPy arrays for each signal, and
+  \item sorts operators based on a dependency graph.
+\end{enumerate}
+On each timestep, the reference simulator
+\begin{enumerate}
+  \item computes each operator in order, and
+  \item copies probed signals to a separate buffer.
+\end{enumerate}
+Figure~\ref{fig:sim} depicts
+the state of the reference simulator
+after two timesteps of a simple model.
 
 \paragraph{Signals}
+
 A \texttt{Signal} represents any number that
 will be used by the simulator.
 Each high level Nengo object contains
@@ -767,284 +812,53 @@ several signals;
 for example, an ensemble contains signals
 that represent the high-level input
 signal that will be encoded
-to input currents (see equation \eqref{TODO}),
-and the encoding weights
-($\mathbf{e_i}$; see equation \eqref{TODO}).
+to input currents,
+and the encoding weights.
 It also contains a neural population,
 which contains signals that represent
-input currents
-($J(t)$; see equation \eqref{TODO}),
-bias currents ($J^{bias}$; \eqref{TODO}),
-membrane voltages ($V$; \eqref{TODO}),
-and refractory times for each cell.
-These signal are symbolic,
-and contain only information
-about the size of the signal that will be represented,
-and optionally an initial value.
-Simulators may therefore represent
-these signals however they want internally.
+input currents, bias currents,
+membrane voltages, and refractory times for each cell.
 
-In some cases, determining
-the initial values of some signals
-may involve some computation.
-In particular, solving for decoding weights
-(equation \eqref{TODO}) requires
-solving a least-squares minimization problem.
-This computation is done in this stage
-of the build process,
-as it is computationally intensive,
-and may be implemented
-differently by some simulators.
-
-An important feature of signals
-is that parts of a signal
-can be accessed with Python slice syntax,
-which results in a view of the original signal.
-For example, when connecting to
-a subset of a population of neurons,
-current would be injected
-in a view of the overall input current signal
-for that population,
-rather than creating a new signal,
-or partitioning the population's signal
-into smaller chunks.
-Grouping related signals together
-and exposing them through views
-also provides hints to the simulator
-that can be used to organize signals
-efficiently in memory.
+As can be seen in Figure~\ref{fig:sim},
+the signals used in a Nengo simulation
+can be conceptually grouped into
+those that track low-level neural signals,
+and those that track high-level signals
+defined by the NEF.
+Most neural simulators only track
+low-level signals.
+Operators commonly map
+between related low- and high-level signals.
 
 \paragraph{Operators}
+
 Operators represent computations
 to be performed on signals on each timestep.
 Once the model has been built,
 only a small set of mathematical
 operations are necessary for simulation.
-\begin{enumerate}
-  \item \textbf{Reset} assigns a constant value to a signal.
-    This is typically used to set a signal to 0
-    at the start of a timestep.
-  \item \textbf{Copy} assigns the value
-    of one signal to another signal.
-    This is typically used instead of \textbf{Reset}
-    in situations where the signal's value
-    at the start of a timestep should
-    be the value of another signal.
-  \item \textbf{DotInc} increments a signal by
-    the dot product of two signals;
-    i.e., $Y \leftarrow Y + AB$.
-    This is a common operation
-    done in many situations,
-    such as decoding a signal (see equation \eqref{TODO}).
-  \item \textbf{ProdUpdate} scales a signal
-    and adds the dot product of two signals to it;
-    i.e., $Y \leftarrow BY + AX$.
-    This is done when temporally filtering a signal.
-  \item \textbf{Nonlinearities} include any
-    user-defined function computed by a node,
-    and the update equation for each neuron model.
-\end{enumerate}
 
-It is important to note that all operators
-excepts for the nonlinearities are linear,
-and therefore can share an implementation
-in an underlying simulator,
-allowing those operations to happen in parallel.
+Many of the computations
+done in a simulation
+are linear (e.g.,
+the decoding and encoding steps
+in Figure~\ref{fig:sim}),
+and therefore can share a common operator;
+this can be helpful for parallelization
+in some simulators.
 
-Operators are created
-by Nengo objects during the build process.
-For example, an ensemble creates
-a \textbf{Reset} operator to reset
-its input signal to 0,
-and a \textbf{DotInc} operator
-to encode that input signal into
-input currents injected into
-the underlying population of neurons;
-i.e., the \textbf{DotInc} computes
-$J = \alpha_i \mathbf{e_i} X$ from equation \eqref{TODO}.
-
-\subsection{Reference simulator}
-
-The reference simulator starts by
-building NumPy arrays
-for every signal created during the build process
-described above.
-It then builds a graph of the
-operators created during the build process,
-ordering them such that they can be
-executed one after another to get the correct answer.
-
-The ordering is determined
-by which signals an operator
-sets, increments, reads, and updates.
-A signal can only be set or updated once,
-but can be read or incremented any number of times.
-An update represents the operator that sets
-the signal's value at time $t+dt$,
-and therefore must be the last operator
-that acts on a given signal.
-This means that an operator
-that updates a signal depends on
-all operators that set, increment,
-or read that signal.
-Reads represent reading the value
-of a signal at time $t$,
-which is determined by the sets
-and increments, and so
-an operator that reads a given signal
-depends on all operators that
-set and increment that signal.
-Increments must happen
-after a given signal is set,
-so an operator that increments a given
-signal depends on the operator
-that sets that signal, if it exists.
-
-The reference simulator represents
-these dependencies by a directed graph,
-with edges going from
-dependent operators to
-the operators on which they depend.
-The dependency graph is then topologically sorted,
-and that ordering is stored.
-
-The simulator can then be run
-for an arbitrary amount of time.
-On each timestep,
-the simulator goes through each of the
-operators in order,
-and then makes a copy of any signals
-that were probed on this timestep.
-
-\subsection{OpenCL simulator}
-
-OpenCL is a framework for writing
-efficient parallel code that runs
-on many different platforms,
-including modern CPUs and GPUs.
-It allows for the kind of parallel execution
-that is required to run neural models quickly,
-while still being able to run
-on multiple platforms.
-
-The OpenCL simulator operates on
-the same objects that the reference simulator does;
-i.e., it starts with a collection
-of signals and operators,
-schedules them efficiently,
-and runs all operators on each timestep.
-
-However, in order to execute
-many operators in parallel,
-the OpenCL simulator
-organizes computations
-differently than the reference simulator.
-All of the linear operators are mapped
-onto \textbf{MultiProdUpdate} operators,
-which perform the general update
-$$Y \leftarrow \gamma + \beta Y + AX.$$
-It can then schedule many
-\textbf{MultiProdUpdate} operations
-on a single timestep,
-if the dependency graph allows it.
-
-The OpenCL simulator also transparently
-attempts to build OpenCL equivalents
-for arbitrary Python functions
-executed by nodes.
-These arbitrary functions
-can slow down a simulation significantly,
-as data and control has to be passed back
-to the Python interpreter
-on each timestep.
-The OpenCL simulator inspects
-the abstract syntax tree
-of the function being computed
-and substitutes OpenCL equivalents when possible.
-
-\subsection{Extensibility}
-
-Nengo is designed to be extended
-in order to make modelling easier,
-and to enable models to be run
-on many different platforms.
-
-\subsubsection{Nonlinearities}
-
-Many modellers make use of
-different neuron models and
-learning rules than are
-currently implemented
-in the two simulators
-in section \ref{sec:simulators}.
-Because Nengo endeavors
-to compute nonlinear functions efficiently,
-these nonlinearities
-must be implemented in each simulator,
-though they may share the same representation
-at the model definition stage.
-While this results in simulators
-that cannot run all Nengo models,
-this cannot be avoided,
-and therefore we make this explicit.
-
-In order to implement
-a new neuron model or learning rule,
-two classes must be created.
-The first is a symbolic class
-that keeps track of any parameters
-that might affect the execution
-of the nonlinearity;
-for example, for
-the leaky integrate-and-fire neuron model,
-the refractory time constant,
-$\tau^{ref}$, is part of this symbolic class.
-An instance of this class
-is then used as an argument
-to the ensemble constructor.
-For learning rules,
-an instance of that class
-is used as an argument
-to functions that connect ensembles.
-The second class to be created
-is simulator-specific,
-and contains the function that will be
-executed on each timestep of the simulation.
-Individual simulators may have additional
-requirements when adding
-a new nonlinearity.
-
-\subsubsection{Model simulation}
-
-The simulator included with Nengo
-is provided primarily as a reference
-for platform experts designing a simulator
-for their platform.
-The reference simulator is implemented with
-a two-step build process;
-this is designed to make
-some simulators easier to implement,
-as the result of
-the first step of the build process
-is a set of computations
-that most computing devices are able to perform.
-
-However, other simulators---especially
-those running on special purpose
-hardware---may not be able
-to perform all of these computations.
-In that case, these simulators
-can define their own build process
-that takes as input a Nengo model.
-This flexibility is possible
-due to the decoupling of
-the model definition and simulation steps.
+Nonlinear functions, however,
+require specific operators.
+Each supported neuron model and learning rule
+has an associated operator;
+the simulator explicitly maps
+from symbolic neuron objects in ensembles
+and from symbolic learning rule objects
+in connections to their associated operator.
 
 \section{Examples} \label{sec:examples}
 
 \subsection{Communication channel} \label{sec:comm-channel}
-
-Faithfully transmit a signal.
 
 \begin{figure}
 \begin{center}
@@ -1075,7 +889,8 @@ Faithfully transmit a signal.
     \includegraphics[width=\textwidth]{comm_channel_res}
   \end{minipage}
 \end{center}
- \textbf{\refstepcounter{figure}\label{fig:cchannel} Figure \arabic{figure}.}{
+ \textbf{\refstepcounter{figure}\label{fig:comm-channel}
+   Figure \arabic{figure}.}{
    Communcation channel model. (Top) Diagram of the model.
    (Bottom left) Python code to create and run the model.
    (Bottom right) Results of the model simulation. Lines depict
@@ -1084,6 +899,27 @@ Faithfully transmit a signal.
    spikes emitted by neurons in the ensembles. Each row depicts spikes
    for one neuron.}
 \end{figure}
+
+A communication channel
+is a minimal example demonstrating
+the representation and transformation principles
+of the NEF.
+A communication channel
+represents some signal and transmits it unchanged;
+i.e., it computes the function $f(x) = x$.
+Figure~\ref{fig:comm-channel}
+depicts a scalar communication channel
+representing band-limited Gaussian white noise.
+
+The communication channel
+is a simple enough model
+that it can be readily implemented in PyNN.
+Figure~\ref{fig:pynn} contains the code
+for implementing a communication channel in PyNN.
+This highlights many of the differences
+between Nengo models and conventional neural models;
+we also use the script for benchmarking
+(see section \ref{sec:benchmark}).
 
 \begin{figure}
 \begin{center}
@@ -1147,16 +983,6 @@ Faithfully transmit a signal.
 
 \subsection{Lorenz attractor network} \label{sec:lorenz}
 
-Many models in theoretical neuroscience
-are based on attractor networks.
-The NEF has been used in the past
-to implement many different types of
-attractor networks \cite{TODO}.
-In this example,
-we implement the Lorenz chaotic attractor
-with a single ensemble
-composed of 2000 leaky integrate-and-fire neurons.
-
 \begin{figure}
 \begin{center}
   \begin{minipage}{0.43\textwidth}
@@ -1199,28 +1025,21 @@ composed of 2000 leaky integrate-and-fire neurons.
    for one neuron.}
 \end{figure}
 
-In order to compare this Nengo model
-with other pieces of neural modelling software,
-we have implemented the Lorenz attractor
-in PyNN \cite{TODO} in order to simulate it
-with the simulators that PyNN supports.
+Many models in theoretical neuroscience
+are based on attractor networks.
+The NEF has been used in the past
+to implement many different types of
+attractor networks \cite{TODO}.
+Figure~\ref{fig:lorez} depicts
+a Nengo implementation of the Lorenz chaotic attractor
+with a single ensemble
+composed of 2000 leaky integrate-and-fire neurons.
+
+We have implemented the Lorenz attractor
+in PyNN for benchmarking purposes
+(see supplementary material).
 
 \subsection{Circular convolution} \label{sec:cconv}
-
-One of the most common operations done
-in Nengo models is circular convolution.
-Circular convolution is how
-the semantic pointer architecture
-(SPA; \cite{TODO})
-binds two semantic pointers together.
-Binding is central to many
-of the high level cognitive tasks
-that make Spaun unique.
-Circular convolution
-is also best implemented in a two-layer network,
-rather than in a single connection.
-This two-layer network construction is simplified
-by the existence of the \texttt{CircularConvolution} network.
 
 \begin{figure}
 \begin{center}
@@ -1253,7 +1072,7 @@ by the existence of the \texttt{CircularConvolution} network.
     \includegraphics[width=\textwidth]{cconv_res}
   \end{minipage}
 \end{center}
- \textbf{\refstepcounter{figure}\label{fig:lorenz} Figure \arabic{figure}.}{
+ \textbf{\refstepcounter{figure}\label{fig:cconv} Figure \arabic{figure}.}{
    Circular convolution model. (Top) Diagram of the model.
    Note that much of the complexity is contained within the
    circular convolution network; the transform matrices shown
@@ -1268,10 +1087,30 @@ by the existence of the \texttt{CircularConvolution} network.
    for one neuron.}
 \end{figure}
 
-TODO: can we do circconv in PyNN?
+One of the most common operations done
+in Nengo models is circular convolution.
+Circular convolution is how
+the semantic pointer architecture
+(SPA; \cite{TODO})
+binds two semantic pointers together.
+Binding is central to many
+of the high level cognitive tasks
+that make Spaun unique.
+Circular convolution
+is best implemented in a two-layer network,
+rather than in a single connection.
+This two-layer network construction is simplified
+by the existence of the \texttt{CircularConvolution} network.
+The complexity encapsulated in that network
+can be seen in Figure~\ref{fig:cconv}.
+
+Unlike the previous two examples,
+we do not implement
+circular convolution in PyNN.
+The resulting script would be
+too long to be instructive.
 
 \section{Benchmarks}
-
 
 \begin{figure}
 \begin{center}
@@ -1292,50 +1131,12 @@ TODO: can we do circconv in PyNN?
 
 \section{Discussion}
 
-Even at its \texttt{0.1} release,
-we have met our goals
-for this reimplementation of Nengo.
-\begin{enumerate}
-  \item We have provided a scripting interface
-    similar to the Jython interface.
-    In many cases, the new scripting interface
-    is simpler and more expressive than
-    the previous Jython interface.
-  \item We have leveraged existing scientific computing tools
-    rather than writing our own.
-    In the the scripting interface and the reference simulator,
-    we use NumPy to simplify array computations.
-    In the reference simulator, we use
-    NetworkX to perform the topological sort
-    of the operator dependency graph.
-    In examples, we use Matplotlib
-    to plot the results of simulations.
-  \item We have provided the ability to run models with
-    different software and hardware simulators.
-    We have shown that this is possible by
-    implementing two software simulators.
-\end{enumerate}
-
-While this reimplementation of Nengo
-does not completely replace
-the existing suite of Java-based Nengo tools,
-it is able to cover the vast majority of use cases
-with an order of magnitude less
-code than the Java-based tools
-($\sim$30,000 lines of Java + 10,000 lines of Jython
-vs. $\sim$8,000 lines of Python).
-We are optimistic that the remaining use cases
-can be implemented in this new framework.
-
-TODO: something about documentation, unit tests,
-coverage, travis-ci, etc
-
 \subsection{Comparison to similar projects}
 
 There are many other neural simulators
 dedicated to building large-scale neural models;
 however, Nengo is unique in being built
-on a theoretical framework (the NEF, \cite{TODO})
+on a theoretical framework
 that has already been used to make
 large-scale functional brain models.
 
@@ -1343,11 +1144,11 @@ The most closely related project is PyNN
 \cite{TODO},
 which provides a high-level scripting
 interface similar to the
-model creation part of Nengo.
+high-level objects in PyNengo.
 Rather than implementing its
 own simulator, PyNN uses existing
-simulators, such as Brian \cite{TODO},
-NEST \cite{TODO}, and NEURON \cite{TODO}.
+simulators with Python bindings,
+such as NEST \cite{TODO}.
 
 The APIs of Nengo and PyNN are similar,
 but differ significantly
@@ -1371,13 +1172,11 @@ between a pair of neurons in the two populations.
 
 As shown in Figure~\ref{TODO},
 Nengo is able to simulate many networks
-faster than all of PyNN's simulators
-(TODO: right?).
-This is, in part, because Nengo stores two vectors
-whose product is the entire
-connection weight matrix between
-two ensembles, rather than storing
-the entire matrix.
+faster than all of PyNN's simulators.
+This is, in part,
+because Nengo stores the factors
+of the connection weight matrix,
+rather than storing the entire matrix.
 
 However, PyNN also contains functionality
 not currently implemented in Nengo.
@@ -1385,12 +1184,10 @@ PyNN can assign spatial information
 to neurons in a population,
 which can be used to influence
 how those neurons connect to other populations.
-PyNN simulates many different learning rules
+PyNN simulates many learning rules
 and neuron types,
 and is therefore better suited to
-simulate small networks of detailed neuron models
-(as would be necessary for modelling
-an invertebrate nervous system).
+simulate networks of detailed neuron models.
 
 \subsection{Future work}
 
@@ -1418,11 +1215,39 @@ and simulators to Nengo
 and to theoretical neuroscience
 as a whole.
 
+\subsection{Conclusion}
+
+PyNengo is the next generation of Nengo.
+Though the project is still young,
+it can already simulate most models
+that have been built using the NEF.
+It does this with 11\% as many lines of code
+as its predecessor,
+and interacts seamlessly with
+other scientific Python tools.
+
+While the reference simulator
+is simple and easy to understand,
+the OpenCL simulator is extremely fast;
+it can simulate a large circular convolution model
+TODO times faster than JavaNengo's simulator.
+This makes the creation and simulation
+of models many times larger than Spaun
+tractable with current hardware;
+these models will further test
+the NEF as a theory of the brain,
+and with PyNengo make those theories
+testable by anyone with a computer.
+
 \section*{Disclosure/Conflict-of-Interest Statement}
 
 The authors declare that the research was conducted in the absence of
 any commercial or financial relationships that could be construed as a
 potential conflict of interest.
+
+\section*{Author contributions}
+
+TODO
 
 \section*{Acknowledgement}
 
