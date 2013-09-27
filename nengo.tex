@@ -1183,14 +1183,22 @@ TODO: can we do circconv in PyNN?
 
 \section{Benchmarks}
 
-Some stuff about benchmarking
 
 \begin{figure}
 \begin{center}
-  \includegraphics[width=0.5\textwidth]{benchmark}
+  \includegraphics[width=0.5\textwidth]{ocl_vs_ref}
 \end{center}
- \textbf{\refstepcounter{figure}\label{fig:benchmarks} Figure \arabic{figure}.}{
-   Benchmarks}
+ \textbf{
+     \refstepcounter{figure}\label{fig:ocl_vs_ref}
+     Figure \arabic{figure}.}{
+     Five-hundred-dimensional circular convolution networks were some of the most
+     computationally demanding elements of the Spaun cognitive architecture.
+     Simulations of circular convolution networks of various sizes illustrate the speed of our re-engineered simulators.
+     A straightforward reference implementation in Python is sufficient for small networks,
+     while for larger ones the new OpenCL-powered simulator runs up to 200$\times$ faster,
+     In particular the Radeon 7970 GPU can simulate 500-dimensional convolution networks faster than real time (0.95 seconds for a 1-second simulation).
+     Also, although both are multithreaded, our new implementation delivers better CPU performance than the previous JavaNengo implementation.
+     }
 \end{figure}
 
 \section{Discussion}
