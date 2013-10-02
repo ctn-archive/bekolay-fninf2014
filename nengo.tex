@@ -130,16 +130,19 @@ due to a lack of satisfying
 theories of the brain.
 Much work has been put into neural simulators
 that attempt to recreate neuroscientific
-data in precise detail,
-but behavior has not emerged
+data in precise detail
+with the thought that
+cognition will emerge by connecting
+detailed neuron models according
+to the statistics of biological connections \cite{TODO}; % blue brain
+cognition has not yet emerged
 from data-driven large scale models.
 Similarly, theoretical frameworks
-consisting of a generic algorithm
-replicated many times
-(e.g., the memory-prediction framework \cite{TODO}
-and the pattern recognition theory of mind \cite{TODO})
-have not been shown to solve problems
-that the generic algorithm alone cannot solve.
+that use a generic algorithm
+replicated many times % reword based on papers below
+are unable to solve more complex problems
+than the generic algorithm alone
+(e.g., \cite{TODO} \cite{TODO}). % Hawkins, Kurzweil
 
 Nengo is a neural simulator
 based on a theoretical framework proposed
@@ -151,7 +154,7 @@ currently the world's largest functional brain model
 \cite{TODO}.
 Spaun is a network of 2.5 million spiking neurons
 that can perform eight high-level cognitive tasks
-including list memory and inductive reasoning.
+including memorizing lists and inductive reasoning.
 It can perform any of these eight tasks
 at any time by being presented
 the appropriate series of images
@@ -163,7 +166,7 @@ to remember the list $1234$.
 It then provides its answer by
 sending motor commands to a simulated arm model,
 tracing out digits.
-If asked to recall the remember list,
+If asked to recall the remembered list,
 it would trace out the digits $1234$.
 
 While the tasks Spaun performs are diverse,
@@ -184,8 +187,8 @@ This is made possible by a theoretical framework
 like the memory-prediction framework \cite{TODO},
 but unlike it and other frameworks,
 the NEF enables Spaun to employ
-many different algorithms
-based on the behavior being performed,
+different sets of algorithms
+depending on the behavioral task performed,
 rather than defining a single algorithm
 and hypothesizing that replicating it
 many times will enable these behaviors.
@@ -232,7 +235,7 @@ JavaNengo is a suite of tools providing
 a neural simulator and graphical user interface (GUI)
 implemented in Java,
 and a scripting interface implemented in Jython
-(see Table~\ref{tab:nengo-vers} for more detail).
+(as detailed in Table~\ref{tab:nengo-vers}).
 JavaNengo's simulator was created
 with the intention of being a general
 neural simulator that included
@@ -259,12 +262,14 @@ The JavaNengo GUI provided
 a drag-and-drop interface in which to create NEF models.
 However, as it was developed
 before the scripting interface,
-the GUI manipulates simulator objects directly.
+the GUI manipulates simulator objects directly,
+rather than constructing a script
+that manipulates those simulator objects.
 Typically, modellers start by following
 tutorials that use the GUI interface,
 and transition to the scripting interface
-in order to implement more complicated models.
-Since the GUI modifies simulator objects directly,
+in order to implement more complicated models;
+since the GUI modifies simulator objects directly,
 modelling concepts learned in the GUI
 have to be relearned in the scripting interface.
 
@@ -306,7 +311,7 @@ including all scientific libraries
 that use NumPy.
 
 Finally, perhaps the most significant limitation
-of the JavaNengo tools is their performance.
+of the JavaNengo tools is performance.
 While Java has good support for threads,
 it does not have well-supported libraries
 for doing mathematical operations on large matrices quickly.
@@ -329,9 +334,7 @@ as the platform for the next generation of Nengo.
 
 \subsection{PyNengo}
 
-PyNengo,
-the subject of the remainder of this paper,
-is a Python package for
+PyNengo is a Python package for
 defining and simulating
 neural models using the NEF.
 It targets the CPython interpreter,
@@ -343,25 +346,24 @@ opening up possibilities
 for using neurally implemented algorithms
 in applications and games.
 
-PyNengo's object model is simple and minimal,
-making it easy to
+PyNengo has a simple object model,
+which makes it easy to
 document, test, and modify.
-It also includes a scripting interface to those objects
-based on JavaNengo's scripting interface \cite{TODO},
-but with several modifications
-to allow for easier incorporation
-of user-defined networks,
-new neuron models, and learning rules.
-Additionally, PyNengo's scripting interface
-contains methods to record simulated data
-and access that data after simulation.
+PyNengo's scripting interface to those objects
+is modified from JavaNengo's scripting interface \cite{TODO}
+to easily incorporate user-defined networks,
+new neuron models and learning rules,
+and multiple simulators.
+Additionally, the scripting interface
+contains functions to record data during a simulation,
+and access that data after the simulation.
 
 Model creation and simulation are decoupled,
 allowing for models to be exported
 to other simulators,
 such as those accessible with PyNN.
 Simulators can also be written
-to leverage specific platforms.
+to leverage special-purpose hardware.
 Currently, we have implemented
 a platform-independent simulator
 that uses NumPy for vectorized computations,
@@ -381,13 +383,13 @@ However, we are confident that these tools
 can be created, and will be much easier
 to implement compared to JavaNengo's GUI.
 
-PyNengo overcomes all of JavaNengo's limitations.
+PyNengo overcomes JavaNengo's limitations.
 It can simulate most models
 currently simulated by JavaNengo
 using 11\% as many lines of code,\footnote{
   JavaNengo is 40,000 lines of code, not including the GUI,
   and PyNengo is 5000 lines of code. TODO}
-and depending on
+and depends on
 only three external libraries instead of ten.
 The OpenCL simulator can simulate
 a large model TODO times
@@ -474,9 +476,9 @@ of large-scale neural models.
 
 \paragraph{Representation}
 Information is encoded by populations of neurons.
-We consider that information
-to be time-varying vectors of real numbers,
-in order to reason with that information
+We represent information
+with time-varying vectors of real numbers
+in order to manipulate that information
 using conventional mathematics.
 By doing this, we can \textit{encode}
 those vectors by injecting
@@ -496,14 +498,14 @@ Figure~\ref{fig:nef} depicts
 the encoding (A) and decoding (B) process.
 In the encoding process, the input signal drives
 each neuron based on its \textit{tuning curve},
-which describes how much
-that neuron fires for a given input signal.
+which describes how likely
+that neuron is to fire for a given input signal.
 The tuning curve summarizes the gain
 of a neuron (how quickly the activity rises),
 the bias (the activity of a neuron given no signal),
 and the encoding weight
 (the part of the vector space
-that causes the neuron to fire most strongly).
+that causes the neuron to be the most active).
 This results in a predictable pattern of firing
 given the input signal.
 
@@ -545,7 +547,7 @@ in a scalar connection weight
 representing the strength
 of the connection between two neurons.
 In order to compute any function,
-we can set the connection weights between
+we set the connection weights between
 two populations to be the product of
 the decoding weights for that function
 for neurons in the first population
@@ -589,9 +591,11 @@ resulting in a harmonic oscillator.
 
 \paragraph{Nengo}
 Large models can be built
-by thinking of the principles of the NEF
-as building blocks that can be put together
-to describe neural systems.
+by using of the principles of the NEF
+as connectable components
+that describe neural systems,
+just as a circuit diagram
+describes an electronic circuit.
 The goal of Nengo is to allow
 modellers to describe neural systems
 in terms of what information is being represented,
@@ -649,7 +653,7 @@ the population of neurons.
 For example, \texttt{nengo.LIF(50, tau\_ref=0.002)}
 describes a population
 of 50 leaky integrate-and-fire neurons \cite{TODO} % LIF cite
-with a refractory time of 0.002 seconds.
+with a refractory time of 2 milliseconds.
 The \texttt{nengo.LIF} class defines
 the parameters of the LIF neurons symbolically
 so that each simulator can compute
@@ -1533,6 +1537,8 @@ to this reimplementation of Nengo
 by providing examples,
 unit tests, and bugfixes:
 Peter Blouw, Brent Komer, and Bryan Tripp.
+
+% Also acknowledge Bryan for making JavaNengo, and edits
 
 \paragraph{Funding\textcolon}
 NSERC CRC, CFI, and OIT.
