@@ -296,6 +296,14 @@ that are proficient with both Java and Python syntax,
 the scripting interface still lacks
 convenient ways to record the results of simulations,
 and to define complex experimental setups.
+Additionally, Jython is always several versions
+behind CPython, making it impossible
+to use new language features
+like dictionary comprehensions.
+Jython also cannot access libraries
+that contain any C code,
+including all scientific libraries
+that use NumPy.
 
 Finally, perhaps the most significant limitation
 of the JavaNengo tools is their performance.
@@ -376,7 +384,9 @@ to implement compared to JavaNengo's GUI.
 PyNengo overcomes all of JavaNengo's limitations.
 It can simulate most models
 currently simulated by JavaNengo
-using 11\% as many lines of code,
+using 11\% as many lines of code,\footnote{
+  JavaNengo is 40,000 lines of code, not including the GUI,
+  and PyNengo is 5000 lines of code. TODO}
 and depending on
 only three external libraries instead of ten.
 The OpenCL simulator can simulate
@@ -706,9 +716,10 @@ to control and optimize node execution.
 
 Ensembles and nodes can be connected together
 in several ways.
-Like other high-level objects,
-a connection contains symbolic information
-about how two objects are to be connected together.
+Like other objects in PyNengo's object model,
+a connection contains symbolic information;
+in this case, a connection tracks
+how two objects are to be connected together.
 
 The most important type of connection
 in Nengo is the \texttt{DecodedConnection}.
@@ -774,11 +785,12 @@ is composed of only one recurrently connected ensemble.
 By encapsulating that logic in a network,
 the purpose of that ensemble is made explicit.
 On the other end of the spectrum,
-the \texttt{BasalGanglia} network,
+the \texttt{BasalGanglia} network
 is composed of five groups of ensembles
 connected with several specific functions
-that together implement a ``winner take all'' circuit.
-Encapsulating that logic
+that together implement a ``winner-take-all'' circuit.
+Encapsulating the code to create those ensembles
+and connections in a network subclass
 makes a complicated section of code
 easy to include in many different models.
 
