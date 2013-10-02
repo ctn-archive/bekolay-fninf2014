@@ -757,7 +757,7 @@ with the rest of the model
 (see section \ref{sec:ccon} for a usage example).
 
 Networks are designed to be
-subclasses by users,
+subclassed by users,
 in order to group together
 parts of a model.
 In most cases,
@@ -784,8 +784,8 @@ easy to include in many different models.
 
 \subsection{Probe}
 
-A probe is used to denotes a signal
-that will be recorded
+A probe marks that a signal
+will be recorded
 throughout the simulation.
 Nengo objects and connections
 each have several signals that can be probed.
@@ -909,8 +909,6 @@ the reference simulator
 is provided as an example
 for simulator designers,
 not as a specification.
-
-\subsection{Reference simulator}
 
 Before the first timestep, the reference simulator
 \begin{enumerate}
@@ -1411,6 +1409,12 @@ connects two ensembles together,
 with a probability of 0.5
 that there will be a connection
 between a pair of neurons in the two populations.
+This difference reflects the
+fundamental difference that Nengo
+is built on a theoretical framework
+that enables modellers to think
+about information processing in the brain
+at a conceptual level.
 
 As shown in Figure~\ref{TODO},
 Nengo is able to simulate many networks
@@ -1456,6 +1460,13 @@ contributing networks, nonlinearities,
 and simulators to Nengo
 and to theoretical neuroscience
 as a whole.
+Internally, we will bring the functionality
+of PyNengo to parity with JavaNengo
+by implementing the use cases
+not currently covered by PyNengo,
+and create a graphical interface
+to build models and
+interactively inspect simulations.
 
 \subsection{Conclusion}
 
