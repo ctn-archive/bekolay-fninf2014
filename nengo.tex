@@ -699,8 +699,8 @@ interface with other programs
 using shared memory or sockets,
 and so on.
 
-A node tracks any information
-that is not represented by an ensemble.
+A node represents information
+that cannot be decoded from an ensemble.
 As a simple example,
 a node can be used to model sensory stimuli
 that are predefined functions of time.
@@ -1271,8 +1271,8 @@ sim.run(0.5)
    after a startup transient of less than 0.1 seconds.}
 \end{figure}
 
-One of the most common operations done
-in Nengo models is circular convolution.
+A common function computed by Nengo models
+is circular convolution.
 Circular convolution is how
 the semantic pointer architecture
 (SPA; \cite{TODO})
@@ -1421,9 +1421,9 @@ the mathematical operation that is performed
 through the connection between
 two ensembles;
 e.g., \texttt{DecodedConnection(A, B,
-function=product)} connects ensemble A
-to ensemble B, projecting the product of
-some dimensions encoded by A to B.
+function=square)} connects ensemble A
+to ensemble B, projecting the square of
+the value represented by A to B.
 In PyNN, connections commonly describe
 features of the connection weight matrix
 between two populations;
