@@ -648,15 +648,16 @@ and an object that describes
 the population of neurons.
 For example, \texttt{nengo.LIF(50, tau\_ref=0.002)}
 describes a population
-of 50 leaky integrate-and-fire neurons
+of 50 leaky integrate-and-fire neurons \cite{TODO} % LIF cite
 with a refractory time of 0.002 seconds.
-Neurons are defined symbolically
+The \texttt{nengo.LIF} class defines
+the parameters of the LIF neurons symbolically
 so that each simulator can compute
-this population's nonlinear function
-however it sees fit.
-The neuron model used by the population
-is easily changed, as long as the simulator
-is aware of the neuron model description object.
+the LIF nonlinearity efficiently.
+The neuron model used by the ensemble
+is changed by passing in a different symbolic neuron object;
+however, the simulator used must be aware
+of that neuron model.
 
 Other attributes of the \texttt{Ensemble},
 such as its encoding weights,
@@ -668,28 +669,22 @@ or by setting an attribute on the instantiated object.
 While an ensemble makes a hypothesis
 about the information being represented by neurons,
 these additional attributes
-also allow modellers to ensure that
-the ensemble stays
-within neurobiological constraints.
+allow modellers to fit
+neural parameters to \textit{in vivo}
+electrophysiology data.
 If these attributes are not set,
-then they will be randomly selected
-from distributions that describe
+Nengo attempts to maintain
+neurobiological constraints
+by selecting neural parameters
+from distributions consistent with
 neocortical pyramidal cells.
 
 \subsection{Node}
 
-A \texttt{Node} tracks any information
-that is not represented by an ensemble.
-In the most common case,
-nodes provide input signals
-that drive ensembles of sensory neurons.
-In a more general sense,
-nodes represent the experimental environment
-in which a neural model exists.
-
-A node computes an arbitrary function
-of its inputs directly.
-Possible input signals include
+A \texttt{Node} contains a user-defined
+Python function that directly calculates
+the node's outputs from its inputs at each timestep.
+Available inputs include
 the simulator timestep,
 the decoded output of an ensemble,
 or the output of another node.
@@ -704,6 +699,16 @@ interface with other programs
 using shared memory or sockets,
 and so on.
 
+A node tracks any information
+that is not represented by an ensemble.
+As a simple example,
+a node can be used to model sensory stimuli
+that are predefined functions of time.
+As a more sophisticated example,
+a node can be used to model
+a complex experimental environment that
+both provides input to the neural model
+and responds to the neural model's output.
 Nodes allow many of the special-purpose
 routines that are necessary in real-world
 models to be integrated
@@ -734,7 +739,7 @@ This functionality is what enables Nengo models
 to appear conceptual,
 even though the underlying implementation
 can translate that connection
-to connection weights.
+to synaptic weights.
 
 The ability to connect neurons together
 with synaptic connection weights is still possible
@@ -796,14 +801,20 @@ easy to include in many different models.
 
 \subsection{Probe}
 
-A probe marks that a signal
+A \texttt{Probe} marks that a signal
 will be recorded
 throughout the simulation.
-Nengo objects and connections
-each have several signals that can be probed.
-An ensemble's decoded value
-and its neurons' spikes
-can be probed, among others.
+Nengo models contain many variables
+that change over time,
+including membrane potentials,
+spike events, and represented variables.
+It is resource intensive to store the values of
+large numbers of variables
+at each time step, and it is also not necessary,
+as typically only a small fraction
+of these variables are analyzed after a simulation.
+The modeller chooses which variables to
+record by connecting a probe to an object.
 
 Like nodes, a probe could be implemented
 outside of the model.
@@ -1183,7 +1194,7 @@ sim.run(6)
 \end{figure}
 
 Many models in theoretical neuroscience
-are based on attractor networks.
+are based on attractor networks \cite{TODO}. % Amit, Rolls, Deco
 The NEF has been used in the past
 to implement many different types of
 attractor networks \cite{TODO}.
