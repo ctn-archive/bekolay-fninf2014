@@ -6,4 +6,4 @@ legend.frameon : False
 savefig.dpi : 1200
 svg.fonttype : none
 text.usetex : true
-text.latex.preamble : \usepackage{pslatex}
+text.latex.preamble : \usepackage{times}

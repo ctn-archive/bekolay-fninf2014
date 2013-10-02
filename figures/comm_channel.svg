@@ -32,9 +32,9 @@
      fit-margin-left="2"
      fit-margin-right="2"
      fit-margin-bottom="2"
-     inkscape:window-width="2048"
-     inkscape:window-height="1119"
-     inkscape:window-x="1680"
+     inkscape:window-width="1920"
+     inkscape:window-height="1036"
+     inkscape:window-x="1280"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <defs
@@ -261,17 +261,17 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
-       x="276.43878"
+       x="282.43878"
        y="83.750092"
        id="text3900-8-0"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3902-5-5"
-         x="276.43878"
+         x="282.43878"
          y="83.750092"
-         style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold">f(x<tspan
+         style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#323232;fill-opacity:1;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral">f(x<tspan
    id="tspan3280"
-   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:-2.10999918px;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold">) = x</tspan></tspan></text>
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:-2.10999918px;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral">) = x</tspan></tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path3282"
@@ -357,9 +357,7 @@
          id="tspan3902-5-5-5"
          x="71.061676"
          y="82.018532"
-         style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"><tspan
-           id="tspan3280-4"
-           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:-2.10999918px;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold">x</tspan></tspan></text>
+         style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:-2.10999918px;fill:#323232;fill-opacity:1;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral">x</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"

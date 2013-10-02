@@ -42,8 +42,8 @@
 \def\keyFont{\fontsize{8}{11}\helveticabold }
 \def\firstAuthorLast{Bekolay {et~al.}}
 \def\Authors{Trevor Bekolay\,$^{1,*}$, James Bergstra\,$^{1}$,
-  Xuan Choo\,$^{1}$, Travis DeWolf\,$^{1}$, Eric Hunsberger\,$^{1}$,
-  Daniel Rasmussen\,$^{1}$, Terrence C. Stewart\,$^{1}$
+  Eric Hunsberger\,$^{1}$, Travis DeWolf\,$^{1}$, Terrence C. Stewart\,$^{1}$,
+  Daniel Rasmussen\,$^{1}$, Xuan Choo\,$^{1}$, Aaron Voelker\,$^{1}$,
   and Chris Eliasmith\,$^{1}$}
 \def\Address{$^{1}$Computational Neuroscience Research Group,
   Center for Theoretical Neuroscience,
@@ -74,9 +74,45 @@
 \maketitle
 
 \begin{abstract}
-%Maximum: 2000 characters
+  Neuroscience currently lacks
+  a comprehensive theory of
+  how the brain implements cognitive processes
+  with biological parts.
+  The Neural Engineering Framework (NEF)
+  proposes one such theory,
+  but has not has not gathered
+  significant empirical support
+  due, in part, to the technical
+  challenge of building and simulating
+  large-scale models with the NEF.
+  Nengo is a tool that builds and simulates
+  functional brain models with the NEF.
+  Nengo is the primary resource
+  for teaching how the NEF
+  is used to model neural systems,
+  and for researchers using the NEF
+  to build and simulate
+  functional brain models.
+  A previous version of Nengo was used
+  to create Spaun,
+  the world's largest functional brain model.
+  The implementation of Spaun
+  identified limitations
+  in Nengo's ability to
+  construct models with simple syntax,
+  simulate them quickly,
+  and collect data for subsequent analysis.
+  We have implemented a new version of Nengo
+  in Python that overcomes these limitations.
+  It uses simple and extendable syntax,
+  simulates a benchmark model on the scale of Spaun
+  200 times faster than the previous implementation,
+  and has a flexible mechanism
+  for collecting simulation results.
 
-  \tiny \keyFont{\section{Keywords:} 1 2 3 4 5 (6 7 8)}
+  \tiny \keyFont{\section{Keywords:} Python, Neural Engineering
+    Framework, theoretical neuroscience, computational neuroscience,
+    control theory, software, simulation}
 \end{abstract}
 
 %max figures+tables: 15
@@ -170,7 +206,7 @@ extensibility, and simplicity.
 \subsection{JavaNengo limitations}
 
 \begin{table}[!t]
-\processtable{Nengo tools\label{tab:nengo-vers}}
+\processtable{Tools bearing the name Nengo.\label{tab:nengo-vers}}
 {\begin{tabular}{p{2.6cm} p{2.7cm} l p{7cm}} \toprule
 \textbf{Name} & \textbf{Implementation language}
   & \textbf{Code repository} & \textbf{Purpose} \\\midrule
@@ -189,7 +225,7 @@ PyNengo & Python & \texttt{nengo}
 PyNengo OpenCL simulator & Python+PyOpenCL
   & \texttt{nengo\_ocl}
   & Simulates models constructed with PyNengo. \\\botrule
-\end{tabular}}{Code repositories avilable at \url{http://github.com/ctn-waterloo/}}
+\end{tabular}}{Code repositories avilable at \url{http://github.com/ctn-waterloo/}.}
 \end{table}
 
 JavaNengo is a suite of tools providing
@@ -381,7 +417,49 @@ of large-scale neural models.
   \includegraphics[width=0.245\textwidth]{nef_summary_dyn}
 \end{center}
  \textbf{\refstepcounter{figure}\label{fig:nef} Figure \arabic{figure}.}{
-   Summary of the Neural Engineering Framework.}
+   Summary of the three principles of the Neural Engineering Framework
+   (NEF). (A) By the representation principle, signals are encoded
+   in neural populations based on the \textit{tuning curve}
+   of each neuron (top). The tuning curve describes
+   how active a neuron is given some input signal.
+   If we drive the eight neurons in the top panel
+   with the input signal in the middle panel,
+   we see the firing pattern in the bottom panel.
+   (B) By the representation principle,
+   the spiking activity of a neural population
+   can be decoded to recover the original input signal,
+   or some transformation of that input signal.
+   First, the firing pattern shown in the top panel
+   is filtered with a decaying exponential filter (middle panel).
+   The filtered activity is then summed together
+   with a set of weights that approximates
+   the input signal (bottom panel, green)
+   and the cosine of the input signal (bottom panel, purple).
+   (C) By the transformation principle,
+   populations of neurons can send signals
+   to another population by decoding
+   the desired function from the first population
+   and then encoding the decoded estimate
+   into the second population.
+   These two steps can be expanded into a single step
+   by calculating a set of weights
+   that describe the strength of the connection
+   between each neuron in the first population
+   and each neuron in the second population.
+   In (C), a sine wave is encoded by population A (top panel);
+   the negative of that signal is projected
+   to population B (middle panel)
+   and the square of that signal is projected
+   to population C (bottom panel).
+   (D) By the dynamcs principle,
+   signals being represented by population of neurons
+   can be thought of
+   as state variables in a dynamical system.
+   In this example, the dynamical system
+   has negative feedback across its two dimensions,
+   resulting in a harmonic oscillator.
+   The oscillator is plotted across time (top)
+   and in state space (bottom).}
 \end{figure}
 
 \paragraph{Representation}
@@ -739,10 +817,57 @@ directly to sockets will be added.
 
 \begin{figure}
 \begin{center}
-  \includegraphics[width=0.6\textwidth]{sim}
+  \includegraphics[width=\textwidth]{sim}
 \end{center}
  \textbf{\refstepcounter{figure}\label{fig:sim} Figure \arabic{figure}.}{
-   The first two timesteps of a simple simulation.}
+   Detailed breakdown of the PyNengo reference simulator
+   running a simple model for two timesteps.
+   (A) Code describing the model being simulated.
+   It consists of ensemble A project the sine of its
+   encoded signal to ensemble B,
+   which is recurrently connected.
+   (B) Diagram depicting the model being simulated.
+   (C) A detailed diagram of how the reference simulator
+   simulates this model. Signals, which are the values
+   tracked in the simulation, are colored blue.
+   Operators, which are the computations done on signals,
+   are colored red.
+   Signals can be grouped as low-level neural signals
+   that are used to compute the nonlinear functions
+   underlying neuron models,
+   and high-level NEF signals that are used to
+   drive neurons and track the signals
+   that the neurons are representing.
+   The operators that implement the decoding
+   and encoding steps map between
+   the low-level neural signals
+   and the high-level NEF signals.
+   (D) The signals tracked at the low level
+   can be interpreted as a model
+   commonly seen in computational neuroscience literature;
+   a population of leaky integrate-and-fire neurons
+   is driven by some time-varying input current, $J(t)$.
+   These neurons project to a population
+   of recurrently connected neurons.
+   The connection weight between the two populations,
+   and from the second population to itself,
+   can be computed by the NEF's transformation
+   principle, bypassing the need for
+   the high-level NEF signals
+   used by the reference simulator
+   for speed and data collection purposes.
+   (E) The signals tracked at the high level
+   can be interpreted as a dynamical system
+   that can be analyzed with control theory.
+   A simply represents its input,
+   and passes its state to a sin function
+   which becomes the input to B.
+   B is a simple linear system
+   that can be described with the typical
+   $\dot{x}(t) = A x(t) + B u(t)$ equation.
+   These dynamical systems can be simulated
+   directly, without the use of spiking neurons,
+   in order to quickly analyze system behavior.}
 \end{figure}
 
 
@@ -862,42 +987,45 @@ in connections to their associated operator.
 
 \begin{figure}
 \begin{center}
-  \includegraphics[width=.9\textwidth]{comm_channel}
-  \begin{minipage}{0.58\textwidth}
+  \includegraphics[width=.85\textwidth]{comm_channel}
+  \begin{minipage}{0.48\textwidth}
     \begin{lstlisting}
-      import nengo
-      from nengo.helpers import white_noise
-      model = nengo.Model("Communication Channel")
-      model.make_node("Input", white_noise(1, 5))
-      model.make_ensemble("A", nengo.LIF(30), 1)
-      model.make_ensemble("B", nengo.LIF(30), 1)
-      model.connect("Input", "A")
-      model.connect("A", "B")
-      model.probe("Input")
-      model.probe("A", filter=0.01)
-      model.probe("A.spikes")
-      model.probe("B", filter=0.01)
-      model.probe("B.spikes")
-      sim = model.simulator()
-      sim.run(1)
-      A_data = sim.data("A")
-      A_spikes = sim.data("A.spikes")
-      ...
+import nengo
+from nengo.helpers import white_noise
+model = nengo.Model("Communication Channel")
+model.make_node("Input", white_noise(1, 5))
+model.make_ensemble("A", nengo.LIF(30), 1)
+model.make_ensemble("B", nengo.LIF(30), 1)
+model.connect("Input", "A")
+model.connect("A", "B")
+model.probe("Input")
+model.probe("A", filter=0.01)
+model.probe("A.spikes")
+model.probe("B", filter=0.01)
+model.probe("B.spikes")
+sim = model.simulator()
+sim.run(1)
+A_data = sim.data("A")
+A_spikes = sim.data("A.spikes")
+...
     \end{lstlisting}
   \end{minipage}
-  \begin{minipage}{0.37\textwidth}
+  \begin{minipage}{0.39\textwidth}
     \includegraphics[width=\textwidth]{comm_channel_res}
   \end{minipage}
 \end{center}
  \textbf{\refstepcounter{figure}\label{fig:comm-channel}
    Figure \arabic{figure}.}{
-   Communcation channel model. (Top) Diagram of the model.
-   (Bottom left) Python code to create and run the model.
-   (Bottom right) Results of the model simulation. Lines depict
-   the node's output (Input panel) and the decoded value being represented
-   by ensembles (A and B panels). Light gray lines in A and B panels denote
-   spikes emitted by neurons in the ensembles. Each row depicts spikes
-   for one neuron.}
+   A communication channel implemented with Nengo.
+   (A) Diagram depicting the model. Ensemble A
+   projects its encoded signal to ensemble B unchanged.
+   (B) Nengo code to build and simulate the model
+   for 1 second.
+   (C) The results of the simulation.
+   The input signal (top panel) is white noise limited to 0 to 5 Hz.
+   The signal is well represented by both ensemble A (middle panel)
+   and ensemble B (bottom panel) despite the neural firing patterns
+   (underlaid in middle and bottom panels) being different.}
 \end{figure}
 
 A communication channel
@@ -923,62 +1051,67 @@ we also use the script for benchmarking
 
 \begin{figure}
 \begin{center}
-  \begin{minipage}{.495\textwidth}
+  \begin{minipage}{.435\textwidth}
     \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
-      # We use Nengo to generate
-      #     bias: Bias currents
-      #     decoders: Decoding weights
-      #     encoders: Encoding weights
-      # for populations A and B.
-      import pynn.nest as pyNN
+# We use Nengo to generate
+#     bias: Bias currents
+#     decoders: Decoding weights
+#     encoders: Encoding weights
+# for populations A and B.
+import pynn.nest as pyNN
 
-      lif_params = {'tau_refrac': 2.0, 'tau_syn_E':100,
-                     'tau_syn_I':100}
-      dt = 0.5
-      pyNN.setup(timestep=dt, min_delay=dt)
-      A = pyNN.Population(30, pyNN.IF_cond_exp, lif_params)
-      B = pyNN.Population(30, pyNN.IF_cond_exp, lif_params)
-      input_signal = 0.5
-      inputA = [pyNN.DCSource(amplitude=val) for val
-                 in A_bias + input_signal * A_encoders]
-      for i, pulse in enumerate(inputA):
-          pulse.inject_into(A[i:i+1])
-      inputB = [pyNN.DCSource(amplitude=val) for val
-                 in B_bias]
-      for i, pulse in enumerate(inputB):
-          pulse.inject_into(B[i:i+1])
+lif_params = {'tau_refrac': 2.0, 'tau_syn_E':100,
+               'tau_syn_I':100}
+dt = 0.5
+pyNN.setup(timestep=dt, min_delay=dt)
+A = pyNN.Population(30, pyNN.IF_cond_exp, lif_params)
+B = pyNN.Population(30, pyNN.IF_cond_exp, lif_params)
+input_signal = 0.5
+inputA = [pyNN.DCSource(amplitude=val) for val
+           in A_bias + input_signal * A_encoders]
+for i, pulse in enumerate(inputA):
+    pulse.inject_into(A[i:i+1])
+inputB = [pyNN.DCSource(amplitude=val) for val
+           in B_bias]
+for i, pulse in enumerate(inputB):
+    pulse.inject_into(B[i:i+1])
     \end{lstlisting}
   \end{minipage}
-  \begin{minipage}{.495\textwidth}
+  \begin{minipage}{.46\textwidth}
     \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
-      weights = []
-      for i in xrange(30):
-          for j in xrange(30):
-              weights.append((i, j,
-                  np.dot(A_decoder[i], B_encoder[j]), 1.0))
-      connection = pyNN.Projection(
-          A, B, pyNN.FromListConnector(weights))
-      A.record('spikes')
-      B.record('spikes')
-      pyNN.run(1000)
+weights = []
+for i in xrange(30):
+    for j in xrange(30):
+        weights.append((i, j,
+            np.dot(A_decoder[i], B_encoder[j]), 1.0))
+connection = pyNN.Projection(
+    A, B, pyNN.FromListConnector(weights))
+A.record('spikes')
+B.record('spikes')
+pyNN.run(1000)
 
-      # Decoded value of B
-      B_output = numpy.zeros(1000)
-      for i in xrange(1000):
-          spikes = B[i:i+1].getSpikes()[:,1]
-          spikes = (spikes / dt).astype('int')
-          B_output[spikes] += B_decoder[i]
-      # Filter with tau = 200 ms
-      decay = np.exp(-dt / 200)
-      B_output[0, :] *= (1 - decay)
-      for i in xrange(1, 1000):
-          B_output[i,:] = decay * B_output[i-1,:]
-                           + (1-decay) * B_output[i,:]
+# Decoded value of B
+B_output = numpy.zeros(1000)
+for i in xrange(1000):
+    spikes = B[i:i+1].getSpikes()[:,1]
+    spikes = (spikes / dt).astype('int')
+    B_output[spikes] += B_decoder[i]
+# Filter with tau = 200 ms
+decay = np.exp(-dt / 200)
+B_output[0, :] *= (1 - decay)
+for i in xrange(1, 1000):
+    B_output[i,:] = decay * B_output[i-1,:]
+                     + (1-decay) * B_output[i,:]
     \end{lstlisting}
   \end{minipage}
 \end{center}
  \textbf{\refstepcounter{figure}\label{fig:pynn} Figure \arabic{figure}.}{
-   An implementation of the communication channel in PyNN.}
+   Implementation of the communication channel in PyNN.
+   Note that several quantities are generated from Nengo;
+   the functions that generate these quantities in Nengo
+   can be decoupled, but are not included here for brevity.
+   The implementation of the Lorenz attractor
+   is not shown, but is very similar to the communication channel.}
 \end{figure}
 
 \subsection{Lorenz attractor network} \label{sec:lorenz}
@@ -987,27 +1120,27 @@ we also use the script for benchmarking
 \begin{center}
   \begin{minipage}{0.43\textwidth}
     \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
-      import nengo
-      tau = 0.1; sigma = 10; beta = 8.0/3; rho = 28
-      model = nengo.Model('Lorenz attractor')
-      model.make_ensemble('State', nengo.LIF(2000),
-                            dimensions=3, radius=60)
+import nengo
+tau = 0.1; sigma = 10; beta = 8.0/3; rho = 28
+model = nengo.Model('Lorenz attractor')
+model.make_ensemble('State', nengo.LIF(2000),
+                      dimensions=3, radius=60)
 
-      def feedback(x):
-          dx0 = -sigma * x[0] + sigma * x[1]
-          dx1 = -x[0] * x[2] - x[1]
-          dx2 = x[0] * x[1] - beta * (x[2] + rho) - rho
+def feedback(x):
+    dx0 = -sigma * x[0] + sigma * x[1]
+    dx1 = -x[0] * x[2] - x[1]
+    dx2 = x[0] * x[1] - beta * (x[2] + rho) - rho
 
-          return [dx0 * tau + x[0],
-                  dx1 * tau + x[1],
-                  dx2 * tau + x[2]]
+    return [dx0 * tau + x[0],
+            dx1 * tau + x[1],
+            dx2 * tau + x[2]]
 
-      model.connect('State', 'State',
-                      function=feedback, filter=tau)
-      model.probe('State', filter=tau)
-      model.probe('State.spikes')
-      sim = model.simulator()
-      sim.run(6)
+model.connect('State', 'State',
+                function=feedback, filter=tau)
+model.probe('State', filter=tau)
+model.probe('State.spikes')
+sim = model.simulator()
+sim.run(6)
     \end{lstlisting}
   \end{minipage}
   \begin{minipage}{0.55\textwidth}
@@ -1016,13 +1149,27 @@ we also use the script for benchmarking
   \end{minipage}
 \end{center}
  \textbf{\refstepcounter{figure}\label{fig:lorenz} Figure \arabic{figure}.}{
-   Lorenz attractor model. (Left) Python code to create and run the model.
-   (Top right) Diagram of the model.
-   (Bottom right) Results of the model simulation. Lines depict
-   the node's output (Input panel) and the decoded value being represented
-   by ensembles (A and B panels). Light gray lines in A and B panels denote
-   spikes emitted by neurons in the ensembles. Each row depicts spikes
-   for one neuron.}
+   A Lorenz attractor implemented with Nengo.
+   (A) Nengo code to build and simulate the model
+   for 6 seconds.
+   (B) Diagram depicting the model. The state ensemble
+   is recurrently connected with complex dynamics
+   implemented the chaotic Lorenz attractor.
+   Not that this populations does not receive
+   any input that might drive its initial value;
+   instead, the initial value is determined by
+   the baseline firing of the 2000 leaky integrate-and-fire
+   neurons that make up the state ensemble.
+   (C) The trajectory that the state ensemble takes
+   in its three-dimensional state space.
+   For the parameters chosen, the trajectory takes
+   the well-known butterfly shape.
+   (D) The state vector plotted over time.
+   (E) The spikes emitted by a random sample of 25
+   neurons from the state ensemble.
+   Some neurons fire uniformly across the 6 second simulation,
+   but most change depending on the state being tracked
+   due to the recurrent connection.}
 \end{figure}
 
 Many models in theoretical neuroscience
@@ -1044,47 +1191,63 @@ in PyNN for benchmarking purposes
 \begin{figure}
 \begin{center}
   \includegraphics[width=0.8\textwidth]{cconv}
-  \begin{minipage}{0.53\textwidth}
+  \begin{minipage}{0.46\textwidth}
     \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
-      import nengo
-      from nengo.networks import CircularConvolution
-      model = nengo.Model("Circular convolution")
-      model.make_node("Input A", [-0.21, 0.5, 0.12, 0.06])
-      model.make_ensemble("A", nengo.LIF(512), 4)
-      model.connect("Input A", "A")
-      model.make_node("Input B", [-0.18, 0.28, 0.18, -0.52])
-      model.make_ensemble("B", nengo.LIF(512), 4)
-      model.connect("Input B", "B")
-      cconv = model.add(CircularConvolution("Circular Convolution",
-          neurons=nengo.LIF(1032), dimensions=4))
-      model.connect("A", cconv.A)
-      model.connect("B", cconv.B)
-      model.make_ensemble("Result", nengo.LIF(512), 4)
-      model.connect(cconv, "Result")
-      model.probe("A", filter=0.02)
-      model.probe("B", filter=0.02)
-      model.probe("Result", filter=0.02)
-      sim = model.simulator()
-      sim.run(0.5)
+import nengo
+from nengo.networks import CircularConvolution
+model = nengo.Model("Circular convolution")
+model.make_node("Input A", [-0.21, 0.5, 0.12, 0.06])
+model.make_ensemble("A", nengo.LIF(512), 4)
+model.connect("Input A", "A")
+model.make_node("Input B", [-0.18, 0.28, 0.18, -0.52])
+model.make_ensemble("B", nengo.LIF(512), 4)
+model.connect("Input B", "B")
+cconv = model.add(CircularConvolution("Circular Convolution",
+    neurons=nengo.LIF(1032), dimensions=4))
+model.connect("A", cconv.A)
+model.connect("B", cconv.B)
+model.make_ensemble("Result", nengo.LIF(512), 4)
+model.connect(cconv, "Result")
+model.probe("A", filter=0.02)
+model.probe("B", filter=0.02)
+model.probe("Result", filter=0.02)
+sim = model.simulator()
+sim.run(0.5)
     \end{lstlisting}
   \end{minipage}
-  \begin{minipage}{0.43\textwidth}
+  \begin{minipage}{0.46\textwidth}
     \includegraphics[width=\textwidth]{cconv_res}
   \end{minipage}
 \end{center}
- \textbf{\refstepcounter{figure}\label{fig:cconv} Figure \arabic{figure}.}{
-   Circular convolution model. (Top) Diagram of the model.
-   Note that much of the complexity is contained within the
-   circular convolution network; the transform matrices shown
+ \textbf{\refstepcounter{figure}\label{fig:cconv} Figure
+   \arabic{figure}.}{
+   Circular convolution implemented with Nengo.
+   (A) Diagram depicting the model.
+   The input vectors, A and B, represent four-dimensional signal
+   which are mapped onto six ensembles within the
+   Circular Convolution network through
+   a complicated transformation matrix.
+   Each ensemble within the network represents a
+   two-dimensional signal. The product of those two signals
+   is projected through another complicated transformation matrix
+   to compute the final four-dimensional result.
+   Note that the complicated parts of the model
+   are contained within the network;
+   the number of ensembles and the transform matrices shown
    are automatically generated by the network depending on
-   input dimensionality.
-   (Bottom left) Python code to create and run the model.
-
-   (Bottom right) Results of the model simulation. Lines depict
-   the node's output (Input panel) and the decoded value being represented
-   by ensembles (A and B panels). Light gray lines in A and B panels denote
-   spikes emitted by neurons in the ensembles. Each row depicts spikes
-   for one neuron.}
+   the dimensionality of the input vectors.
+   (B) Nengo code to build and simulate the model
+   for 0.5 seconds.
+   (C) The result of the simulation.
+   Straight horizontal lines represent
+   the target values that each ensemble
+   should represent.
+   Wavy lines represent the decoded values
+   for each dimension represented by the
+   A, B, and Result ensembles
+   (top, middle, bottom panels respectively).
+   The ensembles represent the correct values,
+   after a startup transient of less than 0.1 seconds.}
 \end{figure}
 
 One of the most common operations done
@@ -1114,20 +1277,99 @@ too long to be instructive.
 
 \begin{figure}
 \begin{center}
-  \includegraphics[width=0.5\textwidth]{ocl_vs_ref}
+  \includegraphics[width=0.32\textwidth]{bench_cchannel}
+  \includegraphics[width=0.32\textwidth]{bench_lorenz}
+  \includegraphics[width=0.32\textwidth]{bench_cconv}
 \end{center}
  \textbf{
-     \refstepcounter{figure}\label{fig:ocl_vs_ref}
+     \refstepcounter{figure}\label{fig:benchmarks}
      Figure \arabic{figure}.}{
-     Five-hundred-dimensional circular convolution networks were some of the most
-     computationally demanding elements of the Spaun cognitive architecture.
-     Simulations of circular convolution networks of various sizes illustrate the speed of our re-engineered simulators.
-     A straightforward reference implementation in Python is sufficient for small networks,
-     while for larger ones the new OpenCL-powered simulator runs up to 200$\times$ faster,
-     In particular the Radeon 7970 GPU can simulate 500-dimensional convolution networks faster than real time (0.95 seconds for a 1-second simulation).
-     Also, although both are multithreaded, our new implementation delivers better CPU performance than the previous JavaNengo implementation.
+     For (A) and (B), all of the simulators
+     except the PyNengo OpenCL simulator
+     was run on an Intel Core i7-965.
+     JavaNengo used all 4 cores of this processor;
+     all other simulator used only 1 core.
+     The PyNengo OpenCL simulator
+     was run on an NVidia GTX280 GPU.
+     For (C), if not noted, the simulator used
+     was the PyNengo OpenCL simulator.
+     The CPU used for JavaNengo and
+     the PyNengo reference simulator
+     was an Intel Core i7-3770;
+     all 4 cores were used by JavaNengo,
+     while PyNengo's reference simulator
+     only used one core.
      }
 \end{figure}
+
+While benchmark models are not indicative
+of performance on all models,
+increasing simulation speed
+was a primary motivators in creating PyNengo.
+To validate that performance has improved,
+we ran the models described in section~\ref{sec:examples}
+for various numbers of neurons and dimensions
+for each ensemble.
+
+The communication channel and Lorenz attractor
+are small models that demonstrate
+the principles of the NEF.
+Their small size enables us to write
+PyNN scripts that implement roughly
+the same functionality
+with Brian, NEURON, NEST, and TODO PCSim.
+We run each parameter set five times
+on the same machine,
+and plot the mean.
+In most cases, the coefficient of variation
+is well below 0.1, except for two
+outliers with coefficients of 0.18 and 0.22,
+indicating that these means are robust.
+The results, shown in Figure~\ref{fig:benchmarks},
+suggest that all versions of Nengo are significantly
+faster than the simulators accessible
+through PyNN, especially
+as the size of the model increases.
+This is likely due to Nengo's
+use of factorized weight matrices,
+rather than storing and computing with
+the entire weight matrix
+on each timestep.
+While NEST and NEURON were not
+run with MPI,
+the reference simulator of PyNengo
+also only uses one CPU core.
+The results also suggest that PyNengo's
+OpenCL simulator is faster
+than the reference simulator
+and JavaNengo's simulator,
+though the difference
+is not overwhelming in these models.
+
+As a real-world example,
+we have also benchmarked
+the circular convolution model.
+Circular convolution is an important test case,
+as a significant portion of Spaun's
+2.5 million neurons are used to
+implement circular convolution.
+In this case, only versions of Nengo
+were tested, and were tested rigorously.
+Instead of running each simulation multiple times,
+we instead run the simulator for 10 timesteps
+in order to fill various levels of the cache,
+and then run the simulator for 1000 more timesteps;
+there is very little variance using this method.
+As can be seen in Figure~\ref{fig:benchmarks},
+for large models, the OpenCL simulator
+performs much faster than JavaNengo;
+in particular, a Radeon 7970 GPU performs 500-dimensional
+circular convolution faster than real time,
+and 200 times faster than JavaNengo.
+Additionally, although both JavaNengo
+and the OpenCL simulator on a CPU
+both use all available CPU cores,
+PyNengo's OpenCL simulator is significantly faster.
 
 \section{Discussion}
 

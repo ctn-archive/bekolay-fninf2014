@@ -9,8 +9,8 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="717.11609"
-   height="205.77705"
+   width="629.336"
+   height="185.32837"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
@@ -23,8 +23,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="317.7565"
-     inkscape:cy="21.038155"
+     inkscape:cx="284.18507"
+     inkscape:cy="93.18102"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -32,9 +32,9 @@
      fit-margin-left="2"
      fit-margin-right="2"
      fit-margin-bottom="2"
-     inkscape:window-width="2048"
-     inkscape:window-height="1119"
-     inkscape:window-x="1680"
+     inkscape:window-width="1920"
+     inkscape:window-height="1036"
+     inkscape:window-x="1280"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <defs
@@ -174,12 +174,12 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(-109.07027,-9.926308)"
+     transform="translate(-109.07027,-30.375)"
      id="layer1"
      inkscape:groupmode="layer"
      inkscape:label="Layer 1">
@@ -227,210 +227,183 @@
          x="110.59761"
          y="210.04028"
          style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#323232;fill-opacity:1;font-family:Times New Roman;-inkscape-font-specification:Times New Roman">2000 LIF neurons, 3D</tspan></text>
-    <g
-       id="g4378"
-       transform="translate(-55,-48.571429)">
-      <text
-         sodipodi:linespacing="125%"
-         id="text3900-8-0-1"
-         y="151.70975"
-         x="344.93759"
-         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
-         xml:space="preserve"><tspan
-           style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-           y="151.70975"
-           x="344.93759"
-           id="tspan3902-5-5-3"
-           sodipodi:role="line">f(<tspan
-   id="tspan3185"
-   style="font-weight:bold">x</tspan>) =        + <tspan
-   id="tspan3191"
-   style="letter-spacing:5px">τ</tspan></tspan></text>
-      <g
-         transform="translate(81.142857,-1.627263)"
-         id="g4118">
-        <path
-           style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-           d="m 545.70353,64.116351 -15.71429,0 0,153.571429 20.71429,0"
-           id="path3193"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="cccc" />
-        <g
-           id="g4102">
-          <text
-             sodipodi:linespacing="125%"
-             id="text3900-8-0-1-0"
-             y="98.152466"
-             x="559.95538"
-             style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
-             xml:space="preserve"><tspan
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="98.152466"
-               x="559.95538"
-               id="tspan3902-5-5-3-4"
-               sodipodi:role="line">−σ</tspan><tspan
-               id="tspan4050"
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="148.15247"
-               x="559.95538"
-               sodipodi:role="line">ρ</tspan><tspan
-               id="tspan4060"
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="198.15247"
-               x="559.95538"
-               sodipodi:role="line">x<tspan
-   id="tspan4292"
-   style="font-size:65.00091553%;baseline-shift:sub">1</tspan></tspan></text>
-          <text
-             xml:space="preserve"
-             style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
-             x="623.54498"
-             y="97.656815"
-             id="text4064"
-             sodipodi:linespacing="125%"><tspan
-               sodipodi:role="line"
-               id="tspan4066"
-               x="623.54498"
-               y="97.656815"
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold">σ</tspan><tspan
-               sodipodi:role="line"
-               x="623.54498"
-               y="154.04401"
-               style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               id="tspan4068">−1</tspan><tspan
-               sodipodi:role="line"
-               x="623.54498"
-               y="204.04401"
-               style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               id="tspan4070">0</tspan></text>
-          <text
-             sodipodi:linespacing="125%"
-             id="text4074"
-             y="105.08539"
-             x="678.92206"
-             style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
-             xml:space="preserve"><tspan
-               style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="105.08539"
-               x="678.92206"
-               id="tspan4076"
-               sodipodi:role="line">0</tspan><tspan
-               id="tspan4078"
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="148.6982"
-               x="678.92206"
-               sodipodi:role="line">x<tspan
-   id="tspan4290"
-   style="font-size:65.00091553%;baseline-shift:sub">0</tspan></tspan><tspan
-               id="tspan4080"
-               style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="205.08539"
-               x="678.92206"
-               sodipodi:role="line">−β</tspan></text>
-        </g>
-        <path
-           style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-           d="m 698.14732,64.116351 15.71429,0 0,153.571429 -20.71429,0"
-           id="path3193-1"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="cccc" />
-      </g>
-      <g
-         transform="translate(-327.56382,99.801307)"
-         id="g4118-4">
-        <g
-           transform="translate(262.85714,-101.42857)"
-           id="g4229">
-          <path
-             sodipodi:nodetypes="cccc"
-             inkscape:connector-curvature="0"
-             id="path3193-3"
-             d="m 545.70353,64.116351 -15.71429,0 0,153.571429 20.71429,0"
-             style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-          <text
-             sodipodi:linespacing="125%"
-             id="text3900-8-0-1-0-3"
-             y="98.152466"
-             x="559.95538"
-             style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
-             xml:space="preserve"><tspan
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="98.152466"
-               x="559.95538"
-               id="tspan3902-5-5-3-4-4"
-               sodipodi:role="line">x<tspan
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
+       x="297.93759"
+       y="101.14566"
+       id="text3900-8-0-1"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3902-5-5-3"
+         x="297.93759"
+         y="101.14566"
+         style="font-size:36px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#323232;fill-opacity:1;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral">f(<tspan
+   style="font-size:36px;font-weight:bold;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral"
+   id="tspan3185">x</tspan>) =        + <tspan
+   style="font-size:36px;letter-spacing:5px;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral"
+   id="tspan3191">τ            ·</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
+       x="535.82922"
+       y="56.315662"
+       id="text3900-8-0-1-0"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3902-5-5-3-4"
+         x="535.82922"
+         y="56.315662"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral Italic">−σ</tspan><tspan
+         sodipodi:role="line"
+         x="535.82922"
+         y="96.315659"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral Italic"
+         id="tspan4050">ρ</tspan><tspan
+         sodipodi:role="line"
+         x="535.82922"
+         y="136.31566"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral Italic"
+         id="tspan4060">x<tspan
    style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan4227">0</tspan></tspan><tspan
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="148.15247"
-               x="559.95538"
-               sodipodi:role="line"
-               id="tspan4215">x<tspan
+   id="tspan6777">1</tspan></tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4064"
+       y="59.40366"
+       x="590.73798"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"><tspan
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral Italic"
+         y="59.40366"
+         x="590.73798"
+         id="tspan4066"
+         sodipodi:role="line">σ</tspan><tspan
+         id="tspan4068"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral Italic"
+         y="99.403656"
+         x="590.73798"
+         sodipodi:role="line">−1</tspan><tspan
+         id="tspan4070"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral Italic"
+         y="139.40366"
+         x="590.73798"
+         sodipodi:role="line">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
+       x="642.07721"
+       y="60.203663"
+       id="text4074"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4076"
+         x="642.07721"
+         y="60.203663"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral">0</tspan><tspan
+         sodipodi:role="line"
+         x="642.07721"
+         y="100.20366"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral"
+         id="tspan4078">x<tspan
    style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan4225">1</tspan></tspan><tspan
-               id="tspan4060-0"
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="198.15247"
-               x="559.95538"
-               sodipodi:role="line">x<tspan
-   id="tspan4288"
-   style="font-size:65.00091553%;baseline-shift:sub">2</tspan></tspan></text>
-          <path
-             sodipodi:nodetypes="cccc"
-             inkscape:connector-curvature="0"
-             id="path3193-1-5"
-             d="m 578.14732,64.116351 15.71429,0 0,153.571429 -20.71429,0"
-             style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-        </g>
-      </g>
-      <g
-         transform="translate(20.454196,99.801307)"
-         id="g4118-4-6">
-        <g
-           transform="translate(262.85714,-101.42857)"
-           id="g4229-3">
-          <path
-             sodipodi:nodetypes="cccc"
-             inkscape:connector-curvature="0"
-             id="path3193-3-4"
-             d="m 545.70353,64.116351 -15.71429,0 0,153.571429 20.71429,0"
-             style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-          <text
-             sodipodi:linespacing="125%"
-             id="text3900-8-0-1-0-3-9"
-             y="98.152466"
-             x="559.95538"
-             style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
-             xml:space="preserve"><tspan
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="98.152466"
-               x="559.95538"
-               id="tspan3902-5-5-3-4-4-9"
-               sodipodi:role="line">x<tspan
+   id="tspan6779">0</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="642.07721"
+         y="140.20366"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral"
+         id="tspan4080">−β</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 414.78227,33.881949 -13.714,0 0,117.571421 13.714,0"
+       id="path3193-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
+       x="421.59271"
+       y="56.523663"
+       id="text3900-8-0-1-0-3"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3902-5-5-3-4-4"
+         x="421.59271"
+         y="56.523663"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral">x<tspan
    style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan4227-0">0</tspan></tspan><tspan
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="148.15247"
-               x="559.95538"
-               sodipodi:role="line"
-               id="tspan4215-4">x<tspan
+   id="tspan6752">0</tspan></tspan><tspan
+         id="tspan4215"
+         sodipodi:role="line"
+         x="421.59271"
+         y="96.523666"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral">x<tspan
    style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan4225-9">1</tspan></tspan><tspan
-               id="tspan4060-0-2"
-               style="font-size:40px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;fill:#323232;fill-opacity:1;font-family:MathJax_Math;-inkscape-font-specification:MathJax_Math Bold"
-               y="198.15247"
-               x="559.95538"
-               sodipodi:role="line">x<tspan
-   id="tspan4288-2"
-   style="font-size:65.00091553%;baseline-shift:sub">2</tspan></tspan></text>
-          <path
-             sodipodi:nodetypes="cccc"
-             inkscape:connector-curvature="0"
-             id="path3193-1-5-3"
-             d="m 578.14732,64.116351 15.71429,0 0,153.571429 -20.71429,0"
-             style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-        </g>
-      </g>
-    </g>
+   id="tspan6754">1</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="421.59271"
+         y="136.52367"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral"
+         id="tspan4060-0">x<tspan
+   style="font-size:65.00091553%;baseline-shift:sub"
+   id="tspan6756">2</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#323232;fill-opacity:1;stroke:none;font-family:Sans"
+       x="714.36133"
+       y="56.523663"
+       id="text3900-8-0-1-0-3-9"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3902-5-5-3-4-4-9"
+         x="714.36133"
+         y="56.523663"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral Italic">x<tspan
+   style="font-size:65.00091553%;baseline-shift:sub"
+   id="tspan6785">0</tspan></tspan><tspan
+         id="tspan4215-4"
+         sodipodi:role="line"
+         x="714.36133"
+         y="96.523666"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral Italic">x<tspan
+   style="font-size:65.00091553%;baseline-shift:sub"
+   id="tspan6783">1</tspan></tspan><tspan
+         sodipodi:role="line"
+         x="714.36133"
+         y="136.52367"
+         id="tspan4060-0-2"
+         style="font-size:32px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;text-anchor:middle;font-family:STIXGeneral;-inkscape-font-specification:STIXGeneral Italic">x<tspan
+   style="font-size:65.00091553%;baseline-shift:sub"
+   id="tspan6781">2</tspan></tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 426.99899,33.881942 13.714,0 0,117.571438 -13.714,0"
+       id="path3193-3-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 528.6762,33.881942 -13.714,0 0,117.571438 13.714,0"
+       id="path3193-3-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 655.17863,33.881932 13.714,0 0,117.571458 -13.714,0"
+       id="path3193-3-7-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 708.96191,33.881942 -13.714,0 0,117.571438 13.714,0"
+       id="path3193-3-0"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 721.17863,33.881942 13.714,0 0,117.571438 -13.714,0"
+       id="path3193-3-7-2"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
   </g>
 </svg>
