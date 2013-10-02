@@ -162,18 +162,22 @@ representing the task to be performed
 and the details of that task;
 for example, sequentially presenting images
 containing the characters $A3[1234]$ instructs Spaun
-to remember the list $1234$.
+to memorize the list $1234$.
 It then provides its answer by
 sending motor commands to a simulated arm model,
 tracing out digits.
-If asked to recall the remembered list,
+If asked to recall the memorized list,
 it would trace out the digits $1234$.
 
 While the tasks Spaun performs are diverse,
 all tasks use a common set of
-functional modules that we map
-onto the brain areas hypothesized
-to perform those functions.
+functional modules.
+Each functional module corresponds
+to a brain area that has been hypothesized
+to perform those functions
+in neuroscientific literature
+(e.g., motor commands are represented
+in primary motor cortex).
 Like data-driven large scale models,
 Spaun is able to match experimental data
 across the neuroscientific spectrum,
@@ -183,10 +187,10 @@ based on data and hoping behavior emerges,
 we construct the model
 based on behavior
 and see that the data emerges.
-This is made possible by a theoretical framework
-like the memory-prediction framework \cite{TODO},
-but unlike it and other frameworks,
-the NEF enables Spaun to employ
+This is possible due to the NEF,
+which, unlike the memory prediction framework
+and theoretical frameworks,
+allows Spaun to employ
 different sets of algorithms
 depending on the behavioral task performed,
 rather than defining a single algorithm
@@ -231,7 +235,7 @@ PyNengo OpenCL simulator & Python+PyOpenCL
 \end{tabular}}{Code repositories avilable at \url{http://github.com/ctn-waterloo/}.}
 \end{table}
 
-JavaNengo is a suite of tools providing
+JavaNengo is a suite of tools composed of
 a neural simulator and graphical user interface (GUI)
 implemented in Java,
 and a scripting interface implemented in Jython
@@ -268,7 +272,7 @@ that manipulates those simulator objects.
 Typically, modellers start by following
 tutorials that use the GUI interface,
 and transition to the scripting interface
-in order to implement more complicated models;
+in order to implement more complex models;
 since the GUI modifies simulator objects directly,
 modelling concepts learned in the GUI
 have to be relearned in the scripting interface.
@@ -278,8 +282,8 @@ described in \cite{TODO},
 provided a simpler interface
 to the NEF-specific portions of the simulator.
 This greatly enhanced productivity,
-and made it possible
-to create many models with very little code.
+allowing models to be described
+by short scripts.
 Modellers quickly started using
 the scripting interface
 as their primary tool,
@@ -322,15 +326,16 @@ which can perform the types of computations
 that neural models require quickly and in parallel.
 
 Addressing all of these issues
-in the Java codebase would involve
-significant enough changes
-that we started from scratch instead.
+in the Java codebase would require
+such extensive changes
+that we instead opted
+to write a new version of Nengo in Python.
 Since the scripting interface
 already used Python syntax,
 and since Python is widely used
 for neuroscientific data analysis,
 we targeted the CPython interpreter
-as the platform for the next generation of Nengo.
+as the platform for the new version of Nengo.
 
 \subsection{PyNengo}
 
@@ -412,8 +417,7 @@ of large-scale neural models.
 
 \begin{enumerate}
   \item \textbf{Representation:} A population of neurons
-    collectively represents information in the form of
-    time-varying vectors of real numbers.
+    collectively represents a time-varying vector of real numbers.
   \item \textbf{Transformation:} Functions on those vectors
     are computed by the connections between populations.
   \item \textbf{Dynamics:} The vectors represented
@@ -575,7 +579,7 @@ on vectors is sufficient to model
 many neural systems,
 many systems, notably memory systems,
 require persistent activity through recurrent connections.
-When recurrent connection are introduced,
+When recurrent connections are introduced,
 the vectors that populations represent
 can be thought of as state variables
 in a dynamical system.
@@ -596,31 +600,45 @@ as connectable components
 that describe neural systems,
 just as a circuit diagram
 describes an electronic circuit.
-The goal of Nengo is to allow
-modellers to describe neural systems
-in terms of what information is being represented,
-how that information is transformed,
-and what dynamics are required
-to perform cognitively relevant
-functions with biologically constrained
-neural components.
-Those descriptions are then
-translated to a network
-of interconnected neurons.
-This situates Nengo
-as a ``neural compiler''
+The goal of Nengo is to enable
+modellers to create those components
+and connect them.
+Components describe
+what information is being represented,
+and connections describe
+how that information is transformed
+over time.
+Nengo translates those descriptions
+to a network of interconnected neurons,
+situating it as a ``neural compiler''
 that translates
 a high-level functional model
-to a low-level neural model
-that implements the high-level function.
+to a low-level neural model.
 
 \section{PyNengo object model}
+
+To describe the high-level functional model,
+PyNengo defines six core objects.
+\begin{enumerate}
+  \item The \texttt{Model} encapsulates the model and
+    exposes a simplified interface to other objects.
+  \item The \texttt{Ensemble} contains a group of neurons
+    that encodes a time-varying vector of real numbers.
+  \item The \texttt{Node} represents non-neural information,
+    such as sensory inputs.
+  \item The \texttt{Connection} describes connections
+    between nodes and ensembles.
+  \item The \texttt{Network} is a group of interconnected
+    nodes and ensembles.
+  \item The \texttt{Probe} gathers data during a simulation
+    for later analysis.
+\end{enumerate}
 
 \subsection{Model}
 
 A Nengo model is a collection
-of Nengo objects that represent information
-and connections that transform information.
+of Nengo objects, which represent information,
+and connections, which transform information.
 Objects and connections can be probed
 in order to collect data during simulation.
 
@@ -645,15 +663,15 @@ An \texttt{Ensemble} is
 a population of neurons
 that represents information
 in the form of a real-valued vector.
-An ensemble must be given as arguments
-its dimensionality
+When creating an ensemble,
+the user must provide the dimensionality
 (i.e., the length of the vector it represents),
 and an object that describes
-the population of neurons.
-For example, \texttt{nengo.LIF(50, tau\_ref=0.002)}
-describes a population
-of 50 leaky integrate-and-fire neurons \cite{TODO} % LIF cite
-with a refractory time of 2 milliseconds.
+a population of neurons.
+For example, \texttt{Ensemble('A', nengo.LIF(50, tau\_ref=0.002), 1)}
+describes an ensemble representing a one-dimensional vector
+with 50 leaky integrate-and-fire neurons \cite{TODO} % LIF cite
+that have a refractory period of 2 milliseconds.
 The \texttt{nengo.LIF} class defines
 the parameters of the LIF neurons symbolically
 so that each simulator can compute
@@ -661,7 +679,7 @@ the LIF nonlinearity efficiently.
 The neuron model used by the ensemble
 is changed by passing in a different symbolic neuron object;
 however, the simulator used must be aware
-of that neuron model.
+of that type of neuron.
 
 Other attributes of the \texttt{Ensemble},
 such as its encoding weights,
@@ -776,16 +794,15 @@ of the network and how it interacts
 with the rest of the model
 (see section \ref{sec:ccon} for a usage example).
 
-Networks are designed to be
-subclassed by users,
+\textt{Network} is a base class designed to be
+subclassed by users
 in order to group together
 parts of a model.
 In most cases,
 the code that creates and connects
 several objects in the model can be
-moved into a \texttt{Network}
-subclass' \texttt{make}
-function with only minor changes.
+made into a Network subclass
+with only minor changes.
 
 Networks can vary dramatically in size,
 and can be composed of other networks.
@@ -897,9 +914,15 @@ directly to sockets will be added.
    in order to quickly analyze system behavior.}
 \end{figure}
 
-
 Decoupling model creation and simulation
-enables PyNengo simulators
+has been done previously
+by PyNN \cite{TODO}.
+In PyNN, the same Python script
+can be used to run a model
+on four different simulators.
+Nengo follows this programming model,
+decoupling model creation and simulation,
+which enables PyNengo simulators
 to allocate memory and schedule computations
 in the most efficient ways possible.
 Simulators are given a \texttt{Model}
@@ -925,9 +948,9 @@ we will describe
 the reference simulator implementation;
 the OpenCL simulator shares many
 of the reference simulator's architectural choices,
-but is heavily optimized in ways
-that cannot be adequately described
-with the space available.
+but the details of its implementation
+include OpenCL-specific optimizations
+that are beyond the scope of this paper.
 Additionally, it should be noted that
 any simulator that takes a \texttt{Model}
 as input and exposes a \texttt{step}
@@ -937,21 +960,16 @@ is provided as an example
 for simulator designers,
 not as a specification.
 
-Before the first timestep, the reference simulator
-\begin{enumerate}
-  \item translates high-level objects to
-    a set of signals and operators,
-  \item allocates NumPy arrays for each signal, and
-  \item sorts operators based on a dependency graph.
-\end{enumerate}
-On each timestep, the reference simulator
-\begin{enumerate}
-  \item computes each operator in order, and
-  \item copies probed signals to a separate buffer.
-\end{enumerate}
-Figure~\ref{fig:sim} depicts
-the state of the reference simulator
-after two timesteps of a simple model.
+The reference simulator
+uses a reduced set of objects
+that describe computations
+occurring in the model.
+Specifically, the simulator
+contains signals, which represent values,
+and operators, which represent computations
+on signals.
+Figure~\ref{fig:sim} shows the signals
+and operators used in a simple model.
 
 \paragraph{Signals}
 
@@ -975,7 +993,7 @@ can be conceptually grouped into
 those that track low-level neural signals,
 and those that track high-level signals
 defined by the NEF.
-Most neural simulators only track
+Other neural simulators only track
 low-level signals.
 Operators commonly map
 between related low- and high-level signals.
@@ -990,12 +1008,11 @@ operations are necessary for simulation.
 
 Many of the computations
 done in a simulation
-are linear (e.g.,
+are linear transformations (e.g.,
 the decoding and encoding steps
 in Figure~\ref{fig:sim}),
 and therefore can share a common operator;
-this can be helpful for parallelization
-in some simulators.
+this can be helpful for parallelizing computations.
 
 Nonlinear functions, however,
 require specific operators.
@@ -1006,7 +1023,40 @@ from symbolic neuron objects in ensembles
 and from symbolic learning rule objects
 in connections to their associated operator.
 
-\section{Examples} \label{sec:examples}
+\paragraph{Reference simulator description}
+
+Before the first timestep, the reference simulator
+\begin{enumerate}
+  \item translates high-level objects to
+    a set of signals and operators,
+  \item allocates NumPy arrays for each signal, and
+  \item sorts operators based on a dependency graph.
+\end{enumerate}
+On each timestep, the reference simulator
+\begin{enumerate}
+  \item computes each operator in order, and
+  \item copies probed signals to a separate buffer.
+\end{enumerate}
+Figure~\ref{fig:sim} depicts
+the state of the reference simulator
+after two timesteps of a simple model;
+all subsequent timesteps perform the same
+operations as the first two.
+
+\section{Example scripts} \label{sec:examples}
+
+The scripting interface provides
+a simple way to add PyNengo objects to a model,
+simulate that model,
+and extract data collecting during the simulation.
+Rather than list the functions in the scripting interface,
+we instead provide three concrete example scripts
+that highlight the types of models that can be
+build with PyNengo.
+We have also implemented two of these three examples
+in PyNN to provide a comparison
+for the length and clarity of the code
+describing the models.
 
 \subsection{Communication channel} \label{sec:comm-channel}
 
