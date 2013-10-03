@@ -136,19 +136,19 @@ that attempt to recreate neuroscientific
 data in precise detail with the thought that
 cognition will emerge by connecting
 detailed neuron models according
-to the statistics of biological synapses \cite{TODO}. % blue brain
+to the statistics of biological synapses \citep{markram2006}.
 Cognition has not yet emerged
 from data-driven large scale models.
 On the other end of the spectrum,
-cognitive architectures \cite{TODO} % act-r
-and theoretical frameworks \cite{TODO} % Hawkins, Kurzweil
+cognitive architectures \citep{anderson2004}
+and theoretical frameworks \citep{hawkins2006}
 have solved high-dimensional statistical problems,
 but do so without respecting biological constraints,
 and with worse performance than machine learning approaches.
 
 Nengo is a neural simulator
 based on a theoretical framework proposed
-by Eliasmith \& Anderson \citeyearpar{TODO}
+by \citet{eliasmith2003}
 called the Neural Engineering Framework
 (NEF).
 The NEF is a large-scale modeling approach
@@ -157,10 +157,16 @@ to build neural networks with
 demonstrable cognitive abilities.
 Nengo and the NEF has been used to build
 increasingly sophisticated neural subsystems
-for the last decade (e.g., \cite{TODO}),
+for the last decade
+(e.g., path integration [\citealp{conklin2005}],
+working memory [\citealp{singh2006}],
+list memory [\citealp{choo2010}],
+inductive reasoning [\citealp{rasmussen2011}],
+motor control [\citealp{dewolf2011}],
+decision making [\citealp{stewart2012}])
 culminating recently with Spaun,
 currently the world's
-largest functional brain model \cite{TODO}.
+largest functional brain model \citep{eliasmith2012}.
 Spaun is a network of 2.5 million spiking neurons
 that can perform eight high-level cognitive tasks
 including memorizing lists and inductive reasoning.
@@ -293,7 +299,7 @@ and implements seven interfaces.
 Adding support for synaptic plasticity
 in \texttt{NEFEnsemble}
 involved adding or significantly modifying
-25 Java classes \cite{TODO}.
+25 Java classes \citep{bekolay2010}.
 
 The JavaNengo GUI provides
 a drag-and-drop interface in which to create NEF models.
@@ -311,7 +317,7 @@ modelling concepts learned in the GUI
 have to be relearned in the scripting interface.
 
 The JavaNengo scripting interface,
-described in \cite{TODO},
+described in \citet{stewart2009},
 provides a simpler interface
 to the NEF-specific portions of the simulator.
 This greatly enhanced productivity,
@@ -377,9 +383,9 @@ neural models using the NEF.
 Its interfaces are based on NumPy,
 so it integrates seamlessly
 with other scientific Python tools
-for interactive exploration \cite{TODO}, %Ipython
-scientific computation \cite{TODO}, %scipy
-and plotting \cite{TODO}. % Matlab
+for interactive exploration \citep{perez2007},
+scientific computation \citep{oliphant2007},
+and plotting \citep{hunter2007}.
 Arbitrary CPython programs
 can use Nengo models,
 opening up possibilities
@@ -391,7 +397,7 @@ which makes it easy to
 document, test, and modify.
 These objects are accessible
 through a scripting interface
-similar to JavaNengo's \cite{TODO}, % frontiers 2009
+similar to JavaNengo's \citep{stewart2009},
 with improvements
 for easier incorporation of user-defined networks,
 neuron models and learning rules.
@@ -450,7 +456,7 @@ as a theory of the brain.
 
 \section{Neural Engineering Framework (NEF)}
 
-The Neural Engineering Framework (NEF; \cite{TODO})
+The Neural Engineering Framework (NEF; \citealp{eliasmith2003})
 proposes three principles
 that enable the construction
 of large-scale neural models.
@@ -535,7 +541,7 @@ With enough neurons,
 we can estimate the originally encoded vector
 through a \textit{decoding} process.
 This idea is similar to population coding
-\cite{TODO}, but generalized
+\citep{georgopoulos1986}, but generalized
 to vectors of arbitrary length.
 
 Figure~\ref{fig:nef} depicts
@@ -685,7 +691,7 @@ and an object that describes
 a population of neurons.
 For example, \texttt{Ensemble('A', nengo.LIF(50, tau\_ref=0.002), 1)}
 describes an ensemble representing a one-dimensional vector
-with 50 leaky integrate-and-fire neurons \cite{TODO} % LIF cite
+with 50 leaky integrate-and-fire neurons \citep{lapicque1907}
 that have a refractory period of 2 milliseconds.
 The \texttt{nengo.LIF} class defines
 the parameters of the LIF neurons symbolically
@@ -918,7 +924,7 @@ directly to sockets will be added.
 
 Decoupling model creation and simulation
 has been done previously
-by PyNN \cite{TODO}.
+by PyNN \citep{davison2008}.
 In PyNN, the same Python script
 can be used to run a model
 on four different simulators.
@@ -1063,9 +1069,9 @@ describing the models.
 
 \begin{figure}
 \begin{center}
-  \includegraphics[width=.85\textwidth]{comm_channel}
-  \begin{minipage}{0.48\textwidth}
-    \begin{lstlisting}
+  \includegraphics[width=.73\textwidth]{comm_channel}
+  \begin{minipage}{0.37\textwidth}
+    \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
 import nengo
 from nengo.helpers import white_noise
 model = nengo.Model("Communication Channel")
@@ -1086,7 +1092,7 @@ A_spikes = sim.data("A.spikes")
 ...
     \end{lstlisting}
   \end{minipage}
-  \begin{minipage}{0.39\textwidth}
+  \begin{minipage}{0.3\textwidth}
     \includegraphics[width=\textwidth]{comm_channel_res}
   \end{minipage}
 \end{center}
@@ -1188,6 +1194,8 @@ for i in xrange(1, 1000):
    can be decoupled, but are not included here for brevity.}
 \end{figure}
 
+\clearpage
+
 \subsection{Lorenz attractor network} \label{sec:lorenz}
 
 \begin{figure}
@@ -1247,10 +1255,10 @@ sim.run(6)
 \end{figure}
 
 Many models in theoretical neuroscience
-are based on attractor networks \cite{TODO}. % Amit, Rolls, Deco
+are based on attractor networks \citep{amit1992, deco2003}.
 The NEF has been used in the past
 to implement many different types of
-attractor networks \cite{TODO}.
+attractor networks \citep{eliasmith2005}.
 Figure~\ref{fig:lorenz} depicts
 a Nengo implementation of the Lorenz chaotic attractor
 with a single ensemble
@@ -1344,6 +1352,8 @@ circular convolution in PyNN.
 The resulting script would be
 too long to be instructive.
 
+\clearpage
+
 \section{Benchmarks} \label{sec:benchmark}
 
 \begin{figure}
@@ -1426,7 +1436,8 @@ the principles of the NEF.
 Their small size enables us to write
 PyNN scripts that implement roughly
 the same functionality
-with Brian, NEURON, NEST, and TODO PCSim.
+with Brian \citep{goodman2009}, NEURON \citep{hines2009},
+NEST \citep{eppler2008}, and PCSim \citep{pecevski2009}.
 We run each parameter set five times
 on the same machine,
 and plot the mean.
@@ -1488,14 +1499,14 @@ that has been validated
 through the Spaun model.
 
 The most closely related project is PyNN
-\cite{TODO},
+\citep{davison2008},
 which provides a high-level scripting
 interface similar to the
 high-level object model in PyNengo.
 Rather than implementing its
 own simulator, PyNN uses four existing
 simulators with Python bindings,
-such as NEST \cite{TODO}.
+such as NEST.
 
 The APIs of Nengo and PyNN are similar,
 but differ significantly
