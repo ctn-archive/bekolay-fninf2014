@@ -74,7 +74,7 @@ data['NEST'][(1000, 50)] = [
 
 cvs = []
 
-plt.figure(figsize=(4,4))
+plt.figure(figsize=(4,5))
 ax = plt.subplot(1,1,1)
 
 x = data.values()[0].keys()
@@ -100,6 +100,8 @@ plt.xticks(xval, xlabels)
 plt.xlim(70, 1130)
 plt.ylim(0, 200)
 plt.ylabel('Simulation time (s)')
+plt.text(720, 206.5, 'Communication channel benchmarks',
+         ha='center', va='center', fontsize='large')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.xaxis.set_ticks_position('bottom')
@@ -107,7 +109,7 @@ ax.xaxis.set_tick_params(direction='out')
 ax.yaxis.set_ticks_position('left')
 
 inset = zoomed_inset_axes(ax, 7,
-                          bbox_to_anchor=(0.955, 0.99),
+                          bbox_to_anchor=(0.955, 0.935),
                           bbox_transform=plt.gcf().transFigure)
 
 xval = [n for (n, d) in x]
@@ -119,9 +121,9 @@ for ix, name in enumerate(data.keys()):
     inset.plot(xval, runtimes, '.-', ms=15, color=colors[ix], label=name)
     yoffset = 0
     if name == "PyNengo\nOpenCL":
-        yoffset = 1.2
+        yoffset = 0.85
     elif name == "PyNengo\nreference":
-        yoffset = -1.2
+        yoffset = -0.85
     if 'Nengo' in name:
         plt.text(xval[-1] + 7, runtimes[-1] + yoffset, name, color=colors[ix],
                  ha='left', va='center', fontsize=14)
@@ -137,7 +139,7 @@ inset.set_xticks(())
 
 mark_inset(ax, inset, loc1=3, loc2=4, fc="none", ec="0.5")
 
-plt.subplots_adjust(left=0.15, bottom=0.12, top=0.97, right=0.75)
+plt.subplots_adjust(left=0.15, bottom=0.1, top=0.935, right=0.75)
 plt.savefig("../figures/bench_cchannel.pdf")
 
 print "Max CV:", max(cvs)

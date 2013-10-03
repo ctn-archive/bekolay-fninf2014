@@ -71,7 +71,7 @@ data['Intel Xeon\nE5-2620'][100] = 1.68300008774
 data['Intel Xeon\nE5-2620'][200] = 3.46999979019
 data['Intel Xeon\nE5-2620'][500] = 12.3960001469
 
-plt.figure(figsize=(4,4))
+plt.figure(figsize=(4,5))
 ax = plt.subplot(1,1,1)
 
 for ix, name in enumerate(data.keys()):
@@ -79,15 +79,17 @@ for ix, name in enumerate(data.keys()):
     plt.plot(n, data[name].values(), '.-', ms=15, color=colors[ix])
     yoffset = 0
     if "3770" in name:
-        yoffset = 1.2
+        yoffset = 0.68
     elif "5540" in name:
-        yoffset = -0.6
+        yoffset = -0.7
     elif "Quadro" in name:
-        yoffset = 0.5
+        yoffset = 0.45
     elif "Tesla" in name:
-        yoffset = 0.3
+        yoffset = 0.2
     elif "Radeon" in name:
         yoffset = 0.2
+    elif "reference" in name:
+        yoffset = -0.68
 
     if name == "JavaNengo":
         plt.text(n[1] + 12000, data[name].values()[1], name, color=colors[ix],
@@ -102,6 +104,8 @@ xlabels = ["%d neurons\n%d dimensions" % (neurons[d], d) for d in dims]
 plt.xticks(xval, xlabels)
 plt.xlim(0, 500000)
 plt.ylim(0, 27.5)
+plt.text(280000, 28.5, 'Circular convolution benchmarks',
+         ha='center', va='center', fontsize='large')
 ax.tick_params(axis='x', which='major', labelsize=11)
 plt.ylabel('Simulation time (s)')
 ax.spines['top'].set_visible(False)
@@ -109,5 +113,5 @@ ax.spines['right'].set_visible(False)
 ax.xaxis.set_ticks_position('none')
 ax.yaxis.set_ticks_position('left')
 
-plt.subplots_adjust(left=0.12, bottom=0.11, top=0.97, right=0.82)
+plt.subplots_adjust(left=0.125, bottom=0.085, top=0.93, right=0.82)
 plt.savefig("../figures/bench_cconv.pdf")

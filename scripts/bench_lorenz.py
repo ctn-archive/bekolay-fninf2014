@@ -12,11 +12,11 @@ from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 data = OrderedDict()
 data['Brian'] = OrderedDict()
 data['NEST'] = OrderedDict()
-# data['NEURON'] = OrderedDict()
+data['NEURON'] = OrderedDict()
 data['JavaNengo'] = OrderedDict()
 data['PyNengo\nreference'] = OrderedDict()
 data['PyNengo\nOpenCL'] = OrderedDict()
-colors = ['#238B45', '#FF7F00', 'k', '#E41A1C', '#08519C'] # '#984EA3',
+colors = ['#238B45', '#FF7F00', '#984EA3', 'k', '#E41A1C', '#08519C']
 
 data['PyNengo\nOpenCL'][100] = [
     0.823611974716,0.827681064606,0.824057102203,0.826804876328,0.825788021088]
@@ -54,14 +54,14 @@ data['Brian'][1000] = [
 data['Brian'][2000] = [
     1448.42626905,1461.23177814,1475.119735,1485.89479995,1462.42504406]
 
-# data['NEURON'][100] = [
-#     0.393055915833,0.394006967545,0.392350912094,0.398588895798,0.395780801773]
-# data['NEURON'][500] = [
-#     2.99810099602,2.97593998909,2.95858383179,2.93473315239,2.96808600426]
-# data['NEURON'][1000] = [
-#     9.42938303947,9.283867836,9.34721088409,9.22296404839,9.32386898994]
-# data['NEURON'][2000] = [
-#     20.4385299683,20.4057679176,20.3683900833,20.3296558857,20.2264928818]
+data['NEURON'][100] = [
+    0.393055915833,0.394006967545,0.392350912094,0.398588895798,0.395780801773]
+data['NEURON'][500] = [
+    2.99810099602,2.97593998909,2.95858383179,2.93473315239,2.96808600426]
+data['NEURON'][1000] = [
+    9.42938303947,9.283867836,9.34721088409,9.22296404839,9.32386898994]
+data['NEURON'][2000] = [
+    20.4385299683,20.4057679176,20.3683900833,20.3296558857,20.2264928818]
 
 data['NEST'][100] = [
     23.4582211971,22.8383898735,23.7844650745,24.908190012,24.6342151165]
@@ -74,7 +74,7 @@ data['NEST'][2000] = [
 
 cvs = []
 
-plt.figure(figsize=(4,4))
+plt.figure(figsize=(4,5))
 ax = plt.subplot(1,1,1)
 
 xval = data.values()[0].keys()
@@ -96,6 +96,7 @@ for ix, name in enumerate(data.keys()):
 plt.xticks(xval, xlabels)
 plt.xlim(50, 2100)
 plt.ylim(0, 650)
+plt.title('Lorenz attractor benchmarks')
 plt.ylabel('Simulation time (s)')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
@@ -103,8 +104,8 @@ ax.xaxis.set_ticks_position('bottom')
 ax.xaxis.set_tick_params(direction='out')
 ax.yaxis.set_ticks_position('left')
 
-inset = zoomed_inset_axes(ax, 18,
-                          bbox_to_anchor=(0.95, 0.65),
+inset = zoomed_inset_axes(ax, 17.5,
+                          bbox_to_anchor=(0.95, 0.73),
                           bbox_transform=plt.gcf().transFigure)
 
 for ix, name in enumerate(data.keys()):
@@ -115,14 +116,14 @@ for ix, name in enumerate(data.keys()):
     plt.plot(xval, runtimes, '.-', ms=15, color=colors[ix])
     yoffset = 0
     if name == "PyNengo\nreference":
-        yoffset = 2
+        yoffset = 1.5
     elif name == "PyNengo\nOpenCL":
-        yoffset = -2
-    if 'Nengo' in name:
+        yoffset = -1.5
+    if 'Nengo' in name or name == 'NEURON':
         plt.text(xval[-1] + 4, runtimes[-1] + yoffset, name, color=colors[ix],
                  ha='left', va='center', fontsize=14)
 inset.set_xlim(1995, 2042)
-inset.set_ylim(-3, 17)
+inset.set_ylim(-2, 21.5)
 inset.xaxis.set_ticks_position('bottom')
 inset.xaxis.set_tick_params(direction='out')
 inset.yaxis.set_ticks_position('right')
@@ -131,7 +132,7 @@ inset.set_xticks(())
 
 mark_inset(ax, inset, loc1=3, loc2=4, fc="none", ec="0.5")
 
-plt.subplots_adjust(left=0.15, bottom=0.12, top=0.97, right=0.85)
+plt.subplots_adjust(left=0.15, bottom=0.1, top=0.94, right=0.85)
 plt.savefig("../figures/bench_lorenz.pdf")
 
 print "Max CV:", max(cvs)
