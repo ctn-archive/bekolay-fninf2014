@@ -86,8 +86,8 @@
   challenge of building and simulating
   large-scale models with the NEF.
   Nengo is a tool that builds and simulates
-  large-scale models with the NEF.
-  Nengo is the primary resource
+  large-scale models with the NEF;
+  it is the primary resource
   for teaching how the NEF
   is used to model neural systems,
   and for doing research
@@ -689,7 +689,10 @@ the user must provide the dimensionality
 (i.e., the length of the vector it represents),
 and an object that describes
 a population of neurons.
-For example, \texttt{Ensemble('A', nengo.LIF(50, tau\_ref=0.002), 1)}
+For example,
+\begin{quote}
+  \texttt{Ensemble('A', nengo.LIF(50, tau\_ref=0.002), 1)}
+\end{quote}
 describes an ensemble representing a one-dimensional vector
 with 50 leaky integrate-and-fire neurons \citep{lapicque1907}
 that have a refractory period of 2 milliseconds.
@@ -763,10 +766,12 @@ to control and optimize node execution.
 
 Ensembles and nodes can be connected together
 in several ways.
-Like other PyNengo objects,
-a connection contains symbolic information;
-in this case, a connection tracks
-how two objects are connected together.
+A \texttt{Connection} contains symbolic information
+about how two objects are connected.
+That information either includes
+a factored or full connection weight matrix,
+or includes enough information
+in order to generate weights during simulation.
 
 The most important type of connection
 in Nengo is the \texttt{DecodedConnection}.
@@ -789,7 +794,7 @@ However, neurons in an ensemble can be directly connected
 to neurons in another ensemble
 with synaptic connection weights
 using the \texttt{NonlinearityConnection}.
-Both of these connection types
+Both connection types
 can be temporally filtered,
 and the weights involved in the connection
 (decoding weights for \texttt{DecodedConnection},
@@ -977,6 +982,8 @@ performed on signals.
 Figure~\ref{fig:sim} shows the signals
 and operators used in a simple model.
 
+\clearpage
+
 \paragraph{Signals}
 
 A \texttt{Signal} represents any number that
@@ -1003,8 +1010,6 @@ Other neural simulators only track
 low-level signals.
 Operators commonly map
 between related low- and high-level signals.
-
-\clearpage
 
 \paragraph{Operators}
 
@@ -1133,59 +1138,7 @@ we also use the script for benchmarking
 
 \begin{figure}
 \begin{center}
-  \begin{minipage}{.435\textwidth}
-    \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
-# We use Nengo to generate
-#     bias: Bias currents
-#     decoders: Decoding weights
-#     encoders: Encoding weights
-# for populations A and B.
-import pynn.nest as pyNN
-
-lif_params = {'tau_refrac': 2.0, 'tau_syn_E':100,
-               'tau_syn_I':100}
-dt = 0.5
-pyNN.setup(timestep=dt, min_delay=dt)
-A = pyNN.Population(30, pyNN.IF_cond_exp, lif_params)
-B = pyNN.Population(30, pyNN.IF_cond_exp, lif_params)
-input_signal = 0.5
-inputA = [pyNN.DCSource(amplitude=val) for val
-           in A_bias + input_signal * A_encoders]
-for i, pulse in enumerate(inputA):
-    pulse.inject_into(A[i:i+1])
-inputB = [pyNN.DCSource(amplitude=val) for val
-           in B_bias]
-for i, pulse in enumerate(inputB):
-    pulse.inject_into(B[i:i+1])
-    \end{lstlisting}
-  \end{minipage}
-  \begin{minipage}{.46\textwidth}
-    \begin{lstlisting}[basicstyle={\footnotesize\ttfamily}]
-weights = []
-for i in xrange(30):
-    for j in xrange(30):
-        weights.append((i, j,
-            np.dot(A_decoder[i], B_encoder[j]), 1.0))
-connection = pyNN.Projection(
-    A, B, pyNN.FromListConnector(weights))
-A.record('spikes')
-B.record('spikes')
-pyNN.run(1000)
-
-# Decoded value of B
-B_output = numpy.zeros(1000)
-for i in xrange(1000):
-    spikes = B[i:i+1].getSpikes()[:,1]
-    spikes = (spikes / dt).astype('int')
-    B_output[spikes] += B_decoder[i]
-# Filter with tau = 200 ms
-decay = np.exp(-dt / 200)
-B_output[0, :] *= (1 - decay)
-for i in xrange(1, 1000):
-    B_output[i,:] = decay * B_output[i-1,:]
-                     + (1-decay) * B_output[i,:]
-    \end{lstlisting}
-  \end{minipage}
+  \includegraphics[width=\textwidth]{pynn}
 \end{center}
  \textbf{\refstepcounter{figure}\label{fig:pynn} Figure \arabic{figure}.}{
    Implementation of the communication channel in PyNN.
@@ -1193,8 +1146,6 @@ for i in xrange(1, 1000):
    the functions that generate these quantities in Nengo
    can be decoupled, but are not included here for brevity.}
 \end{figure}
-
-\clearpage
 
 \subsection{Lorenz attractor network} \label{sec:lorenz}
 
@@ -1352,8 +1303,6 @@ circular convolution in PyNN.
 The resulting script would be
 too long to be instructive.
 
-\clearpage
-
 \section{Benchmarks} \label{sec:benchmark}
 
 \begin{figure}
@@ -1456,7 +1405,7 @@ rather than storing and computing with
 the entire weight matrix
 on each timestep.
 While NEST and NEURON were not
-run with MPI,
+run on multiple cores using message passing,
 the reference simulator of PyNengo
 also only uses one CPU core.
 The results also suggest that PyNengo's
@@ -1486,6 +1435,8 @@ Additionally, although both JavaNengo
 and the OpenCL simulator on a CPU
 use all available CPU cores,
 PyNengo's OpenCL simulator is significantly faster.
+
+\clearpage
 
 \section{Discussion}
 
@@ -1644,16 +1595,21 @@ Chris Eliasmith oversaw all development,
 contributed to PyNengo,
 and co-created the NEF with Charles Anderson.
 
-\section*{Acknowledgement}
+\section*{Acknowledgments}
 
-We would like to thank
-everyone who has contributed
-to this reimplementation of Nengo
-by providing examples,
-unit tests, and bugfixes:
-Peter Blouw, Brent Komer, and Bryan Tripp.
-
-% Also acknowledge Bryan for making JavaNengo, and edits
+We thank Bryan Tripp
+for editing this paper,
+contributing to PyNengo
+and the PyNengo OpenCL simulator
+and for creating the JavaNengo simulator
+that has been useful
+for the past six years,
+and will continue
+to be used for many years to come.
+We thank Peter Blouw and Brent Komer,
+who have contributed
+to PyNengo by providing examples,
+unit tests, and bugfixes.
 
 \paragraph{Funding\textcolon}
 NSERC CRC, CFI, and OIT.

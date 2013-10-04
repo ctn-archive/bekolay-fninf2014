@@ -89,7 +89,7 @@ for ix, name in enumerate(data.keys()):
     if name == "Brian":
         plt.text(xval[2] + 60, runtimes[2], name, color=colors[ix],
                  ha='left', va='center', fontsize=14)
-    elif name in ("NEURON", "NEST"):
+    elif name == "NEST":
         plt.text(xval[-1] + 60, runtimes[-1], name, color=colors[ix],
                  ha='left', va='center', fontsize=14)
 
