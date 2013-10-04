@@ -24,15 +24,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.24748737"
-     inkscape:cx="1101.9799"
-     inkscape:cy="878.42642"
+     inkscape:zoom="0.49497474"
+     inkscape:cx="1221.7318"
+     inkscape:cy="555.1776"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1276"
-     inkscape:window-height="756"
-     inkscape:window-x="4"
+     inkscape:window-width="1920"
+     inkscape:window-height="1036"
+     inkscape:window-x="1280"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
      fit-margin-top="2"
@@ -48,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -59,31 +59,31 @@
      transform="translate(1540.0227,-167.68314)">
     <path
        style="fill:#f0f0f0;fill-opacity:1;stroke:none"
-       d="m -648.08757,1779.1117 137.12762,0 0,308.7792 -137.12762,-278.9999 z"
+       d="m -648.08757,1781.1117 137.12762,0 0,308.7792 -137.12762,-278.9999 z"
        id="path5798-3-7-0-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <path
        style="fill:#f0f0f0;fill-opacity:1;stroke:none"
-       d="m -648.08757,1671.1117 137.12762,0 0,28.9221 -137.12762,52.8572 z"
+       d="m -648.08757,1673.1117 137.12762,0 0,28.9221 -137.12762,52.8572 z"
        id="path5798-3-7-0-2-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <path
        style="fill:#f0f0f0;fill-opacity:1;stroke:none"
-       d="m -648.08757,1621.1117 137.12762,0 0,28.9221 -137.12762,0.8572 z"
+       d="m -648.08757,1623.1117 137.12762,0 0,28.9221 -137.12762,0.8572 z"
        id="path5798-3-7-0-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <path
        style="fill:#f0f0f0;fill-opacity:1;stroke:none"
-       d="m -648.08757,1371.1117 137.12762,0 0,216.9221 -137.12762,-187.1428 z"
+       d="m -648.08757,1373.1117 137.12762,0 0,216.9221 -137.12762,-187.1428 z"
        id="path5798-3-7-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <path
        style="fill:#f0f0f0;fill-opacity:1;stroke:none"
-       d="m -648.08757,1249.1117 137.12762,0 0,22.9221 -137.12762,58.8572 z"
+       d="m -648.08757,1249.1117 137.12762,0 0,100.9424 -138.13777,-18.1529 z"
        id="path5798-3-7-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
@@ -110,7 +110,7 @@
            x="-1925.7142"
            y="-630.49493"
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium" /></flowRegion><flowPara
-         id="flowPara2991"></flowPara></flowRoot>    <text
+         id="flowPara2991" /></flowRoot>    <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;opacity:0.42000002;fill:none;stroke:none;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
        x="91.428574"
@@ -373,12 +373,12 @@
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="-1232.5828"
-       y="1644.8833"
+       y="1646.8833"
        id="text4791"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          x="-1232.5828"
-         y="1644.8833"
+         y="1646.8833"
          id="tspan4801"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.probe(<tspan
    style="fill:#9400d1;fill-opacity:1"
@@ -387,13 +387,13 @@
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="-1072.5828"
-       y="1803.2283"
+       y="1805.2283"
        id="text4803"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4805"
          x="-1072.5828"
-         y="1803.2283"
+         y="1805.2283"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
    id="tspan5446">Bdata</tspan> = sim.data(<tspan
@@ -524,7 +524,9 @@
            id="tspan4846"
            y="718.81952"
            x="-509.30435"
-           sodipodi:role="line">    return gain, bias</tspan><tspan
+           sodipodi:role="line"><tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4531">    return</tspan> gain, bias</tspan><tspan
            style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            id="tspan4848"
            y="758.41949"
@@ -562,7 +564,9 @@
            id="tspan4867"
            y="476.9465"
            x="-509.30435"
-           sodipodi:role="line">    return np.sqrt(norm)[:, np.newaxis]</tspan></text>
+           sodipodi:role="line"><tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4529">    return</tspan> np.sqrt(norm)[:, np.newaxis]</tspan></text>
     </g>
     <text
        xml:space="preserve"
@@ -593,12 +597,20 @@
          id="tspan4954"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
-   id="tspan5482">biasinputA</tspan> = [pyNN.DCSource(amplitude=val) for val in Abias]</tspan><tspan
+   id="tspan5482">biasinputA</tspan> = [pyNN.DCSource(amplitude=val) <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4533">for</tspan> val <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4535">in</tspan> Abias]</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
          y="885.53058"
          id="tspan4956"
-         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">for i, pulse in enumerate(biasinputA):</tspan><tspan
+         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4537">for</tspan> i, pulse <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4539">in</tspan> enumerate(biasinputA):</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
          y="925.13062"
@@ -645,12 +657,20 @@
          id="tspan5011"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
-   id="tspan5492">biasinputB</tspan> = [pyNN.DCSource(amplitude=val) for val in Bbias]</tspan><tspan
+   id="tspan5492">biasinputB</tspan> = [pyNN.DCSource(amplitude=val) <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4541">for</tspan> val <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4543">in</tspan> Bbias]</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
          y="1143.1403"
          id="tspan5013"
-         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">for i, pulse in enumerate(biasinputB):</tspan><tspan
+         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4545">for</tspan> i, pulse <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4547">in</tspan> enumerate(biasinputB):</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
          y="1182.7402"
@@ -693,87 +713,117 @@
          id="tspan5040"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
-   id="tspan5496">inputnode</tspan> = [pyNN.DCSource(amplitude=val) for val in 0.5 * Aencoders]</tspan></text>
+   id="tspan5496">inputnode</tspan> = [pyNN.DCSource(amplitude=val) <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4549">for</tspan> val <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4551">in</tspan> 0.5 * Aencoders]</tspan><tspan
+         sodipodi:role="line"
+         x="-492.90436"
+         y="1310.0503"
+         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+         id="tspan3757"><tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4553">for</tspan> i, pulse <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4555">in</tspan> enumerate(inputnode):</tspan><tspan
+         sodipodi:role="line"
+         x="-492.90436"
+         y="1349.6503"
+         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+         id="tspan3759">    pulse.inject_into(A[i:i+1])</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:110.00000238%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="-489.30435"
-       y="1392.1625"
+       y="1394.1625"
        id="text5096"
        sodipodi:linespacing="110%"><tspan
          sodipodi:role="line"
          id="tspan5098"
          x="-489.30435"
-         y="1392.1625"
+         y="1394.1625"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;fill:#007c00;fill-opacity:1;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"># Decoder solving too long to include; assume we have Adecoder and Bdecoder</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1431.7625"
+         y="1433.7625"
          id="tspan5100"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
    id="tspan5498">weights</tspan> = []</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1471.3624"
+         y="1473.3624"
          id="tspan5102"
-         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">for i in xrange(30):</tspan><tspan
+         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4557">for</tspan> i <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4559">in</tspan> xrange(30):</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1510.9625"
+         y="1512.9625"
          id="tspan5104"
-         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">    for j in xrange(30):</tspan><tspan
+         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4561">    for</tspan> j <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4563">in</tspan> xrange(30):</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1550.5625"
+         y="1552.5625"
          id="tspan5106"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">        weights.append((i, j, np.dot(Adecoder[i], Bencoder[j]), 1.0))</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1590.1625"
+         y="1592.1625"
          id="tspan5110"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
    id="tspan5500">connection</tspan> = pyNN.Projection(A, B, pyNN.FromListConnector(weights))</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1629.7625"
+         y="1631.7625"
          id="tspan5112"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium" /></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:110.00000238%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="-491.42834"
-       y="1693.0751"
+       y="1695.0751"
        id="text5114"
        sodipodi:linespacing="110%"><tspan
          sodipodi:role="line"
          id="tspan5116"
          x="-491.42834"
-         y="1693.0751"
+         y="1695.0751"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">pyNN.run(1000)</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:110.00000238%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="-489.30435"
-       y="1800.5643"
+       y="1802.5643"
        id="text5180"
        sodipodi:linespacing="110%"><tspan
          sodipodi:role="line"
          id="tspan5182"
          x="-489.30435"
-         y="1800.5643"
+         y="1802.5643"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
    id="tspan5502">Bdata</tspan> = numpy.zeros(1000)</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1840.1643"
+         y="1842.1643"
          id="tspan5184"
-         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">for i in xrange(1000):</tspan><tspan
+         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4565">for</tspan> i <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4567">in</tspan> xrange(1000):</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1879.7643"
+         y="1881.7643"
          id="tspan5186"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
@@ -782,25 +832,25 @@
    id="tspan5416">'int'</tspan>)</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1919.3644"
+         y="1921.3644"
          id="tspan5196"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">    Bdata[B_spikes] += Bdecoder[i]</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="1958.9644"
+         y="1960.9644"
          id="tspan5198"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium" /></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="-1112.5828"
-       y="1394.8624"
+       y="1396.8624"
        id="text5200"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5202"
          x="-1112.5828"
-         y="1394.8624"
+         y="1396.8624"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.connect(<tspan
    style="fill:#9400d1;fill-opacity:1"
    id="tspan5392">&quot;A&quot;</tspan>, <tspan
@@ -810,32 +860,32 @@
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="-660.26276"
-       y="1695.739"
+       y="1697.739"
        id="text5206"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5208"
          x="-660.26276"
-         y="1695.739"
+         y="1697.739"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:end;text-anchor:end;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="text-align:end;text-anchor:end;fill:#a0522d;fill-opacity:1"
    id="tspan5442">sim</tspan> = model.simulator()</tspan><tspan
          sodipodi:role="line"
          x="-660.26276"
-         y="1745.739"
+         y="1747.739"
          id="tspan5210"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:end;text-anchor:end;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">sim.run(1)</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:110.00000238%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
        x="-491.03235"
-       y="1642.2194"
+       y="1644.2194"
        id="text5357"
        sodipodi:linespacing="110%"><tspan
          sodipodi:role="line"
          id="tspan5359"
          x="-491.03235"
-         y="1642.2194"
+         y="1644.2194"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">B.record(<tspan
    style="fill:#9400d1;fill-opacity:1"
    id="tspan5414">'spikes'</tspan>)</tspan></text>
@@ -843,29 +893,33 @@
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:110.00000238%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
        x="-489.30435"
-       y="1967.9338"
+       y="1969.9338"
        id="text5372"
        sodipodi:linespacing="110%"><tspan
          sodipodi:role="line"
          id="tspan5374"
          x="-489.30435"
-         y="1967.9338"
+         y="1969.9338"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
    id="tspan5509">decay</tspan> = np.exp(-1.0 / 100)</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="2007.5338"
+         y="2009.5338"
          id="tspan5376"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">Bdata[0, :] *= (1 - decay)</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="2047.1338"
+         y="2049.1338"
          id="tspan5378"
-         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">for i in xrange(1, 1000):</tspan><tspan
+         style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4569">for</tspan> i <tspan
+   style="fill:#0000ff;fill-opacity:1"
+   id="tspan4571">in</tspan> xrange(1, 1000):</tspan><tspan
          sodipodi:role="line"
          x="-489.30435"
-         y="2086.7339"
+         y="2088.7339"
          id="tspan5380"
          style="font-size:36px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:110.00000238%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">    Bdata[i,:] = decay * Bdata[i-1,:] + (1-decay) * Bdata[i,:]</tspan></text>
     <path
@@ -888,25 +942,25 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -648.08757,1369.7224 0,32.8934"
+       d="m -648.08757,1371.7224 0,32.8934"
        id="path5511-9-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -648.08757,1619.5833 0,32.8934"
+       d="m -648.08757,1621.5833 0,32.8934"
        id="path5511-9-0"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -648.08757,1778.0883 0,32.8934"
+       d="m -648.08757,1780.0883 0,32.8934"
        id="path5511-9-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -648.08757,1670.599 0,84.8935"
+       d="m -648.08757,1672.599 0,84.8935"
        id="path5511-7-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -924,7 +978,7 @@
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -510.95995,1247.8303 0,26.8935"
+       d="m -510.95995,1247.8303 0,102.8935"
        id="path5511-7-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -942,25 +996,25 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:#646464;fill-opacity:1;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -510.95995,1369.7224 0,218.8934"
+       d="m -510.95995,1371.7224 0,218.8934"
        id="path5511-9-8-5"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -510.95995,1619.5833 0,32.8934"
+       d="m -510.95995,1621.5833 0,32.8934"
        id="path5511-9-0-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -510.95995,1778.0883 0,312.8934"
+       d="m -510.95995,1780.0883 0,312.8934"
        id="path5511-9-2-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -510.95995,1670.599 0,28.8935"
+       d="m -510.95995,1672.599 0,28.8935"
        id="path5511-7-4-7"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />

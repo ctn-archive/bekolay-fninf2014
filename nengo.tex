@@ -76,8 +76,8 @@
 \begin{abstract}
   Neuroscience currently lacks
   a comprehensive theory of
-  how the brain implements cognitive processes
-  with biological parts.
+  how cognitive processes can be
+  implemented in a biological substrate.
   The Neural Engineering Framework (NEF)
   proposes one such theory,
   but has not yet gathered
@@ -85,34 +85,38 @@
   partly due to the technical
   challenge of building and simulating
   large-scale models with the NEF.
-  Nengo is a tool that builds and simulates
-  large-scale models with the NEF;
-  it is the primary resource
-  for teaching how the NEF
-  is used to model neural systems,
+  Nengo is a software tool
+  that can be used to build and simulate
+  large-scale models based on the NEF;
+  currently, it is the primary resource
+  for both teaching how the NEF
+  is used,
   and for doing research
-  comparing NEF models
-  to experimental data.
+  that generates specific
+  NEF models
+  to explain experimental data.
   A previous version of Nengo
   implemented in Java was used
   to create Spaun,
-  the world's largest functional brain model.
+  the world's largest functional
+  brain model \citep{eliasmith2012}.
   Simulating Spaun
-  identified limitations
+  highlighted limitations
   in Nengo's ability to
-  construct models with simple syntax,
-  simulate them quickly,
-  and collect data for subsequent analysis.
+  support model construction with simple syntax,
+  to simulate large models quickly,
+  and to collect large amounts of data
+  for subsequent analysis.
   This paper describes a new version of Nengo
   implemented in Python that overcomes these limitations.
   It uses simple and extendable syntax,
   simulates a benchmark model on the scale of Spaun
-  200 times faster than the previous implementation,
+  50 times faster than the previous implementation,
   and has a flexible mechanism
   for collecting simulation results.
 
   \tiny \keyFont{\section{Keywords:} Python, Neural Engineering
-    Framework, theoretical neuroscience, computational neuroscience,
+    Framework, Nengo, theoretical neuroscience, computational neuroscience,
     control theory, software, simulation}
 \end{abstract}
 
@@ -126,9 +130,11 @@ Modeling the human brain
 is one of the greatest
 scientific challenges of our time.
 Computational neuroscience
-has made significant advancements;
+has made significant advancements
+from simulating low-level biological parts in great detail,
+to solving high-level problems that humans find difficult;
 however, we still lack a mathematical account of
-how biological and electrical components
+how biological components
 implement cognitive functions such as sensory processing,
 memory formation, reasoning, and motor control.
 Much work has been put into neural simulators
@@ -137,14 +143,15 @@ data in precise detail with the thought that
 cognition will emerge by connecting
 detailed neuron models according
 to the statistics of biological synapses \citep{markram2006}.
-Cognition has not yet emerged
-from data-driven large scale models.
-On the other end of the spectrum,
+However, cognition has not yet emerged
+from data-driven large scale models,
+and there are good reasons to think
+that cognition may never emerge \citep{trujillo-inpress}.
+At the other end of the spectrum,
 cognitive architectures \citep{anderson2004}
-and theoretical frameworks \citep{hawkins2006}
+and machine learning approaches \citep{hinton2006}
 have solved high-dimensional statistical problems,
-but do so without respecting biological constraints,
-and with worse performance than machine learning approaches.
+but do so without respecting biological constraints.
 
 Nengo is a neural simulator
 based on a theoretical framework proposed
@@ -152,7 +159,7 @@ by \citet{eliasmith2003}
 called the Neural Engineering Framework
 (NEF).
 The NEF is a large-scale modeling approach
-that can leverage any neuron model
+that can leverage single neuron models
 to build neural networks with
 demonstrable cognitive abilities.
 Nengo and the NEF has been used to build
@@ -168,67 +175,62 @@ culminating recently with Spaun,
 currently the world's
 largest functional brain model \citep{eliasmith2012}.
 Spaun is a network of 2.5 million spiking neurons
-that can perform eight high-level cognitive tasks
+that can perform eight cognitive tasks
 including memorizing lists and inductive reasoning.
 It can perform any of these eight tasks
 at any time by being presented
 the appropriate series of images
-representing the task to be performed
-and the details of that task;
+representing the task to be performed;
 for example, sequentially presenting images
 containing the characters $A3[1234]$ instructs Spaun
 to memorize the list $1234$.
 If asked to recall the memorized list,
-it sends motor commands to a simulated arm model,
-tracing out the digits $1234$.
-While the tasks Spaun performs are diverse,
-all tasks use a common set of
-functional modules.
-Each functional module corresponds
+Spaun generates motor commands for a simulated arm,
+writing out the digits $1234$.
+While the tasks that Spaun performs are diverse,
+all of the tasks use a common set of
+functional cortical and subcortical components.
+Each functional component corresponds
 to a brain area that has been hypothesized
 to perform those functions
-in neuroscientific literature.
+in the neuroscientific literature.
 
-The NEF shows how to
-construct a neural model
-from anatomical constraints,
-cognitive objectives, and
-dynamical systems theory.
-Perhaps surprisingly,
-constructing models from this starting point,
+The NEF provides principles
+to guide the construction of
+a neural model
+that incorporates anatomical constraints,
+functional objectives, and
+dynamical systems or control theory.
+Constructing models from this starting point,
 rather than from single cell electrophysiology
-and connectivity statistics,
-still produces simulated data that explains
-and predicts experimental results.
-Single cell activity,
-response timing, and behavioral errors
+and connectivity statistics alone,
+produces simulated data that explains
+and predicts a wide variety of experimental results.
+Single cell activity \citep{stewart2012},
+response timing \citep{stewart2009a},
+and behavioral errors \citep{choo2010}
 of NEF-designed models match
 psychological and physiological findings
 without being built specifically into the design.
-These quirks seem to fall directly out
-of the need to satisfy competing objectives
+These results are a consequence of
+the need to satisfy functional objectives
 within anatomical and neurobiological constraints.
-The opposite phenomenon, in which
-cognitively useful behaviors emerge
-from networks of detailed neurons
-connected with plausible connectivity statistics,
-has not yet been observed.
 
 It has often been said that neuroscience
-is data-rich and theory-poor.
-The modeling success of
+is data-rich and theory-poor \citep{churchland1992}.
+We believe that the modeling success of
 large functional networks such as Spaun
-indicates that the NEF
-is beginning to fill the theory void.
+suggests that the NEF
+may be able to fill the theoretical void.
 However, in simulating this large model,
-we pushed our Java-powered simulator
-to its limits in terms of memory consumption,
+the Java-powered simulator
+was limited in terms of memory consumption,
 simulation speed, and extensibility.
 In order to continue to evaluate the NEF
 as a theory of the brain
 by building larger and more complicated models,
 we have begun the next generation
-of Nengo with a focus on speed,
+of Nengo development with a focus on speed,
 extensibility, and simplicity.
 
 This paper introduces a new version
@@ -302,7 +304,8 @@ involved adding or significantly modifying
 25 Java classes \citep{bekolay2010}.
 
 The JavaNengo GUI provides
-a drag-and-drop interface in which to create NEF models.
+a drag-and-drop interface in which
+NEF models can be created.
 However, as it was developed
 before the scripting interface,
 the GUI manipulates simulator objects directly,
@@ -365,7 +368,7 @@ required in neural simulations.
 
 Addressing all of these issues
 in the Java codebase would require
-so many extensive changes
+enough extensive changes
 that we instead opted
 to write a new version of Nengo in Python.
 JavaNengo's Jython scripting interface
@@ -417,11 +420,11 @@ To date, we have implemented one other simulator
 that uses PyOpenCL to take advantage
 of a GPU or multicore CPU.
 
-PyNengo does not currently
+PyNengo does not yet
 replace all of JavaNengo's functionality.
 While it can simulate most
 models that JavaNengo can simulate,
-there is no graphical interface to PyNengo.
+there is currently no graphical interface for PyNengo.
 Model components must be created
 using Python scripts rather than
 the drag-and-drop interface presented by JavaNengo.
@@ -432,15 +435,15 @@ such as IPython and Matplotlib,
 but such tools have not been our focus thus far.
 It is possible to build a graphical program
 like JavaNengo's GUI on top of PyNengo's object model,
-but that remains future work.
+but that remains as future work.
 
 To summarize, PyNengo overcomes
 JavaNengo's limitations.
 It can simulate most models
 currently simulated by JavaNengo
 using a well-tested codebase of
-TODO lines of code,
-compared to JavaNengo's TODO
+$\sim$5000 lines of code,
+compared to JavaNengo's $\sim$45,000
 (which does not include the JavaNengo GUI).
 A new internal representation of neural models
 allows the OpenCL simulator to simulate
@@ -452,23 +455,30 @@ available for preparing and analyzing data.
 In all, PyNengo provides a platform for
 simulating larger and more complex models than Spaun,
 and can therefore further test the NEF
-as a theory of the brain.
+as a theory of neural computation.
 
 \section{Neural Engineering Framework (NEF)}
 
 The Neural Engineering Framework (NEF; \citealp{eliasmith2003})
-proposes three principles
+proposes three quantitatively specified principles
 that enable the construction
 of large-scale neural models.
+Briefly, this mathematical theory defines
 
 \begin{enumerate}
   \item \textbf{Representation:} A population of neurons
-    collectively represents a time-varying vector of real numbers.
-  \item \textbf{Transformation:} Functions on those vectors
-    are computed by the connections between populations of neurons.
+    collectively represents a time-varying vector of real numbers
+    through nonlinear encoding and linear decoding.
+  \item \textbf{Transformation:} Linear and nonlinear
+    functions on those vectors
+    are computed by linear decodings
+    that are used to analytically compute
+    the connections between populations of neurons.
   \item \textbf{Dynamics:} The vectors represented
     by neural populations can be considered state variables
-    in a dynamical system, and can be analyzed using control theory.
+    in a (linear or nonlinear) dynamical system,
+    and recurrent connections can be computed
+    using principle 2.
 \end{enumerate}
 
 \begin{figure}
@@ -526,11 +536,14 @@ of large-scale neural models.
 
 \paragraph{Representation}
 Information is encoded by populations of neurons.
-We represent information
-with time-varying vectors of real numbers
-in order to manipulate that information
+The NEF represents information
+with time-varying vectors of real numbers,
+allowing theorists to propose possible
+neural computations by
+manipulating that information
 using conventional mathematics.
-By doing this, we can \textit{encode}
+The NEF suggests that we can characterize
+the \textit{encoding} of
 those vectors by injecting
 specific amounts of current into
 single neuron models based on
@@ -538,11 +551,12 @@ the vector being encoded.
 This drives the neuron,
 causing it to spike.
 With enough neurons,
-we can estimate the originally encoded vector
+the originally encoded vector
+can be estimated
 through a \textit{decoding} process.
-This idea is similar to population coding
-\citep{georgopoulos1986}, but generalized
-to vectors of arbitrary length.
+This idea is a kind of population coding
+\citep{georgopoulos1986, salinas1994}, but generalized
+to vectors of arbitrary dimensionality.
 
 Figure~\ref{fig:nef} depicts
 the encoding (A) and decoding (B) processes.
@@ -561,7 +575,9 @@ that causes the neuron to be the most active).
 
 In the decoding process,
 the spike trains are first filtered
-with an exponentially decaying filter.
+with an exponentially decaying filter
+accounting for the process
+of a spike generating a postsynaptic current.
 Those filtered spike trains are summed together
 with weights that are determined
 by solving a least-squares minimization problem.
@@ -569,7 +585,7 @@ Note that these decoding weights
 do not necessarily depend on the input signal;
 instead, we typically perform
 this minimization on points
-randomly sampled from
+sampled from
 the vector space
 that the population represents.
 
@@ -579,7 +595,7 @@ unidirectional connections called synapses.
 When a neuron spikes,
 it releases neurotransmitter across the synapse,
 which typically causes some amount of current
-to be imparted in the downstream neuron.
+to be imparted in the postsynaptic (downstream) neuron.
 Many factors affect the
 amplitude of the imparted current;
 we summarize those factors
@@ -590,13 +606,15 @@ In order to compute any function,
 we set the connection weights between
 two populations to be the product of
 the decoding weights for that function
-in the first population
-and the encoding weights
-for the downstream population.
+in the first population,
+the encoding weights
+for the downstream population,
+and any linear transform.
 
-This implies the NEF hypothesizes
+This implies that the NEF hypothesizes
 that synaptic weight matrices
-have low rank, and can be factored.
+have low rank, and can be factored
+into encoders, decoders, and a linear transform.
 Note that, in practice, we rarely use
 the full connection weight matrix,
 and instead store
@@ -624,7 +642,7 @@ of representation and transformation.
 
 \paragraph{NEF and Nengo}
 Large models can be built
-by using of the principles of the NEF
+by using the principles of the NEF
 as connectable components
 that describe neural systems,
 just as a circuit diagram
@@ -644,7 +662,7 @@ to a low-level neural model.
 
 \section{PyNengo object model}
 
-To describe the high-level functional model,
+To describe an NEF model,
 PyNengo defines six core objects.
 \begin{enumerate}
   \item The \texttt{Model} encapsulates the entire model and
@@ -971,6 +989,8 @@ is provided as an example
 for simulator designers,
 not as a specification.
 
+\clearpage
+
 The reference simulator
 uses a reduced set of objects
 that describe computations
@@ -981,8 +1001,6 @@ and operators, which represent computations
 performed on signals.
 Figure~\ref{fig:sim} shows the signals
 and operators used in a simple model.
-
-\clearpage
 
 \paragraph{Signals}
 
