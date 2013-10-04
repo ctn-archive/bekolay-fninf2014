@@ -670,14 +670,20 @@ PyNengo defines six core objects.
   \item The \texttt{Ensemble} contains a group of neurons
     that encodes a time-varying vector of real numbers.
   \item The \texttt{Node} represents non-neural information,
-    such as sensory inputs.
+    such as sensory inputs and motor outputs.
   \item The \texttt{Connection} describes how
     nodes and ensembles are connected.
-  \item The \texttt{Network} is a group of interconnected
-    nodes and ensembles.
+  \item The \texttt{Network} encapsulates a functionally related
+    group of interconnected nodes and ensembles.
   \item The \texttt{Probe} gathers data during a simulation
     for later analysis.
 \end{enumerate}
+These six objects contain symbolic information
+about a Nengo model,
+enabling a strict division between
+model construction and simulation.
+This allows a Nengo model
+to be run on multiple simulators.
 
 \subsection{Model}
 
@@ -703,17 +709,19 @@ a population of neurons
 that represents information
 in the form of a real-valued vector.
 When creating an ensemble,
-the user must provide the dimensionality
-(i.e., the length of the vector it represents),
-and an object that describes
-a population of neurons.
+the user must provide a name,
+an object that describes
+a population of neurons,
+and the dimensionality
+(i.e., the length of the vector it represents).
 For example,
 \begin{quote}
   \texttt{Ensemble('A', nengo.LIF(50, tau\_ref=0.002), 1)}
 \end{quote}
-describes an ensemble representing a one-dimensional vector
-with 50 leaky integrate-and-fire neurons \citep{lapicque1907}
-that have a refractory period of 2 milliseconds.
+describes an ensemble, `A',
+that uses 50 leaky integrate-and-fire neurons \citep{lapicque1907}
+with a 2 millisecond refractory period
+to represent a one-dimensional vector.
 The \texttt{nengo.LIF} class defines
 the parameters of the LIF neurons symbolically
 so that each simulator can compute
@@ -772,10 +780,11 @@ a node can be used to model
 a complex experimental environment that
 both provides input to the neural model
 and responds to the neural model's output.
-Nodes allow many of the special-purpose
-routines that are necessary in real-world
-models to be integrated
-as core components of a Nengo model.
+Nodes allow Nengo to represent
+neural components,
+the body that those components drive,
+and the environment that body interacts with
+in a single unified model.
 This makes Nengo models more explicit,
 and enables simulators
 to control and optimize node execution.
@@ -838,11 +847,11 @@ with only minor changes.
 
 Networks can vary dramatically in size,
 and can be composed of other networks.
-The \texttt{Integrator} network, for example,
+As a simple example, the \texttt{Integrator} network
 is composed of only one recurrently connected ensemble.
 By encapsulating that logic in a network,
 the purpose of that ensemble is made explicit.
-On the other end of the spectrum,
+As a complex example,
 the \texttt{BasalGanglia} network
 is composed of five groups of ensembles
 connected with several specific functions
@@ -854,9 +863,9 @@ easy to include in many different models.
 
 \subsection{Probe}
 
-A \texttt{Probe} denotes that
+A \texttt{Probe} monitors
 a particular part of another object
-will be recorded throughout a simulation.
+that will be recorded throughout a simulation.
 Nengo models contain many variables
 that change over time,
 including membrane potentials,
@@ -887,7 +896,7 @@ Currently, simulators store probed data
 directly in memory,
 but the ability to store data
 in files or to stream data
-directly to sockets will be added.
+directly to sockets is forthcoming.
 
 \begin{figure}
 \begin{center}
@@ -930,8 +939,7 @@ directly to sockets will be added.
    used by the reference simulator
    for speed and data collection purposes.
    (E) The signals tracked at the high level
-   can be interpreted as a dynamical system
-   that can be analyzed with control theory.
+   can be interpreted as a dynamical system.
    State variable A simply represents its input,
    and passes its state to a sine function
    which becomes the input to B.
@@ -940,7 +948,8 @@ directly to sockets will be added.
    $\dot{x}(t) = A x(t) + B u(t)$ equation.
    These dynamical systems can be simulated
    directly, without the use of spiking neurons,
-   in order to quickly analyze system behavior.}
+   in order to quickly analyze system behavior,
+   if desired.}
 \end{figure}
 
 \section{PyNengo simulators} \label{sec:simulators}
@@ -1234,7 +1243,9 @@ with a single ensemble
 composed of 2000 leaky integrate-and-fire neurons.
 We have implemented the Lorenz attractor
 in PyNN for benchmarking purposes
-(code not shown).
+(code not shown; the PyNN script is 100 lines long,
+while the Nengo script [see Figure~\ref{fig:lorenz}
+is 20 lines long).
 
 \subsection{Circular convolution} \label{sec:cconv}
 
@@ -1276,11 +1287,13 @@ sim.run(0.5)
    The input vectors, A and B, represent four-dimensional vectors
    which are mapped onto six ensembles within the
    Circular Convolution network through
-   complicated transformation matrices.
+   complicated transformation matrices
+   that implement a discrete Fourier transform.
    Each ensemble within the network represents a
    two-dimensional vector. The product of the two dimensions
    is projected through another complicated transformation matrix
-   to compute the final four-dimensional result.
+   that implements the inverse discrete Fourier transform,
+   computing the final four-dimensional result.
    Note that the complicated parts of the model
    are contained within the network;
    the number of ensembles and the transform matrices shown
@@ -1302,15 +1315,14 @@ sim.run(0.5)
 
 A common function computed by Nengo models
 is circular convolution.
-Circular convolution is how
-Spaun binds two concepts together.
-Binding is central to solving many
-of the high level cognitive tasks
-that make Spaun unique.
+This function is a central part
+of the Semantic Pointer Architecture \citep{eliasmith2013}
+that uses the NEF to build
+a variety of cognitive models including Spaun.
 Circular convolution
 is best implemented in a two-layer network,
 rather than in a single connection.
-This two-layer organization is simplified
+This two-layer organization is simplified in
 the \texttt{CircularConvolution} network subclass.
 The complexity encapsulated in that network
 can be seen in Figure~\ref{fig:cconv}.
@@ -1357,10 +1369,6 @@ too long to be instructive.
      For most model sizes,
      the results are the same as (A),
      except that NEURON is notably faster.
-     However, when analyzed, the NEURON model
-     emits almost no spikes after the first
-     simulated second, which may be
-     why the simulation is relatively fast.
      The full results for Brian and NEST are not shown;
      for the largest model, they take $\sim$1467
      and $\sim$601 seconds respectively.
@@ -1405,18 +1413,18 @@ PyNN scripts that implement roughly
 the same functionality
 with Brian \citep{goodman2009}, NEURON \citep{hines2009},
 NEST \citep{eppler2008}, and PCSim \citep{pecevski2009}.
-We run each parameter set five times
+We ran each parameter set five times
 on the same machine,
 and plot the mean.
 In most cases, the coefficient of variation
 is well below 0.1, except for two
 outliers with coefficients of 0.18 and 0.22,
-indicating that these means are robust.
+overall indicating that the reported means are robust.
 The results, shown in Figure~\ref{fig:benchmarks}A and B,
 suggest that all versions of Nengo are significantly
 faster than the simulators accessible
 through PyNN, especially
-as the size of models increase.
+as the size of models increases.
 This is likely due to Nengo's
 use of factorized weight matrices,
 rather than storing and computing with
@@ -1429,7 +1437,7 @@ also only uses one CPU core.
 The results also suggest that PyNengo's
 simulators are faster than JavaNengo's simulator.
 
-As a real-world example,
+As a larger-scale example,
 we have also benchmarked
 the circular convolution model.
 Circular convolution is an important test case,
@@ -1446,9 +1454,11 @@ there is very little variance using this method.
 As can be seen in Figure~\ref{fig:benchmarks}C,
 for large models, the OpenCL simulator
 performs much faster than JavaNengo;
-in particular, a Radeon 7970 GPU performs 500-dimensional
-circular convolution faster than real time,
-and 200 times faster than JavaNengo.
+in particular, a Radeon 7970 GPU performs
+500-dimensional circular convolution
+with about half a million neurons
+faster than real time,
+and 50 times faster than JavaNengo.
 Additionally, although both JavaNengo
 and the OpenCL simulator on a CPU
 use all available CPU cores,
@@ -1465,7 +1475,7 @@ dedicated to building large-scale neural models;
 however, Nengo is unique in being built
 on a theoretical framework
 that has been validated
-through the Spaun model.
+through the Spaun model and other past work.
 
 The most closely related project is PyNN
 \citep{davison2008},
@@ -1516,7 +1526,10 @@ and learning rules,
 and has access to the wealth of models
 already created for each of its
 accessible simulators.
-PyNN is therefore better suited to
+Because Nengo is in an earlier development stage,
+many of these detailed neuron models
+and learning rules remain to be added.
+PyNN is therefore currently better suited to
 simulate detailed neural models.
 
 \subsection{Future work}
@@ -1542,7 +1555,7 @@ and many example models,
 we hope to foster a rich community of modellers
 contributing networks, neuron types, learning rules,
 and simulators to Nengo.
-Internally, we will
+Internally, we will be
 implementing the JavaNengo use cases
 not currently covered by PyNengo,
 and create a graphical interface
@@ -1562,8 +1575,10 @@ other scientific Python tools.
 While the reference simulator
 is simple and easy to understand,
 the OpenCL simulator is extremely fast;
-it can simulate a large circular convolution model
-200 times faster than JavaNengo.
+it can simulate circular convolution models
+50-200 times faster than JavaNengo,
+which is faster than alternative simulators
+on simpler models.
 This makes the creation and simulation
 of models that are many times larger than Spaun
 tractable with current hardware.
@@ -1599,9 +1614,11 @@ identified issues with Theano,
 and provided the base for
 the version of PyNengo described in this paper.
 Terrence C. Stewart contributed
-to PyNengo and helped implement
+to PyNengo, helped implement
 the PyNN scripts used in
-sections~\ref{sec:examples} and \ref{sec:benchmark}.
+sections~\ref{sec:examples} and \ref{sec:benchmark},
+and implemented the JavaNengo scripting interface
+on which PyNengo is based.
 Daniel Rasmussen contributed
 to PyNengo and the reference simulator,
 and edited text.
@@ -1630,7 +1647,9 @@ to PyNengo by providing examples,
 unit tests, and bugfixes.
 
 \paragraph{Funding\textcolon}
-NSERC CRC, CFI, and OIT.
+NSERC Discovery, NSERC Graduate Fellowships,
+NSERC Banting Fellowship, ONR (N000141310419)
+and AFOSR (FA8655-13-1-3084).
 
 \bibliographystyle{frontiersinSCNS&ENG}
 \bibliography{nengo}
