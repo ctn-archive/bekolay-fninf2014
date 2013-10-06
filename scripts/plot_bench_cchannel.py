@@ -74,7 +74,9 @@ data['NEST'][(1000, 50)] = [
 
 cvs = []
 
-plt.figure(figsize=(4,5))
+mm_to_inches = 0.0393701
+figsize = (180. * mm_to_inches / 3., 180. * mm_to_inches / 2.5)
+plt.figure(figsize=figsize)
 ax = plt.subplot(1,1,1)
 
 x = data.values()[0].keys()
@@ -86,13 +88,13 @@ for ix, name in enumerate(data.keys()):
     for (n, d), times in data[name].items():
         cvs.append(np.std(times) / np.mean(times))
         runtimes.append(np.mean(times))
-    plt.plot(xval, runtimes, '.-', ms=15, color=colors[ix], label=name)
+    plt.plot(xval, runtimes, '.-', ms=8, color=colors[ix], label=name)
     if name == "Brian":
         plt.text(xval[-3] + 40, runtimes[-3], name, color=colors[ix],
-                 ha='left', va='center', fontsize=14)
+                 ha='left', va='center', fontsize='large')
     elif name in ("NEURON", "NEST"):
         plt.text(xval[-1] + 40, runtimes[-1], name, color=colors[ix],
-                 ha='left', va='center', fontsize=14)
+                 ha='left', va='center', fontsize='large')
 
 del xval[1]
 del xlabels[1]
@@ -118,7 +120,7 @@ for ix, name in enumerate(data.keys()):
     for (n, d), times in data[name].items():
         cvs.append(np.std(times) / np.mean(times))
         runtimes.append(np.mean(times))
-    inset.plot(xval, runtimes, '.-', ms=15, color=colors[ix], label=name)
+    inset.plot(xval, runtimes, '.-', ms=8, color=colors[ix], label=name)
     yoffset = 0
     if name == "PyNengo\nOpenCL":
         yoffset = 0.85
@@ -126,7 +128,7 @@ for ix, name in enumerate(data.keys()):
         yoffset = -0.85
     if 'Nengo' in name:
         plt.text(xval[-1] + 7, runtimes[-1] + yoffset, name, color=colors[ix],
-                 ha='left', va='center', fontsize=14)
+                 ha='left', va='center', fontsize='large')
 
 
 inset.set_xlim(980, 1065)
@@ -140,7 +142,7 @@ inset.set_xticks(())
 mark_inset(ax, inset, loc1=3, loc2=4, fc="none", ec="0.5")
 
 plt.subplots_adjust(left=0.15, bottom=0.1, top=0.935, right=0.75)
-plt.savefig("../figures/bench_cchannel.pdf")
+plt.savefig("../figures/bench_cchannel.svg")
 
 print "Max CV:", max(cvs)
 print "All CVs:", sorted(cvs)

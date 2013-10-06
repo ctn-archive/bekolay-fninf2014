@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="150.05182"
+   height="137.28253"
+   id="svg4392"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="comm_channel_code.svg">
+  <defs
+     id="defs4394" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="77.743295"
+     inkscape:cy="63.109452"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="mm"
+     fit-margin-top="0.01"
+     fit-margin-left="1.01"
+     fit-margin-right="0.01"
+     fit-margin-bottom="0.01"
+     inkscape:window-width="1117"
+     inkscape:window-height="874"
+     inkscape:window-x="1747"
+     inkscape:window-y="75"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata4397">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-2.3726566,-1.04625)">
+    <text
+       xml:space="preserve"
+       style="font-size:39.171978px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+       x="206.39319"
+       y="393.63895"
+       id="text5457"
+       sodipodi:linespacing="125%"
+       transform="scale(0.9937187,1.006321)"><tspan
+         sodipodi:role="line"
+         id="tspan5459"
+         x="206.39319"
+         y="393.63895" /></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6.74431419px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:114.99999762%;letter-spacing:0px;word-spacing:0px;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
+       x="5.8945951"
+       y="5.4924145"
+       id="text5461"
+       sodipodi:linespacing="115%"
+       transform="scale(0.9937187,1.006321)"><tspan
+         sodipodi:role="line"
+         id="tspan5463"
+         x="5.8945951"
+         y="5.4924145"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="line-height:114.99999762%;fill:#0000ff;fill-opacity:1"
+   id="tspan6813">import</tspan> nengo</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="13.248376"
+         id="tspan5497"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="line-height:114.99999762%;fill:#0000ff;fill-opacity:1"
+   id="tspan6815">from</tspan> nengo.helpers <tspan
+   style="line-height:114.99999762%;fill:#0000ff;fill-opacity:1"
+   id="tspan6817">import</tspan> white_noise</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="21.004337"
+         id="tspan5495"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="line-height:114.99999762%;fill:#a0522d;fill-opacity:1"
+   id="tspan6775">model</tspan> = nengo.Model(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6783">&quot;Communication Channel&quot;</tspan>)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="28.760298"
+         id="tspan5493"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.make_node(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6785">&quot;Input&quot;</tspan>, white_noise(1, 5))</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="36.516258"
+         id="tspan5491"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.make_ensemble(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6787">&quot;A&quot;</tspan>, nengo.LIF(30), 1)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="44.272221"
+         id="tspan5489"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.make_ensemble(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6789">&quot;B&quot;</tspan>, nengo.LIF(30), 1)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="52.028183"
+         id="tspan5487"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.connect(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6791">&quot;Input&quot;</tspan>, <tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6793">&quot;A&quot;</tspan>)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="59.784142"
+         id="tspan5485"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.connect(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6795">&quot;A&quot;</tspan>, <tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6797">&quot;B&quot;</tspan>)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="67.5401"
+         id="tspan5483"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.probe(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6799">&quot;Input&quot;</tspan>)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="75.296066"
+         id="tspan5481"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.probe(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6801">&quot;A&quot;</tspan>, filter=0.01)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="83.052025"
+         id="tspan5479"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.probe(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6803">&quot;A.spikes&quot;</tspan>)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="90.807991"
+         id="tspan5477"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.probe(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6805">&quot;B&quot;</tspan>, filter=0.01)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="98.56395"
+         id="tspan5475"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.probe(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6807">&quot;B.spikes&quot;</tspan>)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="106.31991"
+         id="tspan5473"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="line-height:114.99999762%;fill:#a0522d;fill-opacity:1"
+   id="tspan6777">sim</tspan> = model.simulator()</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="114.07587"
+         id="tspan5471"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">sim.run(1)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="121.83183"
+         id="tspan5469"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="line-height:114.99999762%;fill:#a0522d;fill-opacity:1"
+   id="tspan6779">A_data</tspan> = sim.data(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6809">&quot;A&quot;</tspan>)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="129.5878"
+         id="tspan5467"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
+   style="line-height:114.99999762%;fill:#a0522d;fill-opacity:1"
+   id="tspan6781">A_spikes</tspan> = sim.data(<tspan
+   style="line-height:114.99999762%;fill:#9400d1;fill-opacity:1"
+   id="tspan6811">&quot;A.spikes&quot;</tspan>)</tspan><tspan
+         sodipodi:role="line"
+         x="5.8945951"
+         y="137.34375"
+         id="tspan5465"
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:114.99999762%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">...</tspan></text>
+  </g>
+</svg>

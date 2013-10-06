@@ -74,7 +74,9 @@ data['NEST'][2000] = [
 
 cvs = []
 
-plt.figure(figsize=(4,5))
+mm_to_inches = 0.0393701
+figsize = (180. * mm_to_inches / 3., 180. * mm_to_inches / 2.5)
+plt.figure(figsize=figsize)
 ax = plt.subplot(1,1,1)
 
 xval = data.values()[0].keys()
@@ -85,13 +87,13 @@ for ix, name in enumerate(data.keys()):
     for n, times in data[name].items():
         cvs.append(np.std(times) / np.mean(times))
         runtimes.append(np.mean(times))
-    plt.plot(xval, runtimes, '.-', ms=15, color=colors[ix])
+    plt.plot(xval, runtimes, '.-', ms=8, color=colors[ix])
     if name == "Brian":
         plt.text(xval[2] + 60, runtimes[2], name, color=colors[ix],
-                 ha='left', va='center', fontsize=14)
+                 ha='left', va='center', fontsize='large')
     elif name == "NEST":
         plt.text(xval[-1] + 60, runtimes[-1], name, color=colors[ix],
-                 ha='left', va='center', fontsize=14)
+                 ha='left', va='center', fontsize='large')
 
 plt.xticks(xval, xlabels)
 plt.xlim(50, 2100)
@@ -113,7 +115,7 @@ for ix, name in enumerate(data.keys()):
     for n, times in data[name].items():
         cvs.append(np.std(times) / np.mean(times))
         runtimes.append(np.mean(times))
-    plt.plot(xval, runtimes, '.-', ms=15, color=colors[ix])
+    plt.plot(xval, runtimes, '.-', ms=8, color=colors[ix])
     yoffset = 0
     if name == "PyNengo\nreference":
         yoffset = 1.5
@@ -121,7 +123,7 @@ for ix, name in enumerate(data.keys()):
         yoffset = -1.5
     if 'Nengo' in name or name == 'NEURON':
         plt.text(xval[-1] + 4, runtimes[-1] + yoffset, name, color=colors[ix],
-                 ha='left', va='center', fontsize=14)
+                 ha='left', va='center', fontsize='large')
 inset.set_xlim(1995, 2042)
 inset.set_ylim(-2, 21.5)
 inset.xaxis.set_ticks_position('bottom')
@@ -133,7 +135,7 @@ inset.set_xticks(())
 mark_inset(ax, inset, loc1=3, loc2=4, fc="none", ec="0.5")
 
 plt.subplots_adjust(left=0.15, bottom=0.1, top=0.94, right=0.85)
-plt.savefig("../figures/bench_lorenz.pdf")
+plt.savefig("../figures/bench_lorenz.svg")
 
 print "Max CV:", max(cvs)
 print "All CVs:", sorted(cvs)

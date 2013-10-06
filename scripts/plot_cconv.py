@@ -50,9 +50,11 @@ def plot(actual, ens):
     plt.plot(sim.data(model.t), sim.data(ens))
     for color, l in zip(colors, actual):
         plt.axhline(l, color=color)
-    plt.xlim(0, 0.5)
+    plt.xlim(0, 0.2)
 
-plt.figure(figsize=(5,5))
+mm_to_inches = 0.0393701
+figsize = (40 * mm_to_inches, 49.16 * mm_to_inches)
+plt.figure(figsize=figsize)
 plt.subplot(3, 1, 1)
 plot(a_in, "A")
 plt.gca().spines['bottom'].set_visible(False)
@@ -70,5 +72,5 @@ plot(actual_out, "Result")
 plt.xlabel("Time (s)")
 plt.ylabel("Result")
 
-plt.tight_layout(h_pad=0.12)
-plt.savefig("../figures/cconv_res.pdf")
+plt.tight_layout(pad=0.1, h_pad=0.12)
+plt.savefig("../figures/cconv_res.svg")

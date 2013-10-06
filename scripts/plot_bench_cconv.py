@@ -71,12 +71,14 @@ data['Intel Xeon\nE5-2620'][100] = 1.68300008774
 data['Intel Xeon\nE5-2620'][200] = 3.46999979019
 data['Intel Xeon\nE5-2620'][500] = 12.3960001469
 
-plt.figure(figsize=(4,5))
+mm_to_inches = 0.0393701
+figsize = (180. * mm_to_inches / 3., 180. * mm_to_inches / 2.5)
+plt.figure(figsize=figsize)
 ax = plt.subplot(1,1,1)
 
 for ix, name in enumerate(data.keys()):
     n = [neurons[d] for d in data[name].keys()]
-    plt.plot(n, data[name].values(), '.-', ms=15, color=colors[ix])
+    plt.plot(n, data[name].values(), '.-', ms=8, color=colors[ix])
     yoffset = 0
     if "3770" in name:
         yoffset = 0.68
@@ -93,10 +95,10 @@ for ix, name in enumerate(data.keys()):
 
     if name == "JavaNengo":
         plt.text(n[1] + 12000, data[name].values()[1], name, color=colors[ix],
-                 ha='left', va='center', fontsize=12)
+                 ha='left', va='center', fontsize='large')
     else:
         plt.text(n[-1] + 12000, data[name].values()[-1] + yoffset, name,
-                 color=colors[ix], ha='left', va='center', fontsize=12)
+                 color=colors[ix], ha='left', va='center', fontsize='large')
 
 dims = [5, 200, 500]  # Ignoring 10, 20, 50, 100
 xval = [neurons[d] for d in dims]
@@ -106,7 +108,7 @@ plt.xlim(0, 500000)
 plt.ylim(0, 27.5)
 plt.text(280000, 28.5, 'Circular convolution benchmarks',
          ha='center', va='center', fontsize='large')
-ax.tick_params(axis='x', which='major', labelsize=11)
+ax.tick_params(axis='x', which='major', labelsize='small')
 plt.ylabel('Simulation time (s)')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
@@ -114,4 +116,4 @@ ax.xaxis.set_ticks_position('none')
 ax.yaxis.set_ticks_position('left')
 
 plt.subplots_adjust(left=0.125, bottom=0.085, top=0.93, right=0.82)
-plt.savefig("../figures/bench_cconv.pdf")
+plt.savefig("../figures/bench_cconv.svg")

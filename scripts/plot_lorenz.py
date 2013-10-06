@@ -32,19 +32,18 @@ sim = model.simulator()
 sim.run(6)
 
 state_spikes = sorted_spikes(sim, "State", iterations=250, every=80)
-#state_spikes = [np.linspace(0, 6, 6 * 100)]
 
-plt.figure(figsize=(7,4.55))
+mm_to_inches = 0.0393701
+figsize = (100. * mm_to_inches, 80. * mm_to_inches)
+plt.figure(figsize=figsize)
 ax = plt.subplot2grid((2,3), (0,0), colspan=2, rowspan=2, projection='3d')
 ax.plot(sim.data('State')[:,0], sim.data('State')[:,1], sim.data('State')[:,2],
         color='k')
-# ax.set_xticklabels(())
-# ax.set_yticklabels(())
-# ax.set_zticklabels(())
-ax.dist = 8.5
+ax.dist = 9
 
 ax = plt.subplot2grid((2,3), (0,2))
 ax.plot(sim.data(model.t), sim.data('State'))
+ax.set_xlim(0, 6)
 ax.set_ylabel("Amplitude")
 ax.spines['top'].set_visible(False)
 ax.spines['left'].set_visible(False)
@@ -54,8 +53,7 @@ ax.yaxis.tick_right()
 ax.yaxis.set_label_position("right")
 
 ax = plt.subplot2grid((2,3), (1,2))
-ax.eventplot(state_spikes, colors=[(0.1,0.1,0.1)], linewidths=0.05,
-             rasterized=True)
+ax.eventplot(state_spikes, colors=[(0,0,0)], rasterized=True, linewidths=0.1)
 ax.axis([0, 6, len(state_spikes)-0.5, -0.5])
 ax.set_xlabel("Time (s)")
 ax.set_ylabel("Neuron")
@@ -65,6 +63,6 @@ ax.xaxis.set_ticks_position('bottom')
 ax.yaxis.tick_right()
 ax.yaxis.set_label_position("right")
 
-plt.tight_layout(h_pad=0.12)
+plt.tight_layout(pad=0.1, h_pad=0.12)
 plt.subplots_adjust(left=0)
-plt.savefig("../figures/lorenz_res.pdf")
+plt.savefig("../figures/lorenz_res.svg")

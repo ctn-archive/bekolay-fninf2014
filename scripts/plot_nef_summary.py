@@ -27,7 +27,8 @@ cos = model.connect("A", "Dummy", function=np.cos, filter=0.03)
 model.probe(cos)
 
 ## Encoding plot
-figsize = (3.5, 7)
+mm_to_inches = 0.0393701
+figsize = (180. * mm_to_inches / 4.0, 180. * mm_to_inches / 2.0)
 
 sim = model.simulator()
 sim.run(1)
@@ -74,7 +75,7 @@ plt.xlabel("Time (s)")
 plt.ylabel("Neuron")
 
 plt.tight_layout(pad=0.1, h_pad=0.1)
-plt.savefig("../figures/nef_summary_enc.pdf")
+plt.savefig("../figures/nef_summary_enc.svg")
 
 ## Decoding
 # NB: We don't make a new network so that the plots match
@@ -135,8 +136,7 @@ plt.xlabel("Time (s)")
 plt.axis([0, 1, -1.25, 1.25])
 
 plt.tight_layout(pad=0.1, h_pad=0.5)
-plt.savefig("../figures/nef_summary_dec.pdf")
-
+plt.savefig("../figures/nef_summary_dec.svg")
 
 ## Transformation
 
@@ -162,7 +162,7 @@ model.probe("C", filter=0.01)
 sim = model.simulator()
 sim.run(2)
 t = sim.data(model.t)
-grey = [(0.75, 0.75, 0.75)]
+grey = [(0, 0, 0)]
 
 plt.figure(figsize=figsize)
 
@@ -178,7 +178,7 @@ plt.yticks(())
 
 plt.gca().twinx()
 plt.plot(sim.data(model.t), sim.data("A"))
-plt.text(1, 1, "A", ha='center', va='center', fontsize=16,
+plt.text(1, 1, "A", ha='center', va='center', fontsize='large',
          bbox=dict(ec='none', fc='w', alpha=0.8))
 plt.axhline(0, color='k')
 plt.xticks(())
@@ -199,7 +199,7 @@ plt.yticks(())
 
 plt.gca().twinx()
 plt.plot(sim.data(model.t), sim.data("B"))
-plt.text(1, 1, "B=-A", ha='center', va='center', fontsize=16,
+plt.text(1, 1, "B=-A", ha='center', va='center', fontsize='large',
          bbox=dict(ec='none', fc='w', alpha=0.8))
 plt.axhline(0, color='k')
 plt.xticks(())
@@ -221,7 +221,7 @@ plt.xlabel("Time (s)")
 
 plt.gca().twinx()
 plt.plot(sim.data(model.t), sim.data("C"), label="C=B$^2$")
-plt.text(1, 1, "C=B$^2$", ha='center', va='center', fontsize=16,
+plt.text(1, 1, "C=B$^2$", ha='center', va='center', fontsize='large',
          bbox=dict(ec='none', fc='w', alpha=0.8))
 plt.axhline(0, color='k')
 plt.xlabel("Time (s)")
@@ -232,7 +232,7 @@ plt.gca().yaxis.set_ticks_position('left')
 plt.gca().xaxis.set_ticks_position('bottom')
 
 plt.tight_layout(pad=0.1, h_pad=0.5)
-plt.savefig("../figures/nef_summary_trans.pdf")
+plt.savefig("../figures/nef_summary_trans.svg")
 
 ## Dynamics
 
@@ -276,4 +276,4 @@ plt.gca().spines['left'].set_visible(False)
 plt.gca().spines['right'].set_visible(False)
 
 plt.tight_layout(pad=0.1, h_pad=2)
-plt.savefig("../figures/nef_summary_dyn.pdf")
+plt.savefig("../figures/nef_summary_dyn.svg")
