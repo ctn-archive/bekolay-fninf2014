@@ -1,0 +1,51 @@
+Dear Editor,
+
+Please accept for consideration our Methods paper submitted to
+Frontiers in Neuroinformatics entitled "Nengo: A Python tool for
+building large-scale functional brain models." An abstract for this
+paper was accepted for the Python in Neuroscience II research topic.
+
+Our paper describes a new Python software project that aims to
+eventually replace an existing set of Java tools for creating
+large-scale neural models according to the principles of the Neural
+Engineering Framework (NEF; Eliasmith & Anderson 2003). Currently, the
+project covers the majority of the use cases of the Java-based tools
+with significantly fewer lines of code. Most notably, the code has
+been architected to completely decouple model specification and
+simulation, which as enabled the creation of an OpenCL-based simulator
+that can run large models 50 to 200 times faster than the Java-based
+simulator. However, unlike the Java tools, the new Python tools
+currently lack a graphical interface. Despite that, we believe that
+this new Python implementation will be a valuable resource for neural
+modellers. The previous Java-based tools were used to build Spaun, a
+large-scale function brain model capable of performing 8 cognitive
+tasks such as memorizing lists and inductive reasoning. These new
+Python-based tools will enable the construction of models larger and
+more complex than Spaun, which can be simulated faster than Spaun in
+most cases.
+
+It should be noted that this full paper has notable changes from the
+originally submitted abstract, entitled "Reimplementing Nengo in
+Python for speed and simplicity." Specifically, the abstract discussed
+the use of the Theano project in the Python implementation; however,
+after examining the computation graphs that Theano used to simulate
+models, we discovered that we only needed a small number of operators,
+but used them many times, which Theano is not designed to handle well.
+In the implementation discussed in the full paper, our simulator
+handles the construction of the computation graph and schedules it
+efficiently, allowing for simulators to implement the operations in an
+efficient manner based on the platform on which the simulation occurs.
+By doing this, we have exceeded the 15-times speedup listed in the
+abstract, achieving speedups of 50- to 200-times the Java simulator.
+
+As a brief typesetting note, all of the figures have been uploaded as
+compressed TIFFs, which have been generated from vector graphics
+files. Since these figures only contain lineart and text, the original
+source vector files may be better to include in the final PDF. We are
+happy to provide these original vector sources if desired.
+
+Sincerely,
+
+Trevor Bekolay, James Bergstra, Eric Hunsberger, Travis DeWolf,
+Terrence C. Stewart, Daniel Rasmussen, Xuan Choo, Aaron Voelker, and
+Chris Eliasmith
