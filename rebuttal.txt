@@ -1,0 +1,508 @@
+Dear Editor,
+
+Please find a revised version of our Methods paper "Nengo: A Python
+tool for building large-scale functional brain models" attached for
+your consideration for publication in Frontiers in Neuroinformatics.
+
+Sincerely,
+
+Trevor Bekolay, James Bergstra, Eric Hunsberger, Travis DeWolf,
+Terrence C. Stewart, Daniel Rasmussen, Xuan Choo, Aaron Voelker, and
+Chris Eliasmith
+
+Reviewer 1
+==========
+
+Expert Authority
+----------------
+
+>> Are relevant methods of other authors mentioned? If not, please
+>> specify the methods the author should incorporate.
+
+> Emergent should be mentioned. It is not based on spiking simulators,
+> but has a track record in cognitive modelling.
+
+We have now cited Emergent in the introduction alongside ACT-R in the
+introduction.
+
+> MIIND could be mentioned (Disclaimer: the reviewer is involved with
+> MIIND) It models population dynamics, admittedly not based on
+> spiking neurons, but again its aim is large-scale cognitive models
+> and shares some design ideas (see paper in Neural Networks). Please
+> judge for yourself.
+
+We have revised Section 7.1, which now includes a list of tools
+that simulate cognitive phenomena, including MIIND.
+
+The revised text reads:
+
+"There are many other neural simulators dedicated to building
+large-scale neural models (Eppler et al., 2008; Goodman and Brette,
+2009; Hines et al., 2009), and many tools for simulating cognitive
+phenomena with various levels of biologically plausibility (Cooper and
+Fox, 1998; Sun, 2001; Anderson et al., 2004; Franklin et al., 2007;
+Aisa et al., 2008; de Kamps et al., 2008; Laird, 2012). However, Nengo
+is unique in being built on a theoretical framework that has enabled a
+cognitive architecture (the Semantic Pointer Architecture) that
+maintains a high level of biological plausibility, and has been
+validated through the Spaun model and other past work."
+
+Other Comments
+--------------
+
+>> Please add any further comments you have regarding this manuscript.
+
+> It looks like an interesting tool, and I think at this level
+> existing simulators can do with a bit of competition. But the
+> description of the tool leaves much to be desired. In particular it
+> doesn't make clear enough what its advantages over NEST or BRIAN
+> are. The discussion on scaling is not entirely convincing because in
+> part, it is hard to understand how to compare with those simulators.
+
+We have expanded Section 7.1 to compare to projects that have similar
+design goals and present a similar interface (e.g., PyNN) and between
+the underlying neural simulators (e.g., NEST, Brian).
+
+The revised section on neural simulators reads:
+
+"On the neural simulator side, we have shown that both Nengo's
+reference simulator and OpenCL simulator are able to simulate two
+benchmark models much faster than Brian, NEST and NEURON (see
+Figure~\ref{fig:benchmarks}). This is, in part, because Nengo stores
+the factors of the connection weight matrix, rather than storing the
+entire matrix. However, these simulators are able to simulate many
+detailed neuron models and learning rules, and have access to a wealth
+of existing neuron models and learning rules. Because Nengo 2.0 is in
+an earlier development stage, many of these detailed neuron models and
+learning rules remain to be added. Neural simulators like Brian, NEST,
+and NEURON are therefore currently better suited for simulating a
+wider range of single cell models, while Nengo is designed for large
+networks of simple neural models that are connected together according
+to the principles of the Neural Engineering Framework, and can
+simulate these types of models efficiently.
+
+"One key difference between Nengo's simulators and traditional neural
+simulators is the target platform. While NEST and NEURON can be run on
+commodity hardware, networks of modest size are typically simulated in
+high-performance computing environments by using the Message-Passing
+Interface (MPI). Nengo enables large-scale neural simulation on
+commodity hardware, allowing researchers and hobbyists without access
+to large computing clusters the ability to experiment with theoretical
+neuroscience as is currently practiced in cutting edge research. In
+particular, GPUs are a powerful, low-cost computing resource that are
+available in most modern workstations. The OpenCL simulator makes full
+use of GPUs, while the previously discussed simulators currently do
+not."
+
+> Where is it available? What do I need in terms of 3rd party software?
+
+Thanks for pointing out that we omitted these important details in the
+original manuscript. We have added a link to the release and source
+versions of Nengo in a footnote on Page 2 of the revised manuscript
+that reads:
+
+"Nengo is available for download through the Python Package Index at
+https://pypi.python.org/pypi/nengo. The full source is available at
+https://github.com/ctn-waterloo/nengo."
+
+We have also added the following paragraph to the introduction in
+order to clarify Nengo's 3rd party dependencies.
+
+"Nengo 2.0 has been rewritten from scratch in Python, leveraging NumPy
+(Oliphant, 2007) for manipulating large amounts of data. While NumPy
+is its only dependency, Nengo contains optional extensions for
+plotting if Matplotlib is available (Hunter, 2007) and for interactive
+exploration if IPython 63 available (Perez and Granger, 2007). Since
+Nengo only depends on one third-party library, it is easy to integrate
+Nengo models in arbitrary CPython programs, opening up possibilities
+for using neurally implemented algorithms in web services, games, and
+other applications."
+
+> The NEF should be explained in more detail. The paper should be more
+> self-contained. It is not entirely clear how the simulations are
+> implemented. I think an ensemble of, for example, LIF neurons is
+> simulated, and the dynamics and input that they receive AS A
+> POPULATION is presented. That is interesting, but I'm not entirely
+> sure how this is done. What happens in the Lorenz attractor? Do all
+> neurons receive feedback according to the differential equations in
+> the script, i.e. as a current? Or as spike trains modulated by this
+> system? What is 'input' anyway? This is not described very well at
+> all. I would walk the reader through a simple simulation more
+> explicitly.
+
+In response to your direct question, all of the neurons in the Lorenz
+attractor receive input in the form of current; that current is
+determined by a summation of the spiking activities of afferent
+neurons weighted by connection weights that are determined using the
+NEF's transformation principle.
+
+These details are now included in Appendix 1, "Neural Engineering
+Framework Details", which we have added to make this paper more
+self-contained. This appendix gives the mathematical details behind
+the principles discussed in Section 2. (The text of the Appendix is
+too long to include in the interactive review forum.)
+
+We have also described the example scripts in more detail in
+sections 5.1, 5.2, and 5.3.
+
+In regard to walking the reader through a simple simulation, we hope
+that the addition of the NEF appendix will make the existing Figure 2
+a sufficiently detailed account of the first two timesteps of a simple
+simulation.
+
+> Having said that, the paper contains far too many irrelevant design
+> details. The paragraph on JAVANENGO is bizarre. Do you really want
+> to burden you readers with the fact that its class interfaces are
+> overloaded? If you want to promote the new Python tool, there is no
+> reason to blast the Java version. I recommend dropping the entire
+> JAVANENGO section, if the Python version is what you want people to
+> use.
+
+Thanks for pointing this out. As the designers of the new version, we
+have had many discussions about whether we should improve the old
+version or start from scratch; some of that discussion appeared in the
+paper, and upon a second look, we wholeheartedly agree that the
+mentions of JavaNengo are out of place.
+
+We have removed that section completely in the revised manuscript.
+Where mentions of the previous version of Nengo were unavoidable, we
+have referred to JavaNengo as Nengo 1.4, and the new version as Nengo
+2.0 rather than PyNengo.
+
+> I would mention design considerations only when the relate to use
+> cases, i.e. explain why certain scaling properties are achieved. The
+> paper contains far too many design considerations, it should focus
+> on use cases. Scaling is also an issue of use.
+>
+> This question is important in order to judge how similar the
+> simulator is from other tools such as NEST and BRIAN. Can you set up
+> simulations in the two of those that are similar to NENGO and THEN
+> compare them? Also bear in mind that NEST has an MPI backbone.
+
+We wanted this paper to focus on the design of Nengo 2.0, and so our
+intention in saying that the implemented simulators scale well is
+primarily to indicate that the design enables the implementation of
+simulators that scale well. It is difficult to come up with use cases
+that can be adequately explained in this paper; in a sense, the papers
+that are cited in the introduction are those use cases, as they were
+all implemented with Nengo 1.4 (Conklin and Eliasmith, 2005; Singh and
+Eliasmith, 2006; Choo and Eliasmith, 2010; Rasmussen and Eliasmith,
+2014; DeWolf and Eliasmith, 2011; Stewart et al., 2012; Eliasmith et
+al., 2012). We believe that the examples discussed in Section 5 are of
+sufficient length to be instructive.
+
+Setting up simulations first in Brain or NEST (or PyNN) and then
+mapping those to Nengo models would not be very instructive. The point
+of Nengo is to build neural models based on the principles of the NEF;
+models built in those other tools would not use these principles, and
+would result in models containing many ensembles whose underlying
+neural populations would be connected directly with a defined weight
+matrix. We do make this possible for certain important cases (e.g.,
+inhibitory gating signals), but these cases are not the norm when
+using the principles of the NEF. We hope that the focus of the paper
+is clearer given our additions in the introduction and in Section 7.1.
+
+We agree that it would be an interesting comparison to simulate two
+neural populations connected directly with a defined weight matrix.
+However, that comparison would be more apt in a paper that gives more
+implementation details of the simulators being compared. We have not
+provided those details here, and have instead focused on the novel
+contributions of Nengo.
+
+In sum, the difference between Nengo and other neural simulators is
+primarily that Nengo is designed to define and simulate neural models
+created with the principles of the NEF. The updated introduction and
+Section 7.1 (copied above) highlights this difference.
+
+> Can you do other neural models than LIF? Again this harks back to
+> the criticism that the philosophy of NEF is well described, and
+> interesting, but its implementation is not.
+
+Currently in the main development branch of Nengo 2.0, we have only
+implemented the LIF model, and a rate approximation of the LIF model.
+Nengo 1.4 contained implementations of LIF, an adaptive LIF model
+(Koch & Schutter, 1999), and the well-known Hodgkin-Huxley model, so
+we know that it is possible to use other neuron models in NEF-based
+networks. Additionally, we have already completed work done on another
+simulator internal to the lab that uses a neuron model emulating a
+piece of neuromorphic hardware.
+
+The added appendix describing the NEF makes explicit how the neuron
+model is used. Additionally, we have added the following text to
+Section 2:
+
+"Importantly, tuning curves can be determined for any type of neuron,
+and therefore the encoding process (and the NEF as a whole) is not
+dependent on any particular neuron model."
+
+> Two million spiking neurons is not that much. Edelman and Tononi did
+> that 15 years ago. Izhekevich blasts you out of the water. Moreover,
+> it is a meaningless quantity, it depends on what you do. 2.5 million
+> compartmental neurons is still impressive, 2.5 point model neurons is
+> not. In our lab have models with hundreds of thousands of rate-based
+> populations, we could model each population by a thousand neurons if
+> we wanted to. Does that make us record holder? I'd be a bit more
+> careful with such claims, or qualify them better.
+
+We agree that the number of neurons is a meaningless quantity, and
+believe that function is the more important metric. That is why our
+focus is well-exemplified by Spaun, the largest functional brain model
+(which has been previously stated as such in Eliasmith & Trujillo,
+2013), where functional in this case refers to the cognitive functions
+that Spaun performs.
+
+> In my opinion, this paper cannot be read without going to the original
+> paper explaining NEF. Given the brevity of this paper, I think that's
+> not good enough. There is ample space for a better explanation of how
+> it works and how that is different from more conventional simulators.
+
+Thank you for pointing out these weaknesses. We hope that the addition
+of an appendix describing the NEF, an expanded Section 7.1 comparing
+Nengo to conventional simulators, and other improvements throughout
+the revised manuscript have addressed your concerns and have made this
+paper self-contained. In particular, we hope that we have made it
+clear that Nengo's strength lies in the fact that it is based on the
+principles of the NEF; we do not wish to claim that Nengo is a better
+general-purpose neural modeling tool than PyNN, or a better
+general-purpose simulator than Brain or NEST. However, we do wish to
+claim that Nengo is a better modeling tool and simulator for NEF-style
+networks, and that NEF-style networks are less computationally
+intensive to simulate, and therefore are feasible to run on commodity
+hardware.
+
+Reviewer 2
+==========
+
+Expert Authority
+----------------
+
+>> Are relevant methods of other authors mentioned? If not, please
+>> specify the methods the author should incorporate.
+
+> Authors could perhaps mention the Topographica
+> (http://topographica.org/index.html) simulation framework which is
+> also implemented in python and offers a high-level model
+> specification environment. It also offers a lot of analysis and
+> visualization resources and a GUI, which could serve as inspiration
+> for some of the future work mentioned in the manuscript.
+
+Thank you for bringing Topographica to our attention! While we have
+looked at it some time ago, the project seems to have grown much
+lately, and we will investigate it more soon. For now, we have cited
+it in Section 7.1, as it seems to have similar goals as Nengo and
+PyNN.
+
+Article Length
+--------------
+
+>> A Method Article should not exceed 12,000 words. Should any part of
+>> the article be shortened? If yes, please specify which part should be
+>> shortened.
+
+> I found the introduction unnecessarily lengthy with rather small
+> proportion actually discussing the main topic (pyNENGO). Especially
+> the JavaNENGO section could in my opinion be omitted or at least
+> significantly shortened. Also I found the first part of the
+> introduction discussing NEF unnecessarily long - this paper should
+> motivate pynengo not NEF.
+
+Thanks for pointing this out. As the designers of the new version, we
+have had many discussions about whether we should improve the old
+version or start from scratch; some of that discussion appeared in the
+paper, and upon a second look, we wholeheartedly agree that the
+mentions of JavaNengo are out of place.
+
+We have removed that section completely in the revised manuscript.
+Where mentions of the previous version of Nengo were unavoidable, we
+have referred to JavaNengo as Nengo 1.4, and the new version as Nengo
+2.0 rather than PyNengo.
+
+We have also removed some sections of the introduction motivating the
+NEF, and have replaced them with motivations for Nengo. Specifically,
+the paragraph:
+
+"It has often been said that neuroscience is data-rich and theory-poor
+(Churchland and Sejnowski, 1992). We believe that the modeling success
+of large functional networks such as Spaun suggests that the NEF may
+be able to fill the theoretical void. In order to continue to evaluate
+the NEF as a theory of neural computation by building larger and more
+complicated models, we have begun the next generation of Nengo
+development with a focus on speed, extensibility, and simplicity."
+
+has been removed, and replace with the following text:
+
+"The transformation principle of the NEF proposes that the connection
+weight matrix between two neural populations can compute a nonlinear
+function, and can be factored into two significantly smaller matrices.
+By using these factors instead of full connection weight matrices,
+NEF-designed models are more computationally efficient, which allows
+Nengo to run large-scale neural models on low-cost commodity
+hardware."
+
+Other Comments
+--------------
+
+> Section 1.2 alludes to the possibility of exporting model from pynengo
+> to PyNN. Is this a future work, or is there already some
+> infrastructure in place for this? Please clarify.
+
+The ability to export a model to PyNN is a future work. We have
+removed that confusing passage from Section 1.2 in the revised
+manuscript, but that functionality is possible and we hope to
+implement it soon.
+
+We have already have two work-in-progress simulators allowing for
+Nengo 2.0 models to be run on two pieces of neuromorphic hardware. We
+have added a mention of these, copied below, to Section 7.2 in order
+to show that multiple backend simulators are possible (including a
+future PyNN backend):
+
+"We are also developing two simulators that will take the same NEF
+model description as the existing simulators, but will target two
+pieces of neuromorphic hardware to achieve greater speed and power
+efficiency than the OpenCL simulator."
+
+> In section 3.2 authors discuss parameters, some of which can be set on
+> ensembles and some directly on neural populations. It isn't very
+> intuitive why some belong to one or the other (i.e. why maximum firing
+> rate is a parameter of ensemble rather than the population). I feel it
+> could be instructive to discuss a bit more in detail the separation of
+> the high level NEF concepts from the low-level spiking neuron concepts
+> in pynengo.
+
+The intuition as to why some parameters are ensemble-level and some
+are neural population-level relies on a mathematical description of
+how we compute the current that we inject into each of the neuron in
+the neural population. Any parameter that is part of that equation is
+ensemble-level, and any parameter that is not is stored on the neural
+population. We have now included these equations in an appendix that
+gives a mathematical description of the NEF; specifically, Equation
+(1) describes the current that is injected into each neuron model. The
+parameters of this equation are stored on the ensemble, whereas the
+parameters that are used in the neural nonlinearity would be stored in
+the neural population object.
+
+In the revised manuscript we have also removed the mention of the
+maximum firing rate in Section 3.1 (formerly 3.2), as the encoding
+weight is more intuitively a part of the NEF's representation scheme
+specifically and not a property of a neuron.
+
+> I was intrigued by the mention of automatic parameter setting based on
+> neurobiological constraints. Could authors discuss this issue further
+> in the manuscript?
+
+The description "automatic parameter setting" may be too generous due
+to our choice of wording. Specifically, in our original manuscript we
+wrote in Section 3.2 (now 3.1):
+
+"If these attributes are not set, Nengo attempts to maintain
+neurobiological constraints by selecting neural parameters from
+distributions consistent with neocortical pyramidal cells."
+
+However, it is more accurate to say that, if parameters are unset,
+Nengo will use defaults that correspond to neocortical pyramidal
+cells. The text in the updated manuscript now reads:
+
+"If these attributes are not set, Nengo attempts to maintain
+neurobiological constraints by using default parameters consistent
+with neocortical pyramidal cells."
+
+We do wish to do some kind of automatic parameters setting in the
+future, both in terms of neural parameters and connection parameters.
+In the newly added NEF appendix, we also mention how connection
+parameters can correspond to experimental data:
+
+"The decoding process is depicted in Figure 1B, where the optimal
+linear decoders have been found and used for eight neurons. Notably,
+this kind of temporal decoding requires an assumption about the nature
+of the temporal filter being used. Here we assume that post-synaptic
+currents are such filters, and set the time constants to reflect the
+kind of neurotransmitter receptors in the connection (e.g., AMPA
+receptors have short time constants, ~10 ms, and NMDA receptors have
+longer time constants, ~50 ms)."
+
+> It isn't very clear from the manuscript what Network is. Is it really
+> just a simplest form of a container as would appear from the
+> description or does it actually offer some distinct functionality?
+
+A Network really is just a simple container, which is used for
+organizing large models. Our experience building large models has
+shown that this kind of hierarchical organization becomes increasingly
+useful as the size of the model increases, and we include Networks for
+that reason. The text in Section 3.5 has been revised to explicitly
+state that networks are only containers, and can be used for
+hierarchical grouping.
+
+> The first paragraph of section 4 implies a simulator dependent
+> results. If this is the case, I think it warrants a more detailed
+> discussion.
+
+Thanks for pointing this out. We have revised this paragraph to remove
+the simulator dependent language, and have moved that information to
+Section 4.1, which collects together information specific to the
+reference simulator.
+
+The revised first paragraph of Section 4 is:
+
+"Decoupling model creation and simulation has been done previously by
+PyNN (Davison et al., 2008). In PyNN, the same Python script can be
+used to run a model on four different simulators. Nengo follows this
+programming model by decoupling neural model creation and simulation,
+which enables Nengo simulators to allocate memory and schedule
+computations in the most efficient ways possible. Simulators are given
+a Model as an argument; this Model is a static symbolic description.
+The simulator can take the model description and build whatever data
+structures are best suited to implement the simulation."
+
+> The benchmark results are impressive, but it should be noted that
+> most spiking simulators these days are used in HPC environments, and
+> thus parallelization comparisons in multi-processor environments
+> would be more relevant. If pynengo does not offer this
+> functionality, this should be acknowledged and perhaps future plans
+> in this direction should be discussed.
+
+This is a good point. While we are currently implementing a simulator
+that uses MPI, in this paper we want to highlight that Nengo is able
+to simulate large networks that are typically only accessible in HPC
+environments on commodity hardware. The paragraph in the introducton,
+listed above, makes this explicit early on. We have also included the
+following paragraph in Section 7.1:
+
+"One key difference between Nengo's simulators and traditional neural
+simulators is the target platform. While NEST and NEURON can be run on
+commodity hardware, networks of modest size are typically simulated in
+high-performance computing environments by using the Message-Passing
+Interface (MPI). Nengo enables large-scale neural simulation on
+commodity hardware, allowing researchers and hobbyists without access
+to large computing clusters the ability to experiment with theoretical
+neuroscience as is currently practiced in cutting edge research. In
+particular, GPUs are a rich, low-cost computing resource that are
+available in most modern workstations. The OpenCL simulator makes full
+use of GPUs, while other simulators currently do not."
+
+> Googling pynengo doesn't return anything, and I thought I can't find
+> the package at all until I noticed that in table 1 it says that
+> pynengo is the 'nengo' repository. I would advise authors making this
+> more clear, to facilitate the promotion of pynengo. Perhaps end the
+> introduction or discussion with clear instructions how to access the
+> software.
+>
+> Did authors considered releasing pynengo as pypi package?
+
+Thanks for bringing this up. As mentioned above, we have changed all
+references to PyNengo to Nengo 2.0. Additionally, we have pointed to
+Nengo on PyPI and Github in a footnote on page 2:
+
+"Nengo is available for download through the Python Package Index at
+https://pypi.python.org/pypi/nengo. The full source is available at
+https://github.com/ctn-waterloo/nengo."
+
+Currently, we have only registered the nengo namespace on PyPI, but we
+are hoping to make an initial 2.0 release before the publication of
+this paper.
+
+> Section 7.2 about future talks about future work only in the last
+> sentence.
+
+Thank you for noticing this. We have completely rewritten Section 7.2
+to more appropriately focus on future work.

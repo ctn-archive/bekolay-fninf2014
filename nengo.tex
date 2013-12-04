@@ -69,23 +69,23 @@
   that generates specific
   NEF models
   to explain experimental data.
-  A previous version of Nengo
-  implemented in Java was used
-  to create Spaun,
+  Nengo 1.4, which was implemented in Java,
+  was used to create Spaun,
   the world's largest functional
   brain model \citep{eliasmith2012}.
   Simulating Spaun
   highlighted limitations
-  in Nengo's ability to
+  in Nengo 1.4's ability to
   support model construction with simple syntax,
   to simulate large models quickly,
   and to collect large amounts of data
   for subsequent analysis.
-  This paper describes a new version of Nengo
-  implemented in Python that overcomes these limitations.
+  This paper describes Nengo 2.0,
+  which is implemented in Python
+  and overcomes these limitations.
   It uses simple and extendable syntax,
   simulates a benchmark model on the scale of Spaun
-  50 times faster than the previous implementation,
+  50 times faster than Nengo 1.4,
   and has a flexible mechanism
   for collecting simulation results.
 
@@ -116,14 +116,19 @@ to the statistics of biological synapses \citep{markram2006}.
 However, cognition has not yet emerged
 from data-driven large scale models,
 and there are good reasons to think
-that cognition may never emerge \citep{trujillo-inpress}.
+that cognition may never emerge \citep{eliasmith2013a}.
 At the other end of the spectrum,
-cognitive architectures \citep{anderson2004}
+cognitive architectures \citep{anderson2004,aisa2008}
 and machine learning approaches \citep{hinton2006}
 have solved high-dimensional statistical problems,
 but do so without respecting biological constraints.
 
-Nengo is a neural simulator
+Nengo\footnote{Nengo is available for download through
+  the Python Package Index at
+  \url{https://pypi.python.org/pypi/nengo}.
+  The full source is available at
+  \url{https://github.com/ctn-waterloo/nengo}.}
+is a neural simulator
 based on a theoretical framework proposed
 by \citet{eliasmith2003}
 called the Neural Engineering Framework
@@ -138,7 +143,7 @@ for the last decade
 (e.g., path integration [\citealp{conklin2005}],
 working memory [\citealp{singh2006}],
 list memory [\citealp{choo2010}],
-inductive reasoning [\citealp{rasmussen2011}],
+inductive reasoning [\citealp{rasmussen2014}],
 motor control [\citealp{dewolf2011}],
 decision making [\citealp{stewart2012}])
 culminating recently with Spaun,
@@ -178,256 +183,67 @@ produces simulated data that explains
 and predicts a wide variety of experimental results.
 Single cell activity \citep{stewart2012},
 response timing \citep{stewart2009a},
-and behavioral errors \citep{choo2010}
+behavioral errors \citep{choo2010},
+and age-related cognitive decline \citep{rasmussen2014},
 of NEF-designed models match
-psychological and physiological findings
+physiological and psychological findings
 without being built specifically into the design.
 These results are a consequence of
 the need to satisfy functional objectives
 within anatomical and neurobiological constraints.
 
-It has often been said that neuroscience
-is data-rich and theory-poor \citep{churchland1992}.
-We believe that the modeling success of
-large functional networks such as Spaun
-suggests that the NEF
-may be able to fill the theoretical void.
-However, in simulating this large model,
-the Java-powered Nengo simulator
-was limited in terms of memory consumption,
-simulation speed, and extensibility.
-In order to continue to evaluate the NEF
-as a theory of neural computation
-by building larger and more complicated models,
-we have begun the next generation
-of Nengo development with a focus on speed,
-extensibility, and simplicity.
+The transformation principle of the NEF
+proposes that the connection weight matrix
+between two neural populations
+can compute a nonlinear function,
+and can be factored into
+two significantly smaller matrices.
+By using these factors
+instead of full connection weight matrices,
+NEF-designed models are
+more computationally efficient,
+which allows Nengo to run
+large-scale neural models
+on low-cost commodity hardware.
 
-This paper introduces a new version
-of Nengo (PyNengo) written in Python.
-The remainder of this introduction outlines
-the design issues in the previous version (JavaNengo)
-that motivated the reimplementation.
-PyNengo is not currently meant
-to completely replace JavaNengo;
-JavaNengo remains a capable visual NEF
-simulator and a valuable teaching tool
-due to its graphical interface.
-PyNengo's focus is on speed
-and a simplified internal design
-to support ongoing research in
-large adaptive functional models.
-The remainder of the paper outlines PyNengo's design,
-scripting interface, and performance relative to
-JavaNengo and alternatives such as Brian and NEST.
-
-\subsection{JavaNengo limitations}
-
-\begin{table}[!t]
-\processtable{Tools bearing the name Nengo.\label{tab:nengo-vers}}
-{\begin{tabular}{p{2.6cm} p{2.7cm} l p{7cm}} \toprule
-\textbf{Name} & \textbf{Implementation language}
-  & \textbf{Code repository} & \textbf{Purpose} \\\midrule
-JavaNengo simulator & Java & \texttt{nengo\_java}
-  & Simulates many types of spiking neuron models.
-  Includes methods to construct and simulate models using the NEF. \\
-JavaNengo GUI & Java & \texttt{nengo\_java\_gui}
-  & Graphical interface to JavaNengo simulator.
-  Allows modellers to drag-and-drop components built with the NEF. \\
-JavaNengo scripting interface & Jython & \texttt{nengo\_jython}
-  & Scripting interface to JavaNengo simulator.
-  Provides shortcuts to classes and functions in the simulator.
-  Also accessible through and interacts with the JavaNengo GUI. \\
-PyNengo & Python & \texttt{nengo}
-  & Constructs and simulates models using the NEF. \\
-PyNengo OpenCL simulator & Python+PyOpenCL
-  & \texttt{nengo\_ocl}
-  & Simulates models constructed with PyNengo. \\\botrule
-\end{tabular}}{Code repositories avilable at \url{http://github.com/ctn-waterloo/}.}
-\end{table}
-
-JavaNengo is a suite of tools composed of
-a neural simulator and graphical user interface (GUI)
-implemented in Java,
-and a scripting interface implemented in Jython
-(as detailed in Table~\ref{tab:nengo-vers}).
-JavaNengo's simulator was created
-with the intention of being a general
-neural simulator that included
-the methods of the NEF
-as one of several
-methods for creating neural models.
-As a result, its implementation
-of important NEF components
-are nested in deep class hierarchies,
-adding unnecessary layers of complexity
-for developers wishing
-to extend those NEF components.
-For example,
-the most often used class for making
-NEF models, \texttt{NEFEnsemble},
-extends from five ancestor classes
-and implements seven interfaces.
-Adding support for synaptic plasticity
-in \texttt{NEFEnsemble}
-involved adding or significantly modifying
-25 Java classes \citep{bekolay2010}.
-
-The JavaNengo GUI provides
-a drag-and-drop interface in which
-NEF models can be created.
-However, as it was developed
-before the scripting interface,
-the GUI manipulates simulator objects directly,
-rather than constructing a script
-that manipulates those simulator objects.
-Typically, modellers start by following
-tutorials that use the GUI interface,
-and transition to the scripting interface
-in order to implement more complex models;
-since the GUI modifies simulator objects directly,
-modelling concepts learned in the GUI
-have to be relearned in the scripting interface.
-
-The JavaNengo scripting interface,
-described in \citet{stewart2009},
-provides a simpler interface
-to the NEF-specific portions of the simulator.
-This greatly enhanced productivity,
-allowing models to be described
-by short scripts.
-Modellers quickly started using
-the scripting interface
-as their primary tool,
-but still needed to access the GUI
-for interactive model inspection,
-and still needed to modify the simulator
-to add new functionality
-(e.g., to add new neuron models).
-This is because Jython makes it easy
-to inspect and create Java objects,
-but does not make it easy to
-write Java code to
-inspect and create Jython objects.
-Modellers, therefore, had to be
-proficient in Java whether
-they used the scripting interface or not.
-As there are few neural modellers
-that are proficient with both Java and Python syntax,
-the scripting interface still lacks
-convenient ways to record the results of simulations,
-and to define complex experimental setups.
-Additionally, Jython is always several versions
-behind CPython, making it impossible
-to use new language features
-like dictionary comprehensions.
-Jython also cannot access libraries
-that contain any C code,
-including all scientific libraries
-that use NumPy.
-
-Finally, perhaps the most significant limitation
-of JavaNengo is its performance.
-While Java has good support for threads,
-it lacks native high-performance numerical libraries
-for doing mathematical operations on large matrices.
-Additionally, it is difficult to interface with
-hardware such as graphical processing units (GPUs),
-which are well-suited to the computations
-required in neural simulations.
-
-Addressing all of these issues
-in the Java codebase would require
-enough extensive changes
-that we opted instead
-to write a new version of Nengo in Python.
-JavaNengo's Jython scripting interface
-already used Python syntax,
-and since Python is widely used
-for neural simulation and data analysis,
-we targeted the CPython interpreter
-as the platform for the new version of Nengo.
-
-\subsection{PyNengo}
-
-PyNengo is a Python package for
-defining and simulating
-neural models using the NEF.
-Its interfaces are based on NumPy,
-so it integrates seamlessly
-with other scientific Python tools
-for interactive exploration \citep{perez2007},
-scientific computation \citep{oliphant2007},
-and plotting \citep{hunter2007}.
-Arbitrary CPython programs
-can use Nengo models,
+In order to make Nengo more simple, extensible, and fast,
+we have rewritten Nengo 2.0 from scratch in Python,
+leveraging NumPy \citep{oliphant2007}
+for manipulating large amounts of data.
+While NumPy is its only dependency,
+Nengo contains optional extensions
+for plotting if Matplotlib is available
+\citep{hunter2007}
+and for interactive exploration
+if IPython is available \citep{perez2007}.
+Since Nengo only depends on one third-party library,
+it is easy to integrate Nengo models
+in arbitrary CPython programs,
 opening up possibilities
 for using neurally implemented algorithms
 in web services, games, and other applications.
 
-PyNengo has a simple object model,
+Nengo 2.0 has a simple object model,
 which makes it easy to
 document, test, and modify.
-These objects are accessible
-through a scripting interface
-similar to JavaNengo's \citep{stewart2009},
-with improvements
-for easier incorporation of user-defined networks,
-neuron models and learning rules.
-Critically, and unlike JavaNengo,
-PyNengo's scripting interface
-contains functions to record simulated data
-and access that data after simulation.
-
 Model creation and simulation are decoupled,
-allowing for models to be exported
-to other simulation packages
-(e.g., those accessible by PyNN [\citealp{davison2008}])
-or for faster simulators to be used
-as drop-in replacements for PyNengo's
+allowing for models to be run with
+other simulators as drop-in replacements for Nengo 2.0's
 platform-independent reference simulator.
 To date, we have implemented one other simulator
 that uses PyOpenCL to take advantage
 of a GPU or multicore CPU.
-
-PyNengo does not yet
-replace all of JavaNengo's functionality.
-While it can simulate most
-models that JavaNengo can simulate,
-there is currently no graphical interface for PyNengo.
-Model components must be created
-using Python scripts rather than
-the drag-and-drop interface presented by JavaNengo.
-Some of the means of interacting
-with a running model in JavaNengo
-can be provided using packages
-such as IPython and Matplotlib,
-but such tools have not been our focus thus far.
-It is possible to build a graphical program
-like JavaNengo's GUI on top of PyNengo's object model,
-but that remains as future work.
-
-To summarize, PyNengo overcomes
-JavaNengo's limitations.
-It can simulate most models
-currently simulated by JavaNengo
-using a well-tested codebase of
-$\sim$5000 lines of code,
-compared to JavaNengo's $\sim$45,000
-(which does not include the JavaNengo GUI).
-A new internal representation of neural models
-allows the OpenCL simulator to simulate
+The OpenCL simulator can simulate
 large models on the scale of Spaun
-hundreds of times faster than JavaNengo
+at least 50 times faster than Nengo 1.4
 using inexpensive commodity hardware.
-Compatibility with CPython makes scientific Python software
-available for preparing and analyzing data.
-In all, PyNengo provides a platform for
+
+In all, Nengo 2.0 provides a platform for
 simulating larger and more complex models than Spaun,
 and can therefore further test the NEF
 as a theory of neural computation.
 
-\section{Neural Engineering Framework (NEF)}
+\section{Neural Engineering Framework (NEF)} \label{sec:nef}
 
 The Neural Engineering Framework (NEF; \citealp{eliasmith2003})
 proposes three quantitatively specified principles
@@ -486,6 +302,11 @@ the bias (the activity of a neuron given no signal),
 and the \textit{encoding weight}
 (the direction in the input vector space
 that causes the neuron to be the most active).
+Importantly, tuning curves can be determined
+for any type of neuron,
+and therefore the encoding process
+(and the NEF as a whole)
+is not dependent on any particular neuron model.
 
 In the decoding process,
 the spike trains are first filtered
@@ -503,7 +324,11 @@ sampled from
 the vector space
 that the population represents.
 
-\paragraph{Transformation}  % NEF as neural model...
+In Nengo, the representation principle
+can be seen in the \texttt{Ensemble}
+object (see Section~\ref{sec:ensemble}).
+
+\paragraph{Transformation}
 Neurons communicate through
 unidirectional connections called synapses.
 When a neuron spikes,
@@ -538,6 +363,10 @@ the encoders, decoders, and linear transform separately
 This provides significant
 space and time savings during simulation.
 
+In Nengo, the transformation principle
+can bee seen in the \texttt{Connection}
+object (see Section~\ref{sec:connection}).
+
 \paragraph{Dynamics}
 While feedforward vector transformations
 suffice to describe
@@ -555,6 +384,11 @@ and translated into neural circuitry
 using the principles
 of representation and transformation.
 
+In Nengo, dynamics can be seen when
+an \texttt{Ensemble} is connected to itself.
+Several of the \texttt{Network}s
+implemented in Nengo also exhibit dynamics.
+
 \paragraph{NEF and Nengo}
 Large models can be built
 by using the principles of the NEF
@@ -564,34 +398,35 @@ just as a circuit diagram
 describes an electronic circuit.
 The goal of Nengo is to enable
 modellers to create and connect those components.
-Components describe
+Ensembles describe
 what information is being represented,
 and connections describe
 how that information is transformed.
-Nengo translates those descriptions
+Nengo implements those descriptions
+with its object model,
+and translates those objects
 to a network of interconnected neurons,
 situating it as a ``neural compiler''
 that translates
 a high-level functional model
 to a low-level neural model.
 
-\section{PyNengo object model}
+\section{Nengo object model}
 
 To describe an NEF model,
-PyNengo defines six core objects.
+Nengo defines six core objects.
 \begin{enumerate}
-  \item The \texttt{Model} encapsulates the entire model and
-    exposes a simplified interface to other objects.
   \item The \texttt{Ensemble} contains a group of neurons
     that encodes a time-varying vector of real numbers.
   \item The \texttt{Node} represents non-neural information,
     such as sensory inputs and motor outputs.
   \item The \texttt{Connection} describes how
     nodes and ensembles are connected.
-  \item The \texttt{Network} encapsulates a functionally related
-    group of interconnected nodes and ensembles.
   \item The \texttt{Probe} gathers data during a simulation
     for later analysis.
+  \item The \texttt{Network} encapsulates a functionally related
+    group of interconnected nodes and ensembles.
+  \item The \texttt{Model} encapsulates a Nengo model.
 \end{enumerate}
 These six objects contain symbolic information
 about a Nengo model,
@@ -600,24 +435,7 @@ model construction and simulation.
 This allows a Nengo model
 to be run on multiple simulators.
 
-\subsection{Model}
-
-The \texttt{Model} object is primarily a container
-for Nengo objects,
-but also doubles as a scripting interface
-that simplifies creating, connecting,
-and probing objects.
-Basic models
-can be created solely through interacting
-with the \texttt{Model} object
-(see sections \ref{sec:comm-channel} \& \ref{sec:lorenz}
-for examples).
-In advanced models,
-objects are instantiated
-and then added to the model
-(see section \ref{sec:cconv} for an example).
-
-\subsection{Ensemble}
+\subsection{Ensemble} \label{sec:ensemble}
 
 An \texttt{Ensemble} is
 a population of neurons
@@ -631,9 +449,9 @@ and the dimensionality
 (i.e., the length of the vector it represents).
 For example,
 \begin{quote}
-  \texttt{Ensemble('A', nengo.LIF(50, tau\_ref=0.002), 1)}
+  \texttt{nengo.Ensemble(nengo.LIF(50, tau\_ref=0.002), 1)}
 \end{quote}
-describes an ensemble, `A',
+describes an ensemble
 that uses 50 leaky integrate-and-fire neurons \citep{lapicque1907}
 with a 2 millisecond refractory period
 to represent a one-dimensional vector.
@@ -648,8 +466,7 @@ of that type of neuron.
 
 Other attributes of the \texttt{Ensemble},
 such as its encoding weights,
-the maximum firing rate of its neurons,
-and so on, can be specified
+can be specified
 either as keyword arguments
 to the \texttt{Ensemble} constructor,
 or by setting an attribute on the instantiated object.
@@ -662,8 +479,8 @@ electrophysiology data.
 If these attributes are not set,
 Nengo attempts to maintain
 neurobiological constraints
-by selecting neural parameters
-from distributions consistent with
+by using default parameters
+consistent with
 neocortical pyramidal cells.
 
 \subsection{Node}
@@ -685,7 +502,7 @@ For example, it can interact directly with hardware,
 and interface with other programs
 using shared memory or sockets.
 
-A node represents information
+Generally, a node represents information
 that cannot be decoded from an ensemble.
 As a simple example,
 a node can be used to model sensory stimuli
@@ -704,7 +521,7 @@ This makes Nengo models more explicit,
 and enables simulators
 to control and optimize node execution.
 
-\subsection{Connection}
+\subsection{Connection} \label{sec:connection}
 
 Ensembles and nodes can be connected together
 in several ways.
@@ -715,11 +532,11 @@ a factored or full connection weight matrix,
 or includes enough information
 to generate weights during simulation.
 
-The most important type of connection
-in Nengo is the \texttt{DecodedConnection}.
-This connection implements
+When an ensemble is connected
+to another object,
+the connection implements
 the NEF's transformation principle.
-In other words, the \texttt{DecodedConnection}
+In other words, the \texttt{Connection}
 allows ensembles to project
 encoded information---or
 a transformation of that information---to
@@ -729,52 +546,16 @@ to appear conceptual,
 even though the underlying implementation
 can translate that connection
 to synaptic weights.
-By default, ensembles are connected
-with a \texttt{DecodedConnection}.
 
 However, neurons in an ensemble can be directly connected
 to neurons in another ensemble
 with synaptic connection weights
-using the \texttt{NonlinearityConnection}.
-Both connection types
-can be temporally filtered,
+by connecting an ensemble's
+neurons directly to another ensemble's neurons
+(e.g., \texttt{nengo.Connection(ens1.neurons, ens2.neurons, ...)}).
+All connections can be temporally filtered,
 and the weights involved in the connection
-(decoding weights for \texttt{DecodedConnection},
-synaptic connection weights for \texttt{NonlinearityConnection})
 can be modified over time with learning rules.
-
-\subsection{Network}
-
-A network is a collection of interconnected ensembles and nodes.
-It is primarily a way of grouping together
-a set of connected objects
-that collectively perform a complex function.
-Encapsulating them in a network
-makes its purpose explicit
-and hides the complexity of the function
-(see section \ref{sec:cconv} for an example).
-\texttt{Network} is a base class designed to be
-subclassed by modellers.
-The code that creates and connects
-several objects in a model can be
-grouped into a \texttt{Network} subclass
-with only minor changes.
-
-Networks can vary dramatically in size,
-and can be composed of other networks.
-As a simple example, the \texttt{Integrator} network
-is composed of only one recurrently connected ensemble.
-By encapsulating that logic in a network,
-the purpose of that ensemble is made explicit.
-As a complex example,
-the \texttt{BasalGanglia} network
-is composed of five groups of ensembles
-connected with several specific functions
-that together implement a ``winner-take-all'' circuit.
-Encapsulating the code to create those ensembles
-and connections in a network subclass
-makes a complicated section of code
-easy to include in many different models.
 
 \subsection{Probe}
 
@@ -794,7 +575,7 @@ The modeller chooses which variables to
 record by connecting a probe to an object.
 
 Like nodes, a probe could be implemented
-outside of the model.
+outside of the neural model.
 However, doing so requires detailed knowledge
 of the simulator,
 and can incur significant overhead
@@ -813,8 +594,57 @@ but the ability to store data
 in files or to stream data
 directly to sockets is forthcoming.
 
+\subsection{Network}
 
-\section{PyNengo simulators} \label{sec:simulators}
+A network is a collection of interconnected ensembles and nodes.
+Networks provide a way of grouping together
+a set of connected objects
+that collectively perform a complex function.
+Encapsulating them in a network
+makes its purpose explicit
+and hides the complexity of the function
+(see Section~\ref{sec:cconv} for an example).
+This grouping can be hierarchical,
+as networks can contain other network.
+\texttt{Network} is a base class designed to be
+subclassed by modellers.
+The code that creates and connects
+several objects in a model can be
+grouped into a \texttt{Network} subclass
+with only minor changes.
+Nengo comes with several networks already implemented
+which can be used directly,
+or can be used as a template
+for modelers wanting to implement their own networks.
+
+As a simple example, the \texttt{Integrator} network
+is composed of only one recurrently connected ensemble.
+By encapsulating that logic in a network,
+the purpose of that ensemble is made explicit.
+As a complex example,
+the \texttt{BasalGanglia} network
+is composed of five groups of ensembles
+connected with several specific functions
+that together implement a ``winner-take-all'' circuit.
+Encapsulating the code to create those ensembles
+and connections in a network
+makes a complicated section of code
+easy to include in many different models.
+
+\subsection{Model}
+
+The \texttt{Model} object is a container
+for Nengo objects.
+Conceptually, they are similar to networks,
+but are privileged in that
+simulators must have a model
+passed into their constructor,
+making the \texttt{Model} akin
+to a network that contains
+all of the objects defined for a Nengo model.
+A simulator's job is to simulate a model.
+
+\section{Nengo simulators} \label{sec:simulators}
 
 Decoupling model creation and simulation
 has been done previously
@@ -824,26 +654,29 @@ can be used to run a model
 on four different simulators.
 Nengo follows this programming model by
 decoupling neural model creation and simulation,
-which enables PyNengo simulators
+which enables Nengo simulators
 to allocate memory and schedule computations
 in the most efficient ways possible.
 Simulators are given a \texttt{Model}
 as an argument;
-this \texttt{Model} is a symbolic description,
-which a simulator can assume will not change.
-The simulator, however,
-can modify the model as it sees fit;
-in most cases, this means that the simulator
-will fill in many of the details
-not specified at the symbolic level.
+this \texttt{Model} is a static symbolic description.
+The simulator can take the model description
+and build whatever data structures
+are best suited to implement the simulation.
 
-We have implemented
-a reference simulator using NumPy
-for vectorized computations,
-and an OpenCL simulator
-using PyOpenCL to parallelize
+We have implemented a platform-independent
+reference simulator as an example
+for simulator designers.
+This simulator is not a specification;
+any object that accepts a Nengo \texttt{Model}
+as an argument is considered a Nengo simulator.
+To show that model creation and simulation
+are fully decoupled,
+we have also implemented
+an OpenCL simulator
+that uses PyOpenCL to parallelize
 computations on GPUs and multicore CPUs.
-In the remainder of this section,
+However, in the remainder of this section,
 we will describe
 the reference simulator implementation;
 the OpenCL simulator shares many
@@ -851,21 +684,25 @@ of the reference simulator's architectural choices,
 but the details of its implementation
 include OpenCL-specific optimizations
 that are beyond the scope of this paper.
-Additionally, it should be noted that
-any simulator that takes a \texttt{Model}
-as input and exposes a \texttt{step}
-function can be used in PyNengo;
-the reference simulator
-is provided as an example
-for simulator designers,
-not as a specification.
 
-The reference simulator
-uses a reduced set of objects
-that describe computations
+\subsection{Nengo reference simulator}
+
+The Nengo reference simulator
+makes a copy of the objects in the model
+and fills in many of the details
+not specified at the symbolic level.
+For example, \textit{encoders}
+are often not specified when the model is created,
+so the reference simulator randomly chooses
+them as unit vectors in the space that
+the ensemble is representing.
+After filling in these details,
+the reference simulator
+builds a reduced set of objects
+that describe the computations
 occurring in the model.
 Specifically, the simulator
-contains signals, which represent values,
+uses signals, which represent values,
 and operators, which represent computations
 performed on signals.
 Figure~\ref{fig:sim} shows the signals
@@ -875,15 +712,16 @@ and operators used in a simple model.
 
 A \texttt{Signal} represents any number that
 will be used by the simulator.
-Each high-level Nengo object contains
-several signals;
-for example, an ensemble contains signals
+Several signals are created
+for each high-level Nengo object;
+for example, for each ensemble,
+the simulator creates signals
 that represent the high-level input
 signal that will be encoded
 to input currents,
 and the encoding weights.
-It also contains a neural population,
-which contains signals that represent
+The ensemble also contains a neural population,
+for which the simulator creates signals that represent
 input currents, bias currents,
 membrane voltages, and refractory times for each cell.
 
@@ -912,20 +750,21 @@ are linear transformations (e.g.,
 the decoding and encoding steps
 in Figure~\ref{fig:sim}),
 and therefore can share a common operator;
-this can be helpful for parallelizing computations.
+this is helpful for parallelizing computations.
 Nonlinear functions, however,
 require specific operators.
 Each supported neuron model and learning rule
-has an associated operator;
-the simulator explicitly maps
+has an associated operator.
+The simulator explicitly maps
 from symbolic neuron objects in ensembles
 and from symbolic learning rule objects
-in connections to their associated operator.
+in connections to their associated operators.
 
 \paragraph{Reference simulator}
 
 Before the first timestep, the reference simulator
 \begin{enumerate}
+  \item fills in unspecified details of high-level objects,
   \item translates high-level objects to
     a set of signals and operators,
   \item allocates NumPy arrays for each signal, and
@@ -945,13 +784,13 @@ operations as the first two.
 \section{Example scripts} \label{sec:examples}
 
 The scripting interface provides
-a simple way to add PyNengo objects to a model,
+a simple way to add Nengo objects to a model,
 simulate that model,
 and extract data collected during the simulation.
 Rather than list the functions in the scripting interface,
 we instead provide three concrete example scripts
 that highlight the types of models that can be
-built with PyNengo.
+built with Nengo.
 We have also implemented two of these three examples
 in PyNN to provide a comparison
 for the length and clarity of the code
@@ -959,35 +798,96 @@ describing the models.
 
 \subsection{Communication channel} \label{sec:comm-channel}
 
-A communication channel
-is a simple example demonstrating
-the representation and transformation principles
-of the NEF.
-A communication channel
-represents some signal and transmits it unchanged;
-i.e., it computes the function $f(x) = x$.
+% A communication channel represents some signal
+% and transmits it unchanged to another population
+% (i.e. it implements an identify function $f(x) = x$).
+% One of the most important operations
+% in large neural models is routing with this sort of channel.
+% When connected recurrently,
+% a communication channel can also be seen as
+% a simple memory, mapping a real-valued number
+% $x$ to itself at a future time [awkward wording].
+% In this simple case,
+% we can see how the principles of the NEF
+% help to translate a mathematical description
+% of our model to neural circuitry.
+% An Ensemble embodies the idea
+% that a population of neurons
+% should represent a real-valued quantity
+% $x \in \mathbb{R}^1$.
+% Technically, Nengo does this
+% by creating a random projection matrix
+% $E$ and driving the first population
+% with current $Ex + b$,
+% where $b$ is a vector of bias values.
+% A vector $s$ of spikes emitted
+% by this population are weighted and combined
+% by a {\em decoder} matrix D
+% so that $Ds \approx f(x)$.
+% Similarly the second population
+% has encoders $E_2$ and $D_2$.
+% A full weight matrix $W$
+% of synapse strengths
+% between populations 1 and 2
+% can be obtained
+% by multiplying matrices $E_2$ and $D_1$ together:
+% $W=E_2 D_1$.
+% We ran simulations in PyNN
+% by computing this product explicitly
+% and using $W$ and the connection matrix.
+% Unfortunately it much slower to multiply
+% $s$ by $W$ than it is to compute $E_2(D_1s)$,
+% which is why Nengo
+% is a faster simulator for NEF-style models.
+
+As detailed in Section~\ref{sec:nef},
+NEF models are based on the principles
+of representation, transformation, and dynamics.
+One of the most important operations
+in a large neural model is to route
+represented information from
+one ensemble to another without any change.
+For example, in the visual system of Spaun,
+a high-dimensional representation of the visual field
+is compressed to a low-dimensional representation,
+and then sent unchanged to several areas,
+including the working memory
+and action selection networks.
+This routing is implemented
+with a transformation
+called a communication channel.
+This transform simply implements
+the identity function, $f(x) = x$.
+
 Figure~\ref{fig:comm-channel}
 depicts a scalar communication channel
-representing band-limited Gaussian white noise.
+in which band-limited Gaussian white noise
+is represented in one ensemble
+and projected to another ensemble.
 
 The communication channel
 is a simple enough model
 that it can be readily implemented in PyNN.
 Figure~\ref{fig:pynn} compares the code
 for implementing a communication channel in Nengo and PyNN.
-This highlights many of the differences
+This figure highlights many of the differences
 between Nengo models and conventional neural models;
 we also use these script for benchmarking
-(see section \ref{sec:benchmark}).
+(see Section~\ref{sec:benchmark}).
 
 \subsection{Lorenz attractor network} \label{sec:lorenz}
 
-
+While the communication channel exemplifies
+the representation and transformation
+principles of the NEF,
+the Lorenz attractor exemplifies the dynamics principle.
 Many models in theoretical neuroscience
 are based on attractor networks \citep{amit1992, deco2003}.
 The NEF has been used in the past
 to implement many different types of
-attractor networks \citep{eliasmith2005}.
+attractor networks by recurrently connecting
+ensembles with functions that implement
+dynamical systems \citep{eliasmith2005}.
 Figure~\ref{fig:lorenz} depicts
 a Nengo implementation of the Lorenz chaotic attractor
 with a single ensemble
@@ -1000,18 +900,37 @@ is 20 lines long).
 
 \subsection{Circular convolution} \label{sec:cconv}
 
+Communication channels and attractor networks
+show up in many Nengo models,
+but are still relatively simple
+to implement without Nengo,
+as can be seen with the PyNN implementation
+in Figure~\ref{fig:pynn}.
+As the NEF has been used to construct
+larger models that have the capabilities
+of non-neural cognitive models,
+a theory called the
+Semantic Pointer Architecture \citep{eliasmith2013}
+has emerged.
+This theory uses high-dimensional vectors
+as symbol-like structures
+that be combined together to form
+novel concepts.
 
-A common function computed by Nengo models
-is circular convolution.
-This function is a central part
-of the Semantic Pointer Architecture \citep{eliasmith2013}
-that uses the NEF to build
-a variety of cognitive models including Spaun.
+One of the functions that
+is performed on these vectors
+is to compress two $n$-dimensional vectors
+into a single $n$-dimensional vector,
+which can be decompressed
+into noisy versions of
+the two originally compressed vectors.
+We implement this compression
+using the circular convolution function.
 Circular convolution
 is best implemented in a two-layer network,
-rather than in a single connection.
-This two-layer organization is simplified in
-the \texttt{CircularConvolution} network subclass.
+rather than in a single connection,
+which we have simplified through
+the \texttt{CircularConvolution} network.
 The complexity encapsulated in that network
 can be seen in Figure~\ref{fig:cconv}.
 
@@ -1023,13 +942,12 @@ too long to be instructive.
 
 \section{Benchmarks} \label{sec:benchmark}
 
-
 While benchmark models are not indicative
 of performance on all models,
 increasing simulation speed
-was a primary motivator in creating PyNengo.
+was a primary goal of Nengo 2.0.
 To validate that performance has improved,
-we ran the models described in section~\ref{sec:examples}
+we ran the models described in Section~\ref{sec:examples}
 for various numbers of neurons and dimensions
 for each ensemble.
 
@@ -1045,7 +963,8 @@ and NEST \citep{eppler2008}.\footnote{We
   machine on which we ran benchmarks.}
 We ran each parameter set five times
 on the same machine,
-and plot the mean time elapsed.
+and plot the mean time elapsed
+in Figure~\ref{fig:benchmarks}.
 In most cases, the coefficient of variation
 for the five sample times
 is well below 0.1, except for two
@@ -1063,10 +982,10 @@ the entire weight matrix
 on each timestep.
 While NEST and NEURON were not
 run on multiple cores using message passing,
-the reference simulator of PyNengo
+the reference simulator of Nengo
 also only uses one CPU core.
-The results also suggest that PyNengo's
-simulators are faster than JavaNengo's simulator.
+The results further suggest that Nengo 2.0's
+simulators are faster than Nengo 1.4's simulator.
 
 As a larger-scale example,
 we have also benchmarked
@@ -1075,8 +994,7 @@ Circular convolution is an important test case,
 as a significant portion of Spaun's
 2.5 million neurons are used to
 implement circular convolution.
-In this case, only versions of Nengo
-were tested.
+In this case, only versions of Nengo were tested.
 Instead of running each simulation multiple times,
 we instead ran the simulator for 10 timesteps
 in order to fill various levels of CPU or GPU cache,
@@ -1084,40 +1002,52 @@ and then ran the simulator for 1000 more timesteps;
 there is very little variance using this method.
 As can be seen in Figure~\ref{fig:benchmarks}C,
 for large models, the OpenCL simulator
-performs much faster than JavaNengo;
+performs much faster than Nengo 1.4;
 in particular, a Radeon 7970 GPU performs
 500-dimensional circular convolution
 with about half a million neurons
 faster than real time,
-and 50 times faster than JavaNengo.
+and 50 times faster than Nengo 1.4.
 In the 50-dimensional case,
 the Radeon 7970 GPU is 200 times faster
-than JavaNengo.
-Additionally, although both JavaNengo
-and the OpenCL simulator on a CPU
+than Nengo 1.4.
+Additionally, although both Nengo 1.4
+and the OpenCL simulator on CPUs
 use all available CPU cores,
-PyNengo's OpenCL simulator is significantly faster.
+Nengo's OpenCL simulator is many times faster.
 
 \section{Discussion}
 
 \subsection{Comparison to similar projects}
 
 There are many other neural simulators
-dedicated to building large-scale neural models;
-however, Nengo is unique in being built
+dedicated to building large-scale neural models
+\citep{eppler2008,goodman2009,hines2009},
+and many tools for simulating cognitive phenomena
+with various levels of biologically plausibility
+\citep{cooper1998,sun2001,anderson2004,franklin2007,
+  aisa2008,dekamps2008,laird2012}.
+However, Nengo is unique in being built
 on a theoretical framework
-that has been validated
+that has enabled a cognitive architecture
+(the Semantic Pointer Architecture)
+that maintains a high level
+of biological plausibility,
+and has been validated
 through the Spaun model and other past work.
 
-The most closely related project is PyNN
-\citep{davison2008},
-which provides a high-level scripting
-interface similar to the
-high-level object model in PyNengo.
-Rather than implementing its
-own simulator, PyNN uses four existing
-simulators with Python bindings,
-such as NEST.
+The most closely related projects
+in terms of software design
+are PyNN \citep{davison2008}
+and Topographica \citep{bednar2009},
+both of which provide a high-level scripting
+interface to low-level neural simulators.
+PyNN in particular has a similar to the
+high-level object model in Nengo,
+and provides a convenient interface
+to the three most widely used
+neural simulators, according
+to a survey by \citet{hanke2011}.
 
 The APIs of Nengo and PyNN are similar,
 but differ significantly
@@ -1126,7 +1056,7 @@ In Nengo, connections commonly describe
 the mathematical operation that is performed
 through the connection between
 two ensembles;
-e.g., \texttt{DecodedConnection(A, B,
+e.g., \texttt{nengo.Connection(A, B,
 function=square)} connects ensemble A
 to ensemble B, transmitting the square of
 the value represented by A to B.
@@ -1145,61 +1075,108 @@ that enables modellers to think
 about information processing in the brain
 at a conceptual level.
 
-As shown in Figure~\ref{fig:benchmarks},
-Nengo is able to simulate many models
-faster than each of PyNN's simulators.
+On the neural simulator side,
+we have shown that both Nengo's
+reference simulator and OpenCL simulator
+are able to simulate
+two benchmark models much faster
+than Brian, NEST and NEURON
+(see Figure~\ref{fig:benchmarks}).
 This is, in part,
 because Nengo stores the factors
 of the connection weight matrix,
 rather than storing the entire matrix.
-However, PyNN is able to simulate
+However, these simulators are able to simulate
 many detailed neuron models
 and learning rules,
-and has access to the wealth of models
-already created for each of its
-accessible simulators.
-Because Nengo is in an earlier development stage,
+and have access to
+a wealth of existing neuron models
+and learning rules.
+Because Nengo 2.0 is in an earlier development stage,
 many of these detailed neuron models
 and learning rules remain to be added.
-PyNN is therefore currently better suited to
-simulate detailed neural models.
+Neural simulators like Brian, NEST,
+and NEURON are therefore currently better suited for
+simulating a wider range of single cell models,
+while Nengo is designed for large networks
+of simple neural models
+that are connected together according to
+the principles of the Neural Engineering Framework,
+and can simulate these types of models efficiently.
+
+One key difference between Nengo's simulators
+and traditional neural simulators
+is the target platform.
+While NEST and NEURON
+can be run on commodity hardware,
+networks of modest size are
+typically simulated in high-performance computing
+environments by using
+the Message-Passing Interface (MPI).
+Nengo enables large-scale neural simulation
+on commodity hardware,
+allowing researchers and hobbyists
+without access to large computing clusters
+the ability to experiment with
+theoretical neuroscience
+as is currently practiced
+in cutting edge research.
+In particular, GPUs are a
+powerful, low-cost computing resource
+that are available in most
+modern workstations.
+The OpenCL simulator makes full use
+of GPUs, while the previously discussed simulators
+currently do not.
 
 \subsection{Future work}
 
-PyNengo is a young project that
-has started with a deliberately minimal base
-in order to make development easier than in
-previous implementations.
-Additionally, many neural modellers
-are already using Python,
-as evidenced by the existence of
-PyNN, Brian, and Python bindings to other simulators.
-Nengo will be able to benefit
-from improvements to scientific Python tools.
-It is also extendable by modellers with
-varying technical skills;
-creating a new network is simple,
-while creating a new simulator is complex, but possible.
-By enabling outside contributions,
-and providing a user-friendly API
-and many example models,
-we hope to foster a rich community of modellers
-contributing networks, neuron types, learning rules,
-and simulators to Nengo.
-Internally, our short-term goal
-is to implement the JavaNengo use cases
-not currently covered by PyNengo.
+Our short-term goal
+is to implement the Nengo 1.4 use cases
+not currently covered by Nengo 2.0.
+While we have ensured that all of the models
+currently used by Nengo 1.4 tutorials
+can be run in Nengo 2.0,
+several large models, like Spaun,
+include custom extensions written in Java.
+We will incorporate useful extensions
+in Nengo's API directly,
+and reimplement more specific extensions
+to use Nengo's API.
+
+We are also developing two simulators
+that will take the same NEF model description
+as the existing simulators,
+but will target two pieces
+of neuromorphic hardware
+to achieve greater speed and power efficiency
+than the OpenCL simulator.
+
 Our long-term goal is to
 create a graphical interface
 to build models and
 interactively inspect simulations.
+Nengo 1.4 includes a graphical interface
+that includes an interactive simulation inspector.
+We will use our experience building that interface
+to construct an improved interface
+for Nengo 2.0.
+
+Additionally, we hope that in the future
+some work in Nengo will be
+done through outside contributions.
+Nengo 2.0 is a complete rewrite that
+has started with a deliberately minimal base
+and a well-defined API
+in order to make development easier than in
+previous versions.
 
 \subsection{Conclusion}
 
-PyNengo is the next generation of Nengo.
-Though the project is still young,
-it can already simulate most models
-that have been built using the NEF.
+Nengo 2.0 is the next generation of Nengo.
+It has been rewritten from scratch,
+but can already simulate most models
+that have been built using Nengo 1.4.
 It does this with 11\% as many lines of code
 as its predecessor,
 and interacts seamlessly with
@@ -1208,7 +1185,7 @@ While the reference simulator
 is simple and easy to understand,
 the OpenCL simulator is extremely fast;
 it can simulate circular convolution models
-50-200 times faster than JavaNengo,
+50-200 times faster than Nengo 1.4,
 which itself is faster than alternative simulators
 on simpler models.
 This makes the creation and simulation
@@ -1216,9 +1193,176 @@ of models that are many times larger than Spaun
 tractable with current hardware.
 These models will further test
 the NEF as a theory of neural computation;
-PyNengo makes those models
+Nengo makes those models
 accessible to anyone with
 a modern computer.
+
+\appendix
+\section*{Appendix: Neural Engineering Framework details}
+
+This description of the Neural Engineering Framework
+is adapted from the supplementary material
+of \citep{eliasmith2012} with permission.
+
+The Neural Engineering Framework (NEF; \citealp{eliasmith2003})
+provides a set of methods
+for building biologically plausible models
+based on a functional specification of a neural system.
+The central idea behind the NEF
+is that a group of spiking neurons
+can represent a vector space over time,
+and that connections between
+groups of neurons
+can compute functions on those vectors.
+The NEF provides a set of methods
+for determining what the connections
+need to be to compute a given function
+on the vector space
+represented by a group of neurons.
+
+Suppose we wish to compute the function
+$\mathbf{y}=f(\mathbf{x})$,
+where vector space $\mathbf{x}$
+is represented in population A,
+and vector space $\mathbf{y}$
+is represented in population B.
+To do so, the NEF assumes that
+each neuron in A and B has a
+``preferred direction'' or ``encoding'' vector.
+The preferred direction vector
+is the vector (i.e. direction in the vector space)
+for which that neuron will fire most strongly.
+The spiking activity of every neuron
+in population A can be written as
+\begin{equation} \label{eq:enc}
+  a_{i}(\mathbf{x})=G_{i}[\alpha_{i}\mathbf{e}_{i}\mathbf{x}+J_{i}^{bias}],
+\end{equation}
+where $a_{i}$ is the spike train
+of the $i$th neuron in the population,
+$G$ is the spiking neural nonlinearity,
+$\alpha$ is the gain of the neuron,
+$\mathbf{e}$ is the preferred direction
+(or ``encoding'') vector,
+and $J^{bias}$ is a bias current
+to account for background activity of the neuron.
+Notably, the elements in the square brackets
+determine the current flowing into the cell,
+which then drives the spiking
+of the chosen single cell model $G$.
+Equation \eqref{eq:enc} describes
+how a vector space
+is encoded into neural spikes.
+This equation is depicted
+for a 1-dimensional vector space
+in Figure~\ref{fig:nef}A.
+
+The NEF proposes that linear decoders
+can be found to provide an appropriate
+estimate of any vector $\mathbf{x}$
+given the neural activities from
+the encoding equation.
+We can write this as a decoding equation:
+\begin{equation} \label{eq:dec}
+  \hat{\mathbf{x}}=\sum_{i}^{N}a_{i}\mathbf{(x)}\mathbf{d}_{i},
+\end{equation}
+where $N$ is the number of neurons in the group,
+$\mathbf{d}_{i}$ are the linear decoders,
+and $\hat{\mathbf{x}}$ is the estimate of
+the input driving the neurons.
+
+The NEF determines this complementary decoding
+for any given encoding.
+Specifically, this decoding is found
+using a least-squares optimization:
+\begin{equation} \label{eq:error}
+  E=\frac{1}{2}\int[\mathbf{x}-\sum_{i}a_{i}(\mathbf{x)}\mathbf{d}_{i}]^{2}d\mathbf{x},
+\end{equation}
+where $\mathbf{d}_{i}$ are the decoding vectors
+over which this error is minimized.
+
+In effect, this optimization process
+replaces learning in most other
+approaches to constructing neural networks.
+This optimization is not
+biologically plausible on its own,
+although networks generated in
+this manner can also be learned
+with a spike-based rule \cite{macneil2011}.
+
+The decoding process is depicted
+in Figure~\ref{fig:nef}B,
+where the optimal linear decoders
+have been found and used for eight neurons.
+Notably, this kind of temporal decoding
+requires an assumption about
+the nature of the temporal filter being used.
+Here we assume that post-synaptic currents
+are such filters, and set the time constants
+to reflect the kind of neurotransmitter receptors
+in the connection
+(e.g., AMPA receptors have short time constants, $\sim10$ ms,
+and NMDA receptors have longer time constants, $\sim50$ ms).
+
+Such temporal filters map
+to biophysical processes
+once we connect groups of neurons together.
+Defining the encoding and decoding for
+groups A and B using equations
+\eqref{eq:enc} and \eqref{eq:dec}
+provides a means of connecting groups.
+For example, we can substitute
+the decoding of A into the encoding of B,
+thereby deriving connection weights
+\begin{equation} \label{eq:weights}
+  \omega_{ij}=\mathbf{d}_{i}\alpha_{j}\mathbf{e}_{j},
+\end{equation}
+where $i$ indexes the neurons in group A
+and $j$ indexes the neurons in B.
+These weights will compute the function
+$\mathbf{y}=\mathbf{x}$
+(where $\mathbf{y}$ is the vector space
+represented in B and $\mathbf{x}$
+is the vector space represented in A).
+For the more general case,
+it is possible to solve for decoders
+$\mathbf{d}_{i}^{f}$
+for any function by substituting
+$f(\mathbf{x})$ for $\mathbf{x}$
+in equation \eqref{eq:error}, i.e., solving
+\begin{equation} \label{eq:error-fcns}
+E=\frac{1}{2}\int[f(\mathbf{x})-\sum_{i}a_{i}(\mathbf{x)}\mathbf{d}_{i}^{f}]^{2}d\mathbf{x}.
+\end{equation}
+
+In addition, if the function to be computed is linear,
+the relevant linear operator can be introduced
+into Equation \eqref{eq:weights}.
+The resulting general weight equation
+for computing any combination
+of linear and nonlinear functions becomes:
+\begin{equation} \label{eq:weights-general}
+  \omega_{ij}=\alpha_{j}\mathbf{d}_{i}^{f}\mathbf{L}\mathbf{e}_{j}
+\end{equation}
+for any nonlinear function $f$ and
+$N_{B}\times N_{A}$ linear operator $\mathbf{L}$.
+Computing the linear function
+$\mathbf{y}=\mathbf{-x}$ and
+computing the nonlinear function
+which is the element-wise
+square of the vector $\mathbf{x}$
+(i.e., $\mathbf{y}=[x_{1}^{2},x_{2}^{2},...,x_{n}^{2}]$
+is shown in Figure~\ref{fig:nef}C.
+
+This brief discussion is insufficient
+to fully introduce the generality of the NEF.
+However, showing how to compute linear
+and nonlinear functions of vector spaces
+is sufficient for many neural computations.
+As these same methods can be used
+to compute connection weights for recurrent connections,
+the NEF also allows for the neural implementation
+of a wide variety of linear and nonlinear
+dynamical systems in recurrent networks.
+A simple harmonic oscillator is shown in Figure~\ref{fig:nef}D.
 
 \section*{Disclosure/Conflict-of-Interest Statement}
 
@@ -1228,56 +1372,60 @@ potential conflict of interest.
 
 \section*{Author contributions}
 
-TB led development of the
-PyNengo object model and scripting interface,
+TB led development of
+Nengo's object model and scripting interface,
 wrote the text of the paper,
 and prepared all of the figures.
 JB led development of
-the PyNengo reference simulator and OpenCL simulator,
+the Nengo reference simulator and OpenCL simulator,
 edited text, created an early version
 of Figure~\ref{fig:sim},
 and ran the benchmarks shown in
 Figure~\ref{fig:benchmarks}C.
 EH contributed significantly
-to PyNengo and both of its simulators, and edited text.
+to Nengo and both of its simulators, and edited text.
 TD led development
 of a Theano-backed
-version of PyNengo that
+version of Nengo that
 identified issues with Theano,
 and provided the base for
-the version of PyNengo described in this paper.
+the version of Nengo described in this paper.
 TCS contributed
-to PyNengo, helped implement
+to Nengo, helped implement
 the PyNN scripts used in
-sections~\ref{sec:examples} and \ref{sec:benchmark},
-and implemented the JavaNengo scripting interface
-on which PyNengo is based.
+Sections~\ref{sec:examples} and \ref{sec:benchmark},
+and implemented the Nengo 1.4 scripting interface
+on which the Nengo object model is based.
 DR contributed
-to PyNengo and the reference simulator,
+to Nengo and the reference simulator,
 and edited text.
-XC contributed to PyNengo
+XC contributed to Nengo
 and the reference simulator.
 AV ran the benchmarks
 shown in Figure~\ref{fig:benchmarks}A and B.
 CE oversaw all development,
-contributed to PyNengo,
+contributed to Nengo,
+wrote the NEF appendix,
 and co-created the NEF with Charles Anderson.
 
 \section*{Acknowledgments}
 
 We thank Bryan Tripp
 for editing this paper,
-contributing to PyNengo
-and the PyNengo OpenCL simulator
-and for creating the JavaNengo simulator
-that has been useful
+contributing to Nengo
+and the Nengo OpenCL simulator
+and for creating Nengo 1.4,
+which has been indispensable
 for the past six years,
 and will continue
 to be used for many years to come.
 We thank Peter Blouw and Brent Komer,
 who have contributed
-to PyNengo by providing examples,
+to Nengo by providing examples,
 unit tests, and bugfixes.
+Finally, we thank the two reviewers
+who have provided constructive
+feedback on this paper.
 
 \paragraph{Funding\textcolon}
 NSERC Discovery, NSERC Graduate Fellowships,
@@ -1332,13 +1480,12 @@ and AFOSR (FA8655-13-1-3084).
    and in state space (bottom).
    By the dynamcs principle,
    signals being represented by population of neurons
-   can be thought of as state variables in a dynamical system.
-   }
+   can be thought of as state variables in a dynamical system.}
 \end{figure}
 
 \begin{figure}
  \textbf{\refstepcounter{figure}\label{fig:sim} Figure \arabic{figure}.}{
-   Detailed breakdown of the PyNengo reference simulator
+   Detailed breakdown of the Nengo reference simulator
    running a simple model for two timesteps.
    \textbf{(A)} Code describing the model being simulated.
    It consists of ensemble A projecting the sine of its
@@ -1420,7 +1567,7 @@ and AFOSR (FA8655-13-1-3084).
    \textbf{(B)} Diagram depicting the model. The state ensemble
    is recurrently connected with a complex function
    implementing the dynamics of the Lorenz attractor.
-   Note that this populations does not receive
+   Note that this population does not receive
    any input that might drive its initial value;
    instead, the initial value is determined by
    the baseline firing of the 2000 leaky integrate-and-fire
@@ -1477,23 +1624,24 @@ and AFOSR (FA8655-13-1-3084).
    Figure \arabic{figure}.}{
    Benchmark results for several simulators
    on the example models described
-   in section~\ref{sec:examples}.
+   in Section~\ref{sec:examples}.
    In (A) and (B), all of the simulators
-   except the PyNengo OpenCL simulator
+   except the Nengo OpenCL simulator
    were run on an Intel Core i7-965.
-   JavaNengo used all 4 cores of this processor;
+   Nengo 1.4 used all 4 cores of this processor;
    all other simulator used only 1 core.
-   The PyNengo OpenCL simulator
+   The Nengo OpenCL simulator
    was run on an NVidia GTX280 GPU.
    \textbf{(A)} Benchmark results from simulating
    the communication channel for 10 simulated seconds
    at a 1 millisecond timestep.
-   For all model sizes, PyNengo simulators
-   are faster than JavaNengo,
+   For all model sizes, Nengo simulators
+   are faster than Nengo 1.4,
    which is significantly faster than NEURON and NEST,
    which are significantly faster than Brian.
    The full Brian results are not shown;
-   for the largest model, Brian takes $\sim$768 seconds.
+   for the largest model,
+   the Brian simulation takes $\sim$768 seconds.
    \textbf{(B)} Benchmark results from simulating
    the Lorenz attractor for 10 simulated seconds
    at a 1 millisecond timestep.
@@ -1501,30 +1649,30 @@ and AFOSR (FA8655-13-1-3084).
    the results are the same as (A),
    except that NEURON is notably faster.
    The full results for Brian and NEST are not shown;
-   for the largest model, they take $\sim$1467
-   and $\sim$601 seconds respectively.
+   for the largest model, simulations in Brian and NEST
+   take $\sim$1467 and $\sim$601 seconds, respectively.
    \textbf{(C)} Benchmark results from simulating
    circular convolution for 1 simulated second
    at a 1 millisecond timestep.
    For the blue lines, the simulator used
-   was the PyNengo OpenCL simulator.
-   The CPU used for JavaNengo and
-   the PyNengo reference simulator
+   was the Nengo OpenCL simulator.
+   The CPU used for Nengo 1.4 and
+   the Nengo reference simulator
    was an Intel Core i7-3770;
-   all 4 cores were used by JavaNengo,
-   while PyNengo's reference simulator
+   all 4 cores were used by Nengo 1.4,
+   while Nengo's reference simulator
    only used one core.
    For all model sizes,
    the OpenCL simulator is faster
-   than the JavaNengo simulator,
-   which is faster than the PyNengo
+   than the Nengo 1.4 simulator,
+   which is faster than the Nengo
    reference simulator.
    The reference simulator was only run
    up to 50 dimensions.
-   The full results for JavaNengo
+   The full results for Nengo 1.4
    are not shown; for the largest model,
-   it takes $\sim$45 seconds.
- }
+   simulation with Nengo 1.4
+   takes $\sim$45 seconds.}
 \end{figure}
 
 \end{document}
