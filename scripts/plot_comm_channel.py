@@ -8,25 +8,28 @@ from base import sorted_spikes
 
 model = nengo.Model("Communication Channel")
 
-model.make_node("Input", output=white_noise(1, 5, seed=60))
+in_ = nengo.Node(output=white_noise(1, 5, seed=60))
 
-model.make_ensemble("A", nengo.LIF(30), 1)
-model.make_ensemble("B", nengo.LIF(30), 1)
+a = nengo.Ensemble(nengo.LIF(30), 1, label="A")
+b = nengo.Ensemble(nengo.LIF(30), 1, label="B")
 
-model.connect("Input", "A")
-model.connect("A", "B")
+nengo.Connection(in_, a)
+nengo.DecodedConnection(a, b)
 
-model.probe("Input")
-model.probe("A", filter=0.01)
-model.probe("A.spikes")
-model.probe("B", filter=0.01)
-model.probe("B.spikes")
+in_p = nengo.Probe(in_, 'output')
+a_val = nengo.Probe(a, 'decoded_output', filter=0.01)
+a_spikes = nengo.Probe(a, 'spikes')
+b_val = nengo.Probe(b, 'decoded_output', filter=0.01)
+b_spikes = nengo.Probe(b, 'spikes')
 
-sim = model.simulator()
+sim = nengo.Simulator(model)
 sim.run(1)
 
-a_spikes = sorted_spikes(sim, "A")
-b_spikes = sorted_spikes(sim, "B")
+t = sim.data(model.t_probe)
+sim_a = next(ens for ens in sim.model.objs if ens.label == "A")
+a_spikes = sorted_spikes(t, sim_a, sim.data(a_spikes))
+sim_b = next(ens for ens in sim.model.objs if ens.label == "B")
+b_spikes = sorted_spikes(t, sim_b, sim.data(b_spikes))
 
 def adjust(ax):
     ax.spines['top'].set_visible(False)
@@ -40,7 +43,7 @@ mm_to_inches = 0.0393701
 figsize = (85. * mm_to_inches / 2., (39.31 + 4) * mm_to_inches)
 plt.figure(figsize=figsize)
 ax = plt.subplot(3,1,1)
-ax.plot(sim.data(model.t), sim.data("Input"), color='k')
+ax.plot(t, sim.data(in_p), color='k')
 ax.text(0.5, 1.0, "Input", ha='center', va='center', fontsize='large')
 adjust(ax)
 ax.spines['bottom'].set_visible(False)
@@ -55,7 +58,7 @@ ax.set_yticks(())
 ax.axis([0, 1, -0.5, len(a_spikes)-0.5])
 
 ax = ax.twinx()
-ax.plot(sim.data(model.t), sim.data("A"), color='k')
+ax.plot(t, sim.data(a_val), color='k')
 ax.text(0.5, 1.0, "A", ha='center', va='center', fontsize='large',
         bbox=dict(ec='none', fc='w', alpha=0.8))
 ax.spines['bottom'].set_visible(False)
@@ -72,7 +75,7 @@ ax.axis([0, 1, -0.5, len(b_spikes)-0.5])
 ax.set_xlabel("Time (s)")
 
 ax = ax.twinx()
-ax.plot(sim.data(model.t), sim.data("B"), color='k')
+ax.plot(t, sim.data(b_val), color='k')
 ax.text(0.5, 1.0, "B", ha='center', va='center', fontsize='large',
         bbox=dict(ec='none', fc='w', alpha=0.8))
 adjust(ax)

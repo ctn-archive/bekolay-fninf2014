@@ -10,8 +10,8 @@ neurons = {
 
 data = OrderedDict()
 
-data['JavaNengo'] = OrderedDict()
-data['PyNengo\nreference'] = OrderedDict()
+data['Nengo 1.4'] = OrderedDict()
+data['Nengo\nreference'] = OrderedDict()
 data['Intel Core\ni7-3770'] = OrderedDict()
 data['Intel Xeon\nE5540'] = OrderedDict()
 data['Intel Xeon\nE5-2620'] = OrderedDict()
@@ -21,13 +21,13 @@ data['ATI Radeon\nHD7970'] = OrderedDict()
 colors = ['k', '#E41A1C', '#023858', '#045A8D', '#0570B0',
           '#3690C0', '#74A9CF', '#A6BDDB']
 
-data['JavaNengo'][100] = 9
-data['JavaNengo'][200] = 18
-data['JavaNengo'][500] = 45
-data['PyNengo\nreference'][5] = 2.62999796867
-data['PyNengo\nreference'][10] = 5.21562504768
-data['PyNengo\nreference'][20] = 10.5295498371
-data['PyNengo\nreference'][50] = 27.0069601536
+data['Nengo 1.4'][100] = 9
+data['Nengo 1.4'][200] = 18
+data['Nengo 1.4'][500] = 45
+data['Nengo\nreference'][5] = 2.62999796867
+data['Nengo\nreference'][10] = 5.21562504768
+data['Nengo\nreference'][20] = 10.5295498371
+data['Nengo\nreference'][50] = 27.0069601536
 data['Intel Core\ni7-3770'][5] = 0.168757915497
 data['Intel Core\ni7-3770'][10] = 0.256566047668
 data['Intel Core\ni7-3770'][20] = 0.482143878937
@@ -93,7 +93,7 @@ for ix, name in enumerate(data.keys()):
     elif "reference" in name:
         yoffset = -0.68
 
-    if name == "JavaNengo":
+    if name == "Nengo 1.4":
         plt.text(n[1] + 12000, data[name].values()[1], name, color=colors[ix],
                  ha='left', va='center', fontsize='large')
     else:

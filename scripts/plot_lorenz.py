@@ -12,7 +12,7 @@ beta = 8.0/3
 rho = 28
 
 model = nengo.Model('Lorenz attractor')
-model.make_ensemble('State', nengo.LIF(2000), 3, radius=60)
+state = nengo.Ensemble(nengo.LIF(2000), 3, radius=60, label="State")
 
 def feedback(x):
     dx0 = -sigma * x[0] + sigma * x[1]
@@ -23,26 +23,27 @@ def feedback(x):
             dx1 * tau + x[1],
             dx2 * tau + x[2]]
 
-model.connect('State', 'State',
-              function=feedback, filter=tau)
-model.probe('State', filter=tau)
-model.probe('State.spikes')  # Very expensive!!
+nengo.DecodedConnection(state, state, function=feedback, filter=tau)
+st_val = nengo.Probe(state, 'decoded_output', filter=tau)
+st_spikes = nengo.Probe(state, 'spikes')  # Very expensive!!
 
-sim = model.simulator()
+sim = nengo.Simulator(model)
 sim.run(6)
 
-state_spikes = sorted_spikes(sim, "State", iterations=250, every=80)
+sim_state = next(ens for ens in sim.model.objs if ens.label == "State")
+state_spikes = sorted_spikes(sim.data(model.t_probe), sim_state,
+                             sim.data(st_spikes), iterations=250, every=80)
 
 mm_to_inches = 0.0393701
 figsize = (100. * mm_to_inches, 80. * mm_to_inches)
 plt.figure(figsize=figsize)
 ax = plt.subplot2grid((2,3), (0,0), colspan=2, rowspan=2, projection='3d')
-ax.plot(sim.data('State')[:,0], sim.data('State')[:,1], sim.data('State')[:,2],
+ax.plot(sim.data(st_val)[:,0], sim.data(st_val)[:,1], sim.data(st_val)[:,2],
         color='k')
 ax.dist = 9
 
 ax = plt.subplot2grid((2,3), (0,2))
-ax.plot(sim.data(model.t), sim.data('State'))
+ax.plot(sim.data(model.t_probe), sim.data(st_val))
 ax.set_xlim(0, 6)
 ax.set_ylabel("Amplitude")
 ax.spines['top'].set_visible(False)

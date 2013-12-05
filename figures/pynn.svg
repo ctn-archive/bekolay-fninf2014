@@ -13,7 +13,7 @@
    height="472.07712"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.4 r"
    sodipodi:docname="pynn.svg">
   <defs
      id="defs4" />
@@ -24,17 +24,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="267.95809"
-     inkscape:cy="192.07692"
+     inkscape:zoom="2.8"
+     inkscape:cx="159.22311"
+     inkscape:cy="152.09135"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g34541"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1036"
+     inkscape:window-width="1643"
+     inkscape:window-height="1029"
      inkscape:window-x="1280"
      inkscape:window-y="0"
-     inkscape:window-maximized="1"
+     inkscape:window-maximized="0"
      fit-margin-top="0.5"
      fit-margin-left="1"
      fit-margin-right="1"
@@ -77,7 +77,7 @@
          sodipodi:nodetypes="ccccc"
          inkscape:connector-curvature="0"
          id="path5798-3-7-0-2"
-         d="m -648.08757,1623.1117 137.12762,0 0,28.9221 -137.12762,0.8572 z"
+         d="m -648.08757,1582.0186 137.12762,41.0931 0,28.9221 -137.12762,0.8572 z"
          style="fill:#f0f0f0;fill-opacity:1;stroke:none" />
       <path
          sodipodi:nodetypes="ccccc"
@@ -321,88 +321,91 @@
          sodipodi:linespacing="125%"
          id="text4750"
          y="769.25061"
-         x="-1492.5828"
+         x="-1375.6627"
          style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            y="769.25061"
-           x="-1492.5828"
+           x="-1375.6627"
            id="tspan4752"
-           sodipodi:role="line">model.make_ensemble(<tspan
-   id="tspan5382"
-   style="fill:#9400d1;fill-opacity:1">&quot;A&quot;</tspan>, nengo.LIF(30), 1)</tspan></text>
+           sodipodi:role="line"><tspan
+   style="fill:#a0522d;fill-opacity:1"
+   id="tspan22535">A</tspan> = nengo.Ensemble(nengo.LIF(30), 1)</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text4754"
          y="1026.8602"
-         x="-1492.5828"
+         x="-1375.6627"
          style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            y="1026.8602"
-           x="-1492.5828"
+           x="-1375.6627"
            id="tspan4756"
-           sodipodi:role="line">model.make_ensemble(<tspan
-   id="tspan5384"
-   style="fill:#9400d1;fill-opacity:1">&quot;B&quot;</tspan>, nengo.LIF(30), 1)</tspan></text>
+           sodipodi:role="line"><tspan
+   style="fill:#a0522d;fill-opacity:1"
+   id="tspan22537">B</tspan> = nengo.Ensemble(nengo.LIF(30), 1)</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text4765"
          y="1272.9703"
-         x="-659.50275"
+         x="-655.66272"
          style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:end;text-anchor:end;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            y="1272.9703"
-           x="-659.50275"
+           x="-655.66272"
            id="tspan4767"
-           sodipodi:role="line">model.make_node(<tspan
-   id="tspan5386"
-   style="text-align:end;text-anchor:end;fill:#9400d1;fill-opacity:1">&quot;Input&quot;</tspan>, 0.5)</tspan><tspan
+           sodipodi:role="line"><tspan
+   style="fill:#a0522d;fill-opacity:1"
+   id="tspan22557">input</tspan> = nengo.Node(0.5)</tspan><tspan
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:end;text-anchor:end;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            id="tspan4769"
            y="1322.9703"
-           x="-659.50275"
-           sodipodi:role="line">model.connect(<tspan
-   id="tspan5388"
-   style="text-align:end;text-anchor:end;fill:#9400d1;fill-opacity:1">&quot;Input&quot;</tspan>, <tspan
-   id="tspan5390"
-   style="text-align:end;text-anchor:end;fill:#9400d1;fill-opacity:1">&quot;A&quot;</tspan>)</tspan><tspan
+           x="-655.66272"
+           sodipodi:role="line">nengo.Connection(input, A)</tspan><tspan
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:end;text-anchor:end;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            id="tspan4771"
            y="1372.9703"
-           x="-659.50275"
+           x="-655.66272"
            sodipodi:role="line" /></text>
       <text
-         sodipodi:linespacing="125%"
+         sodipodi:linespacing="100%"
          id="text4791"
-         y="1646.8833"
-         x="-1232.5828"
-         style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+         y="1602.2598"
+         x="-1335.6627"
+         style="font-size:40px;font-style:normal;font-weight:normal;line-height:100%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
-           id="tspan4801"
-           y="1646.8833"
-           x="-1232.5828"
-           sodipodi:role="line">model.probe(<tspan
-   id="tspan5398"
-   style="fill:#9400d1;fill-opacity:1">&quot;B&quot;</tspan>, filter=0.01)</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:100%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+           y="1602.2598"
+           x="-1335.6627"
+           sodipodi:role="line"
+           id="tspan22551"><tspan
+   style="fill:#a0522d;fill-opacity:1"
+   id="tspan22555">Bval</tspan> = nengo.Probe(B,<tspan
+   style="fill:#9400d1;fill-opacity:1"
+   id="tspan22553"></tspan></tspan><tspan
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;line-height:100%;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+           y="1642.2598"
+           x="-1335.6627"
+           sodipodi:role="line"
+           id="tspan22563"><tspan
+   style="fill:#9400d1;fill-opacity:1"
+   id="tspan22565">    &quot;decoded_output&quot;</tspan>, filter=0.01)</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text4803"
          y="1805.2283"
-         x="-1072.5828"
+         x="-1095.6627"
          style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            y="1805.2283"
-           x="-1072.5828"
+           x="-1095.6627"
            id="tspan4805"
            sodipodi:role="line"><tspan
    id="tspan5446"
-   style="fill:#a0522d;fill-opacity:1">Bdata</tspan> = sim.data(<tspan
-   id="tspan5402"
-   style="fill:#9400d1;fill-opacity:1">&quot;B&quot;</tspan>)</tspan></text>
+   style="fill:#a0522d;fill-opacity:1">Bdata</tspan> = sim.data(Bval)</tspan></text>
       <g
          transform="translate(20,0)"
          id="g5326">
@@ -848,36 +851,32 @@
          sodipodi:linespacing="125%"
          id="text5200"
          y="1396.8624"
-         x="-1112.5828"
+         x="-1095.6627"
          style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            y="1396.8624"
-           x="-1112.5828"
+           x="-1095.6627"
            id="tspan5202"
-           sodipodi:role="line">model.connect(<tspan
-   id="tspan5392"
-   style="fill:#9400d1;fill-opacity:1">&quot;A&quot;</tspan>, <tspan
-   id="tspan5394"
-   style="fill:#9400d1;fill-opacity:1">&quot;B&quot;</tspan>)</tspan></text>
+           sodipodi:role="line">nengo.Connection(A, B)</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text5206"
          y="1697.739"
-         x="-660.26276"
+         x="-655.66272"
          style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
          xml:space="preserve"><tspan
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:end;text-anchor:end;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            y="1697.739"
-           x="-660.26276"
+           x="-655.66272"
            id="tspan5208"
            sodipodi:role="line"><tspan
    id="tspan5442"
-   style="text-align:end;text-anchor:end;fill:#a0522d;fill-opacity:1">sim</tspan> = model.simulator()</tspan><tspan
+   style="text-align:end;text-anchor:end;fill:#a0522d;fill-opacity:1">sim</tspan> = nengo.Simulator(model)</tspan><tspan
            style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;text-align:end;text-anchor:end;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
            id="tspan5210"
            y="1747.739"
-           x="-660.26276"
+           x="-655.66272"
            sodipodi:role="line">sim.run(1)</tspan></text>
       <text
          sodipodi:linespacing="110%"
@@ -954,7 +953,7 @@
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
          id="path5511-9-0"
-         d="m -648.08757,1621.5833 0,32.8934"
+         d="m -648.08757,1580.4902 0,73.9865"
          style="fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
       <path
          sodipodi:nodetypes="cc"

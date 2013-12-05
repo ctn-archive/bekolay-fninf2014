@@ -13,36 +13,36 @@ data = OrderedDict()
 data['Brian'] = OrderedDict()
 data['NEST'] = OrderedDict()
 data['NEURON'] = OrderedDict()
-data['JavaNengo'] = OrderedDict()
-data['PyNengo\nreference'] = OrderedDict()
-data['PyNengo\nOpenCL'] = OrderedDict()
+data['Nengo 1.4'] = OrderedDict()
+data['Nengo\nreference'] = OrderedDict()
+data['Nengo\nOpenCL'] = OrderedDict()
 colors = ['#238B45', '#FF7F00', '#984EA3', 'k', '#E41A1C', '#08519C']
 
-data['PyNengo\nOpenCL'][100] = [
+data['Nengo\nOpenCL'][100] = [
     0.823611974716,0.827681064606,0.824057102203,0.826804876328,0.825788021088]
-data['PyNengo\nOpenCL'][500] = [
+data['Nengo\nOpenCL'][500] = [
     1.03150510788,1.03527617455,1.03847002983,1.04004907608,1.08543992043]
-data['PyNengo\nOpenCL'][1000] = [
+data['Nengo\nOpenCL'][1000] = [
     1.27273511887,1.27891302109,1.26637387276,1.27474498749,1.26921701431]
-data['PyNengo\nOpenCL'][2000] = [
+data['Nengo\nOpenCL'][2000] = [
     1.73656892776,1.73761916161,1.72962117195,1.72728586197,1.73043680191]
 
-data['PyNengo\nreference'][100] = [
+data['Nengo\nreference'][100] = [
     1.09255409241,1.09260296822,1.09535098076,1.04782700539,1.09734082222]
-data['PyNengo\nreference'][500] = [
+data['Nengo\nreference'][500] = [
     1.37857794762,1.36459708214,1.35432505608,1.36031198502,1.35320615768]
-data['PyNengo\nreference'][1000] = [
+data['Nengo\nreference'][1000] = [
     1.62529683113,1.61883807182,1.64285898209,1.61444401741,1.63075304031]
-data['PyNengo\nreference'][2000] = [
+data['Nengo\nreference'][2000] = [
     2.17722296715,2.18516111374,2.20153999329,2.20053505898,2.19265985489]
 
-data['JavaNengo'][100] = [
+data['Nengo 1.4'][100] = [
     3.18400001526,3.3599998951,3.22500014305,3.28499984741,3.30400013924]
-data['JavaNengo'][500] = [
+data['Nengo 1.4'][500] = [
     5.78500008583,5.55000019073,5.67199993134,5.05799984932,5.44799995422]
-data['JavaNengo'][1000] = [
+data['Nengo 1.4'][1000] = [
     8.76200008392,8.84599995613,8.36500000954,7.40699982643,8.35899996758]
-data['JavaNengo'][2000] = [
+data['Nengo 1.4'][2000] = [
     14.5569999218,14.4720001221,15.6730000973,16.0230000019,14.9340000153]
 
 data['Brian'][100] = [
@@ -117,9 +117,9 @@ for ix, name in enumerate(data.keys()):
         runtimes.append(np.mean(times))
     plt.plot(xval, runtimes, '.-', ms=8, color=colors[ix])
     yoffset = 0
-    if name == "PyNengo\nreference":
+    if name == "Nengo\nreference":
         yoffset = 1.5
-    elif name == "PyNengo\nOpenCL":
+    elif name == "Nengo\nOpenCL":
         yoffset = -1.5
     if 'Nengo' in name or name == 'NEURON':
         plt.text(xval[-1] + 4, runtimes[-1] + yoffset, name, color=colors[ix],

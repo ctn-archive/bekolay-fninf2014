@@ -13,8 +13,8 @@
    height="120.48283"
    id="svg3972"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 3">
+   inkscape:version="0.48.4 r"
+   sodipodi:docname="lorenz_code.svg">
   <defs
      id="defs3974" />
   <sodipodi:namedview
@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="84.642181"
-     inkscape:cy="83.106925"
+     inkscape:zoom="5.6"
+     inkscape:cx="40.535038"
+     inkscape:cy="61.678354"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -35,10 +35,10 @@
      fit-margin-left="0.78"
      fit-margin-bottom="0.2"
      fit-margin-right="0.78"
-     inkscape:window-width="1191"
-     inkscape:window-height="862"
-     inkscape:window-x="1945"
-     inkscape:window-y="44"
+     inkscape:window-width="1541"
+     inkscape:window-height="1042"
+     inkscape:window-x="1283"
+     inkscape:window-y="0"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata3977">
@@ -48,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -92,24 +92,24 @@
    style="fill:#a0522d;fill-opacity:1"
    id="tspan5326">model</tspan> = nengo.Model(<tspan
    style="fill:#9400d1;fill-opacity:1"
-   id="tspan5306">’Lorenz attractor’</tspan>)</tspan><tspan
+   id="tspan17935">&quot;Lorenz attractor&quot;</tspan>)</tspan><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="22.05801"
-         id="tspan4006"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.make_ensemble(<tspan
-   style="fill:#9400d1;fill-opacity:1"
-   id="tspan5308">’State’</tspan>, nengo.LIF(2000),</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+         id="tspan17400"><tspan
+   style="fill:#a0522d;fill-opacity:1"
+   id="tspan17941">state</tspan> = nengo.Ensemble(</tspan><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="28.11301"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
-         id="tspan4012">                    dimensions=3, radius=60)</tspan><tspan
+         id="tspan17406">    nengo.LIF(2000), dimensions=3, radius=60)</tspan><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="34.168007"
          id="tspan4004"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"></tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium" /><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="40.223007"
@@ -159,42 +159,38 @@
          x="2.8422701"
          y="82.608002"
          id="tspan3992"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"></tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium" /><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="88.663002"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
-         id="tspan4020">model.connect(<tspan
-   style="fill:#9400d1;fill-opacity:1"
-   id="tspan5310">’State’</tspan>, <tspan
-   style="fill:#9400d1;fill-opacity:1"
-   id="tspan5312">’State’</tspan>,</tspan><tspan
+         id="tspan4020">nengo.Connection(state, state,</tspan><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="94.718002"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
-         id="tspan4022">              function=feedback, filter=tau)</tspan><tspan
+         id="tspan4022">                 function=feedback, filter=tau)</tspan><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="100.773"
-         id="tspan3990"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.probe(<tspan
-   style="fill:#9400d1;fill-opacity:1"
-   id="tspan5314">’State’</tspan>, filter=tau)</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+         id="tspan17415"><tspan
+   style="fill:#a0522d;fill-opacity:1"
+   id="tspan17943">state_val</tspan> = nengo.Probe(</tspan><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="106.828"
-         id="tspan3988"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium">model.probe(<tspan
+         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"
+         id="tspan17422">    state, <tspan
    style="fill:#9400d1;fill-opacity:1"
-   id="tspan5316">’State.spikes’</tspan>)</tspan><tspan
+   id="tspan17939">&quot;decoded_output&quot;</tspan>, filter=tau)</tspan><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="112.883"
          id="tspan3986"
          style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Inconsolata;-inkscape-font-specification:Inconsolata Medium"><tspan
    style="fill:#a0522d;fill-opacity:1"
-   id="tspan5334">sim</tspan> = model.simulator()</tspan><tspan
+   id="tspan5334">sim</tspan> = nengo.Simulator(model)</tspan><tspan
          sodipodi:role="line"
          x="2.8422701"
          y="118.938"
