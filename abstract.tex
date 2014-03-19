@@ -1,0 +1,112 @@
+\documentclass[12pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{fullpage}
+\usepackage{multicol}
+\usepackage{natbib}
+\usepackage[textwidth=0.8in, shadow]{todonotes}
+
+\setlength{\bibsep}{0.0pt}
+
+% \title{Reimplementing Nengo in Python for speed and simplicity}
+
+\begin{document}
+
+\thispagestyle{empty} % Suppress page number
+
+\begin{centering}
+{\large \bf Reimplementing Nengo in Python for speed and simplicity}
+
+\vspace{12pt}
+{Trevor Bekolay, James Bergstra, Xuan Choo, Travis DeWolf,
+Eric Hunsberger, \\ Daniel Rasmussen, Terrence Stewart, Chris Eliasmith}
+
+{\it Centre for Theoretical Neuroscience, University of Waterloo}
+
+\vspace{12pt}
+\end{centering}
+
+  %Nengo has recently been used to build Spaun, 
+  Nengo is the neural simulation software package
+  recently used to build Spaun,
+  the largest functional brain model to date~\cite{spaun}.
+  Despite Nengo being open source, it has not been
+  widely used or extended. Two reasons
+  for this are the complexity of
+  the implementation and the speed of larger simulations.
+  In this paper, we describe a new version of Nengo
+  which has been reimplemented in Python to
+  address these problems.
+
+  Nengo was originally a Java application that
+  was extended to use Python scripting through Jython,
+  a Java implementation of the Python language~\cite{nengo}.
+  While this enabled models to be created
+  with simpler syntax, 
+  the approach had several weaknesses.
+  % there were several weaknesses of the approach. 
+  The scripting layer
+  could not leverage the Python ecosystem
+  because most scientific packages call C or Fortran code.
+  Nengo developers had to be familiar with both Java and Python.
+  The latest stable version of Jython
+  lags behind CPython, so language features like
+  decorators could not be used until recently.
+  The new implementation of Nengo targets CPython,
+  and therefore can take advantage of modern language features
+  and libraries like NumPy and Matplotlib.
+  The API was also redesigned to provide
+  a much simpler interface for modelers.
+  Currently, Nengo implements the majority
+  of the commonly used features of the Java version,
+  with an order of magnitude less code
+  (previously $\sim$30,000 lines of Java;
+  currently $\sim$2000 lines of Python).
+
+  Nengo now leverages the Theano package~\cite{theano}
+  to speed up the creation and simulation of
+  Nengo models.
+  Theano offers a simple interface for
+  describing computations on matrices.
+  It builds a graph of those computations,
+  simplifies wherever possible, and then transparently
+  generates and runs optimized C code.
+  Theano can target multi-core CPUs, GPUs,
+  and other local and remote computing resources
+  with minimal modeler effort.
+  Preliminary speed tests have shown that simple models
+  can be simulated 9--12~times faster
+  using a single CPU core compared to using multiple cores
+  with the Java version.
+  Simulating a leaky integrate-and-fire neuron in Theano
+  can be done $\sim$15~times faster on a GPU than
+  on a CPU, and so we predict $\sim$100 times speedups
+  for some Nengo models using a GPU.
+
+  %Nengo is now built such that
+  %it can use multiple backends to construct and simulate
+  %neural models. 
+  Nengo now accomodates multiple backends 
+  to construct and simulate neural models.
+  This will allow, for example,
+  a backend that generates PyNN scripts~\cite{pynn}.
+  Such a backend would enable other modelers to create
+  large-scale functional models by using Nengo
+  as a ``neural compiler'' that translates mathematical
+  models to biologically realistic spiking neuron models
+  without requiring them to learn a new simulation framework.
+
+\begingroup
+\renewcommand{\section}[2]{}% Removes the References title
+{\scriptsize
+\begin{multicols}{2}
+\bibliographystyle{unsrt}
+\bibliography{biblio.bib}
+\end{multicols}}
+\endgroup
+
+
+\end{document}
